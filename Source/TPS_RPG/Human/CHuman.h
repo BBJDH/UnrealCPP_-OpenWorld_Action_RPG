@@ -18,7 +18,39 @@ class TPS_RPG_API ACHuman : public ACharacter
 	GENERATED_BODY()
 
 public:
-	FActionCall JumpCall;
+	ACHuman();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:	
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+protected:
+	virtual void Landed(const FHitResult& Hit) override;
+	virtual void Falling() override;
+
+private:
+
+	//BindAction
+	void OnJumpPressed();
+	void OnJumpReleased();
+
+
+	//BindAxis
+	void OnMoveForward(float const InAxisValue);
+	void OnMoveRight(float const InAxisValue);
+	void HorizontalLook(float const InAxisValue);
+	void VerticalLook(float const InAxisValue);
+
+
+public:
+	FActionCall StartFall;
+	FActionCall EndFall;
+
 
 
 	//ÄÄÆ÷³ÍÆ®
@@ -32,32 +64,11 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontageComponent* Montage;
 
-public:
-	ACHuman();
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCZoomComponent* Zoom;
 
-protected:
-	virtual void BeginPlay() override;
-
-public:	
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	
-
-private:
-
-	//BindAction
-	void OnJumpPressed();
-	void OnJumpReleased();
-
-	//BindAxis
-	void OnMoveForward(float const InAxisValue);
-	void OnMoveRight(float const InAxisValue);
-	void HorizontalLook(float const InAxisValue);
-	void VerticalLook(float const InAxisValue);
-
-
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCFeetComponent* Feet;
 
 
 private:
@@ -70,6 +81,16 @@ private:
 	void Bind(UInputComponent  * const PlayerInputComponent);
 
 
+
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "GreatSword")
+		TSubclassOf<class ACGreatSword> GreatSwordClass;
+
+
+	void OnOneHand();
+
+	class ACGreatSword* Sword;
 
 };
 

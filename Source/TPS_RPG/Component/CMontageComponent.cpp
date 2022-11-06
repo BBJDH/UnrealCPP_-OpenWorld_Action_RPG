@@ -20,36 +20,52 @@ void UCMontageComponent::BeginPlay()
 	Owner = Cast<ACharacter>(GetOwner());
 
 
-	TArray<FMontageData*> SubDatas;
-	MontageData->GetAllRows("", SubDatas);
+	TArray<FMontageData*> subDatas;
+	MontageData->GetAllRows("", subDatas);
 
 	for (int32 i = 0; i < static_cast<int32>(EMontageType::Max); i++)
 	{
-		for (FMontageData* Elem : SubDatas)
+		for (FMontageData* elem : subDatas)
 		{
-			if (static_cast<EMontageType>(i) == Elem->Type)
-				Datas[i] = Elem;
+			if (static_cast<EMontageType>(i) == elem->Type)
+				Datas[i] = elem;
 		}
 	}
 }
 
-void UCMontageComponent::PlayHittedMode() const
+void UCMontageComponent::PlayHitted() const
 {
 	PlayAnimMontage(EMontageType::Hitted);
 }
 
-void UCMontageComponent::PlayDeadMode() const
+void UCMontageComponent::PlayDead() const
 {
-	PlayAnimMontage(EMontageType::Hitted);
+	PlayAnimMontage(EMontageType::Dead);
+}
+
+void UCMontageComponent::PlayFirstJump() const
+{
+	PlayAnimMontage(EMontageType::Jump_First);
+
+}
+
+void UCMontageComponent::PlaySecondJump() const
+{
+	PlayAnimMontage(EMontageType::Jump_Second);
+}
+
+void UCMontageComponent::PlayLended() const
+{
+	PlayAnimMontage(EMontageType::Heavy_Landed);
 }
 
 void UCMontageComponent::PlayAnimMontage(EMontageType const InType) const
 {
 	CheckNull(Owner);
 
-	FMontageData* Data = Datas[static_cast<int32>(InType)];
-	if (!!Data && !!Data->Montage)
-		Owner->PlayAnimMontage(Data->Montage, Data->PlayRatio);
+	FMontageData* data = Datas[static_cast<int32>(InType)];
+	if (!!data && !!data->Montage)
+		Owner->PlayAnimMontage(data->Montage, data->PlayRatio);
 }
 
 

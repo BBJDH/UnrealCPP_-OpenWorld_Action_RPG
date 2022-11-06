@@ -4,6 +4,8 @@
 #include "Human/CAnimInstance.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
+#include "CHuman.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 void UCAnimInstance::NativeBeginPlay()
@@ -11,6 +13,10 @@ void UCAnimInstance::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	Owner = Cast<ACharacter>(TryGetPawnOwner());
+
+	CheckNull(Owner);
+	Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
+	Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -20,5 +26,24 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	
 	Speed = Owner->GetVelocity().Size2D();
 
+	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(Owner);
 
+	CheckNull(feet);
+	//if (!!feet &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
+	//{
+	//	IsOnFeetIK = true;
+	//	FeetIKData = feet->GetData();
+	//}
+	//else
+	//	IsOnFeetIK = false;
+}
+
+void UCAnimInstance::StartInAir()
+{
+	InAir = true;
+}
+
+void UCAnimInstance::EndInAir()
+{
+	InAir = false;
 }

@@ -48,8 +48,11 @@ protected:
 
 
 public:
-	void PlayHittedMode()const;
-	void PlayDeadMode()const;
+	void PlayHitted()const;
+	void PlayDead()const;
+	void PlayFirstJump()const;
+	void PlaySecondJump()const;
+	void PlayLended()const;
 
 private:
 	void PlayAnimMontage(EMontageType const InType)const;
