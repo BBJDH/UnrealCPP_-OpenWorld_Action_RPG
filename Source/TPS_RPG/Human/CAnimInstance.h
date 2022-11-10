@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Component/CFeetComponent.h"
+#include "Component/CWeaponComponent.h"
 #include "CAnimInstance.generated.h"
 
 /**
@@ -23,9 +24,13 @@ protected:
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	//내부 함수
 
 private:
+	UFUNCTION()
+		void OnWeaponTypeChanged(EWeaponType InPrevType, EWeaponType InNewType);
+
+private:
+	//내부 함수
 	//직렬화 해야 델리게이트에서 찾기 가능
 	UFUNCTION()
 	void StartInAir();
@@ -49,6 +54,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
 		FFeetData FeetIKData;
+
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
+		EWeaponType WeaponType;
 
 private: 
 	ACharacter* Owner;

@@ -26,6 +26,11 @@ void UCAnimInstance::NativeBeginPlay()
 
 	//Test
 	Cast<ACHuman>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
+
+	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(Owner);
+	CheckNull(weapon);
+
+	weapon->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -55,6 +60,11 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		IsOnFeetIK = false;
 	}
+}
+
+void UCAnimInstance::OnWeaponTypeChanged(EWeaponType InPrevType, EWeaponType InNewType)
+{
+	WeaponType = InNewType;
 }
 
 void UCAnimInstance::StartInAir()

@@ -84,6 +84,7 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 
 	FHitResult hitResult;
 	//충돌 정보를 가져올 구조체 미리 생성
+	//TODO: 정확도 개선
 	UKismetSystemLibrary::LineTraceSingle
 	(
 		GetWorld(),
