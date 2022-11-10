@@ -8,7 +8,7 @@ public class TPS_RPG : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AnimGraph" });
 
 		PublicIncludePaths.Add(ModuleDirectory);
 		//포함 디렉토리 추가,  CPP_Basic 기준경로를 포함시킨다

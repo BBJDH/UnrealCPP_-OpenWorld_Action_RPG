@@ -47,10 +47,16 @@ private:
 	void VerticalLook(float const InAxisValue);
 
 
+	//TestKey
+	void TestKeyBroadCast();
+
+
 public:
 	FActionCall StartFall;
 	FActionCall EndFall;
 
+	//Test
+	FActionCall TestKeyEvent;
 
 
 	//컴포넌트
@@ -70,6 +76,12 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCFeetComponent* Feet;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCWeaponComponent* Weapon;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCStateComponent* State;
+
 
 private:
 	//내부 설정변수
@@ -83,14 +95,8 @@ private:
 
 
 
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "GreatSword")
-		TSubclassOf<class ACGreatSword> GreatSwordClass;
 
 
-	void OnOneHand();
-
-	class ACGreatSword* Sword;
 
 };
 

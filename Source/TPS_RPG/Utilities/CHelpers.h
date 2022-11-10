@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Particles/ParticleSystem.h"
 
 #define CheckTrue(p) {if(p==true) return;} // True시 함수 종료
 #define CheckTrueResult(p,result) {if(p==true) return result;}// True시 함수 종료, 값리턴
@@ -159,5 +160,33 @@ public:
 			}
 		}
 //		return nullptr;
+	}
+
+
+	static void PlayEffect(UWorld* InWorld, UFXSystemAsset* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
+	{
+		UParticleSystem* particle = Cast<UParticleSystem>(InEffect);
+
+		FVector location = InTransform.GetLocation();
+		FRotator rotation = FRotator(InTransform.GetRotation());
+		FVector scale = InTransform.GetScale3D();
+
+
+		if (!!InMesh)
+		{
+			if (!!particle)
+			{
+				UGameplayStatics::SpawnEmitterAttached(particle, InMesh, InSocketName, location, rotation, scale);
+
+				return;
+			}
+		}
+
+		if (!!particle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(InWorld, particle, InTransform);
+
+			return;
+		}
 	}
 };

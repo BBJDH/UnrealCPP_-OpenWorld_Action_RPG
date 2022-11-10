@@ -15,15 +15,10 @@ class TPS_RPG_API UCAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
+
+
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
-	float Speed;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
-	bool IsOnFeetIK;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
-	FFeetData FeetIKData;
 
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -37,9 +32,23 @@ private:
 	UFUNCTION()
 	void EndInAir();
 
+
+	//Test¿ë
+	UFUNCTION()
+	void ToggleIK();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Feet IK")
 		bool InAir;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		float Speed;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		bool IsOnFeetIK;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		FFeetData FeetIKData;
 
 private: 
 	ACharacter* Owner;

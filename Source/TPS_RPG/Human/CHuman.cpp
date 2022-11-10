@@ -13,15 +13,14 @@
 #include "Component/CMontageComponent.h"
 
 #include "Component/CFeetComponent.h"
+#include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
+#include "Component/CStateComponent.h"
 
-#include "Weapon/CGreatSword.h"
 
 ACHuman::ACHuman()
 {
 	Asign();
-
-	CHelpers::GetClass<ACGreatSword>(&GreatSwordClass, "Blueprint'/Game/BP/Weapon/BP_CGreatSword.BP_CGreatSword_C'");
 }
 
 void ACHuman::BeginPlay()
@@ -30,8 +29,7 @@ void ACHuman::BeginPlay()
 	FActorSpawnParameters params;
 	params.Owner = this;
 
-	Sword = GetWorld()->SpawnActor<ACGreatSword>(GreatSwordClass, params);
-	Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative,true),"Holster_GreatSword");
+	
 }
 
 void ACHuman::Tick(float DeltaTime)
@@ -118,6 +116,11 @@ void ACHuman::VerticalLook(float const InAxisValue)
 	AddControllerPitchInput(InAxisValue);
 }
 
+void ACHuman::TestKeyBroadCast()
+{
+	if (TestKeyEvent.IsBound())
+		TestKeyEvent.Broadcast();
+}
 
 
 void ACHuman::Asign()
@@ -127,6 +130,8 @@ void ACHuman::Asign()
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetCapsuleComponent());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 
+	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
+	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 
 	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
 	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
@@ -141,10 +146,10 @@ void ACHuman::Asign()
 	USkeletalMesh* mesh = nullptr;
 
 	//레퍼런스로 에셋 가져오기
-	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Knight_Man/Mesh/SK_Knight_Man_black.SK_Knight_Man_Black'");
-	GetMesh()->SetSkeletalMesh(mesh);
+	//CHelpers::GetAsset<USkeletalMesh>(&mesh, "");
+	//GetMesh()->SetSkeletalMesh(mesh);
 	//위치 조정, 아래로 90, 
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -95));
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0)); //Pitch Yaw Roll
 
 	TSubclassOf<UCAnimInstance> animInstance;
@@ -162,9 +167,9 @@ void ACHuman::Asign()
 	SpringArm->SocketOffset = FVector(0, 60, 0);
 	SpringArm->TargetArmLength = 600;	
 	SpringArm->bEnableCameraLag = true;		//카메라 부드럽게 따라오도록
-	//TODO: Lag을 세게 먹이는 방법 연구할것
+	SpringArm->CameraLagSpeed = 5;
 	SpringArm->CameraRotationLagSpeed = 2;
-	SpringArm->bDoCollisionTest = false;	//스프링암에 걸리면 돌아가도록
+	SpringArm->bDoCollisionTest = true;	//스프링암에 걸리면 돌아가도록
 	SpringArm->bUsePawnControlRotation = true;	//Pawn따라서 회전할지
 
 /*
@@ -185,6 +190,13 @@ void ACHuman::Bind(UInputComponent * const PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACHuman::OnJumpPressed);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACHuman::OnJumpReleased);
 
+	PlayerInputComponent->BindAction("GreatSword", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetGreatSwordMode);
+	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
+
+
+	//Test
+	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman::TestKeyBroadCast);
+
 
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman::OnMoveForward);
@@ -197,10 +209,5 @@ void ACHuman::Bind(UInputComponent * const PlayerInputComponent)
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACHuman::VerticalLook);
 
 	PlayerInputComponent->BindAxis("Zoom", Zoom, &UCZoomComponent::SetZoomValue);
-}
-
-void ACHuman::OnOneHand()
-{
-	Sword->Equip();
 }
 

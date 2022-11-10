@@ -6,7 +6,13 @@
 #include "GameFramework/Character.h"
 #include "CHuman.h"
 #include "GameFramework/CharacterMovementComponent.h"
+//#define LOG_UCFeetComponent 1
 
+void UCAnimInstance::ToggleIK()
+{
+	IsOnFeetIK = !IsOnFeetIK;
+	CLog::Print(IsOnFeetIK);
+}
 
 void UCAnimInstance::NativeBeginPlay()
 {
@@ -17,6 +23,9 @@ void UCAnimInstance::NativeBeginPlay()
 	CheckNull(Owner);
 	Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
 	Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
+
+	//Test
+	Cast<ACHuman>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -29,13 +38,23 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(Owner);
 
 	CheckNull(feet);
-	//if (!!feet &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
-	//{
-	//	IsOnFeetIK = true;
-	//	FeetIKData = feet->GetData();
-	//}
-	//else
-	//	IsOnFeetIK = false;
+	if (!!feet &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
+	{
+		IsOnFeetIK = true;
+		FeetIKData = feet->GetData();
+#if LOG_UCFeetComponent
+		CLog::Print(FeetIKData.PelvisDistance, 11);
+		CLog::Print(FeetIKData.LeftDistance, 12);
+		CLog::Print(FeetIKData.RightDistance, 13);
+		CLog::Print(FeetIKData.LeftRotation, 14);
+		CLog::Print(FeetIKData.RightRotation, 15);
+
+#endif
+	}
+	else
+	{
+		IsOnFeetIK = false;
+	}
 }
 
 void UCAnimInstance::StartInAir()

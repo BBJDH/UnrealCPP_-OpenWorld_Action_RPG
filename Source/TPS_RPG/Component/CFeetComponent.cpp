@@ -10,18 +10,15 @@
 
 UCFeetComponent::UCFeetComponent()
 {
-
 	PrimaryComponentTick.bCanEverTick = true;
-
+	DrawDebug = EDrawDebugTrace::Type::ForOneFrame;
 }
 
 
 void UCFeetComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
-	
 }
 
 
@@ -55,7 +52,6 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	Data.LeftRotation = UKismetMathLibrary::RInterpTo(Data.LeftRotation, leftRotation, DeltaTime, InterpSpeed);
 	Data.RightRotation = UKismetMathLibrary::RInterpTo(Data.RightRotation, rightRotation, DeltaTime, InterpSpeed);
-
 #if LOG_UCFeetComponent
 	CLog::Print(Data.PelvisDistance, 11);
 	CLog::Print(Data.LeftDistance, 12);
@@ -70,18 +66,17 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRotation)
 {
-	FVector socktet = OwnerCharacter->GetMesh()->GetSocketLocation(InName);
+	FVector socktetWorldPos = OwnerCharacter->GetMesh()->GetSocketLocation(InName);
 	// 소켓의 월드 좌표를 얻어온다, InName으로부터 
 
 	float z = OwnerCharacter->GetActorLocation().Z;
 	//캐릭터의 월드 Z 값
-	FVector start = FVector(socktet.X, socktet.Y, z);
+	FVector start = FVector(socktetWorldPos.X, socktetWorldPos.Y, z);
 	//해당 소켓의 월드 x,y 좌표, 높이는 플레이어의 z이므로 허리부터 시작한다
 
 	z = start.Z - OwnerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - TraceDistance;
 	//z를 재정의, 캡슐 컴포넌트 밑바닥에서 TraceDistance 만큼 더 땅을 파고간 거리까지 Trace 검사
-	
-	FVector end = FVector(socktet.X, socktet.Y, z);
+	FVector end = FVector(socktetWorldPos.X, socktetWorldPos.Y, z);
 
 	TArray<AActor*> ignores;
 	ignores.Add(OwnerCharacter);
@@ -94,7 +89,7 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 		GetWorld(),
 		start,
 		end,
-		ETraceTypeQuery::TraceTypeQuery1,	
+		UEngineTypes::ConvertToTraceType(ECC_Visibility),	
 		true,								//복합충돌 켬, 정밀하게 발을 맞추기 위해
 		ignores,
 		DrawDebug,
@@ -103,7 +98,6 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 		FLinearColor::Green,
 		FLinearColor::Red
 	);
-
 	OutDistance = 0;
 	OutRotation = FRotator::ZeroRotator;
 	//반환할 두 값을 초기화
@@ -122,9 +116,7 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 	0 => -TraceDistance 만큼 아래로 이동해야 한다
 **************************************/
 
-
 	OutDistance = length  - TraceDistance;
-
 
 
 	/*************************************

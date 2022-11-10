@@ -77,7 +77,7 @@ private:
 	//발을 붙이기까지의 시간
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-		float TraceDistance = 50;
+		float TraceDistance = 88;
 	//땅하고 발의 높이(추적/수정할 높이)
 
 
