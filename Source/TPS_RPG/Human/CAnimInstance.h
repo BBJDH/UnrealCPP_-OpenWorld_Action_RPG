@@ -16,8 +16,6 @@ class TPS_RPG_API UCAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
-
-
 protected:
 
 

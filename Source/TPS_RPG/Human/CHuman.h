@@ -26,14 +26,18 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
 protected:
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void Falling() override;
 
-private:
+protected:
+
+	virtual void Asign();
+
+
+protected:
 
 	//BindAction
 	void OnJumpPressed();
@@ -43,24 +47,15 @@ private:
 	//BindAxis
 	void OnMoveForward(float const InAxisValue);
 	void OnMoveRight(float const InAxisValue);
-	void HorizontalLook(float const InAxisValue);
-	void VerticalLook(float const InAxisValue);
-
-
-	//TestKey
-	void TestKeyBroadCast();
 
 
 public:
 	FActionCall StartFall;
 	FActionCall EndFall;
 
-	//Test
-	FActionCall TestKeyEvent;
-
 
 	//컴포넌트
-private:
+protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleDefaultsOnly)
@@ -86,14 +81,6 @@ private:
 private:
 	//내부 설정변수
 	float const MAX_WALK_SPEED = 600;
-
-private:
-	//내부 함수
-	void Asign();
-	void Bind(UInputComponent  * const PlayerInputComponent);
-
-
-
 
 
 

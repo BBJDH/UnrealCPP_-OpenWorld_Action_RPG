@@ -119,7 +119,6 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 
 	OutDistance = length  - TraceDistance;
 
-
 	/*************************************
 RotationFromX를 사용해도 된다
 	UKismetMathLibrary::MakeRotFromX();

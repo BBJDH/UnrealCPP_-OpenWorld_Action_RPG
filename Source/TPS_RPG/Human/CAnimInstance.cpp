@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "CHuman.h"
+#include "CHuman_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 //#define LOG_UCFeetComponent 1
 
@@ -25,7 +26,7 @@ void UCAnimInstance::NativeBeginPlay()
 	Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
 	//Test
-	Cast<ACHuman>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
+	Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(Owner);
 	CheckNull(weapon);
