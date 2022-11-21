@@ -29,5 +29,5 @@ private:
 	bool bExist;
 
 private:
-	TArray<class ACharacter*> Hitted;
+	TArray<class ACharacter*> HittedCharacters;
 };

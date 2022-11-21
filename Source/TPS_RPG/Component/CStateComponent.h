@@ -12,7 +12,7 @@ enum class EStateType : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStateTypeChanged, EStateType, InPrevType, EStateType, InNewType);
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom) )
 class TPS_RPG_API UCStateComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -47,7 +47,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	void ChangeType(EStateType InType);
+	void ChangeType(EStateType const InType);
 
 public:
 	FStateTypeChanged OnStateTypeChanged;

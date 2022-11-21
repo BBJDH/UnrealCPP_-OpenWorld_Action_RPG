@@ -50,7 +50,7 @@ void UCDoAction_Combo::OffAttachmentCollision()
 	{
 		float angle = -2.0f;
 		ACharacter* candidate = nullptr;
-		for (ACharacter* hitted : Hitted)
+		for (ACharacter* hitted : HittedCharacters)
 		{
 			FVector direction = hitted->GetActorLocation() - Owner->GetActorLocation();
 			direction = direction.GetSafeNormal2D();
@@ -75,7 +75,7 @@ void UCDoAction_Combo::OffAttachmentCollision()
 		}
 	}
 
-	Hitted.Empty();
+	HittedCharacters.Empty();
 }
 
 void UCDoAction_Combo::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther)
@@ -84,9 +84,9 @@ void UCDoAction_Combo::OnAttachmentBeginOverlap(class ACharacter* InAttacker, cl
 	CheckNull(InOther);
 	CheckFalse(Index < HitDatas.Num());
 
-	for (ACharacter* hitted : Hitted)
-		CheckTrue(hitted == InOther);
+	for (ACharacter* elem : HittedCharacters)
+		CheckTrue(elem == InOther);
 
-	Hitted.Add(InOther);
+	HittedCharacters.Add(InOther);
 	HitDatas[Index].SendDamage(InAttacker, InOther);
 }

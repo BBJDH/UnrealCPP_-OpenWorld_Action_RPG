@@ -5,5 +5,5 @@
 
 ATPS_RPGGameModeBase::ATPS_RPGGameModeBase()
 {
-	CHelpers::GetClass<APawn>(&DefaultPawnClass, "Blueprint'/Game/BP/Human/BP_CHuman.BP_CHuman_C'");
+	CHelpers::GetClass<APawn>(&DefaultPawnClass, "Blueprint'/Game/BP/Human/Player/BP_CHuman_Player.BP_CHuman_Player_C'");
 }

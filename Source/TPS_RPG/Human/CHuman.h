@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Component/CStateComponent.h"
 #include "CHuman.generated.h"
 /*
  ======================================
@@ -19,25 +20,17 @@ class TPS_RPG_API ACHuman : public ACharacter
 
 public:
 	ACHuman();
+	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	virtual void BeginPlay() override;
-
-public:	
-	virtual void Tick(float DeltaTime) override;
-
-
-
-protected:
-	virtual void Landed(const FHitResult& Hit) override;
-	virtual void Falling() override;
-
-protected:
-
 	virtual void Asign();
 
 
-protected:
+	virtual void Landed(const FHitResult& Hit) override;
+	virtual void Falling() override;
+
 
 	//BindAction
 	void OnJumpPressed();
@@ -48,6 +41,25 @@ protected:
 	void OnMoveForward(float const InAxisValue);
 	void OnMoveRight(float const InAxisValue);
 
+
+private:
+
+
+	UFUNCTION()
+		void OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType);
+
+
+	/*
+	 * 액션마다 고유의 피격 몽타주를 재생시키면 보스의 특수화를 어떻게 할까
+	 *오버라이딩을 이용해서 구현한다면 몽땅 따로 특수화를 해줘야하는가
+	 *
+	 */
+	void Hitted();
+	void Dead();
+
+
+
+	
 
 public:
 	FActionCall StartFall;
@@ -77,12 +89,22 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCStatusComponent* Status;
+
 
 private:
 	//내부 설정변수
 	float const MAX_WALK_SPEED = 600;
 
-
+private:
+	struct FDamageData
+	{
+		float Amount;
+		class ACharacter* Attacker;
+		struct FHitDamageEvent* Event;
+	};
+	FDamageData DamageData;
 
 
 };

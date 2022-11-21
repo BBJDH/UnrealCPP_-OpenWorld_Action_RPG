@@ -9,14 +9,14 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/InputComponent.h"
 #include "Component/CMontageComponent.h"
 
 #include "Component/CFeetComponent.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
 #include "Component/CStateComponent.h"
-
+#include "Component/CStatusComponent.h"
+#include "Weapon/CWeaponStructures.h"
 
 ACHuman::ACHuman()
 {
@@ -26,8 +26,8 @@ ACHuman::ACHuman()
 void ACHuman::BeginPlay()
 {
 	Super::BeginPlay();
-	FActorSpawnParameters params;
-	params.Owner = this;
+
+	State->OnStateTypeChanged.AddDynamic(this, &ACHuman::OnStateTypeChanged);
 }
 
 void ACHuman::Tick(float DeltaTime)
@@ -35,6 +35,19 @@ void ACHuman::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	DamageData.Amount = damage;
+	DamageData.Attacker = Cast<ACharacter>(EventInstigator->GetPawn());
+	DamageData.Event = (FHitDamageEvent*)&DamageEvent;
+
+	State->SetHittedMode();
+
+	return damage;
+}
 
 
 void ACHuman::Landed(const FHitResult& Hit)
@@ -44,14 +57,17 @@ void ACHuman::Landed(const FHitResult& Hit)
 	if (this->GetVelocity().Z < -1000)
 		Montage->PlayLended();
 
-	if (EndFall.IsBound())
+	//AnimInstance, Status 전파
+	if (EndFall.IsBound() and Status->IsInAir())
 		EndFall.Broadcast();
 }
 
 void ACHuman::Falling()
 {
 	Super::Falling();
-	if (StartFall.IsBound())
+
+	//AnimInstance, Status 전파
+	if (StartFall.IsBound() and Status->IsInAir() )
 		StartFall.Broadcast();
 }
 
@@ -69,6 +85,7 @@ void ACHuman::OnJumpPressed()
 		}
 	}
 
+	//AnimInstance, Status 전파
 	if (StartFall.IsBound())
 		StartFall.Broadcast();
 }
@@ -101,6 +118,56 @@ void ACHuman::OnMoveRight(float const InAxisValue)
 
 
 
+void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+	case EStateType::Hitted: Hitted(); break;
+	case EStateType::Dead: Dead(); break;
+	}
+}
+
+void ACHuman::Hitted()
+{
+	Status->Damage(DamageData.Amount);
+	DamageData.Amount = 0;
+
+	if (Status->GetHealth() <= 0.0f)
+	{
+		State->SetDeadMode();
+
+		return;
+	}
+
+
+	if (!!DamageData.Event && !!DamageData.Event->HitData)
+	{
+		FHitData* data = DamageData.Event->HitData;
+
+		data->PlayMontage(this);
+		data->PlayHitStop(GetWorld());
+		data->PlaySound(this);
+		data->PlayEffect(GetWorld(), GetActorLocation());
+
+
+		FVector start = GetActorLocation();
+		FVector target = DamageData.Attacker->GetActorLocation();
+		FVector direction = target - start;
+		direction.Normalize();
+
+		LaunchCharacter(-direction * data->Launch, false, false);
+		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	}
+
+	DamageData.Attacker = nullptr;
+	DamageData.Event = nullptr;
+}
+
+void ACHuman::Dead()
+{
+}
+
+
 void ACHuman::Asign()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -110,6 +177,7 @@ void ACHuman::Asign()
 
 	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
+	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 
 	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
 	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
@@ -133,6 +201,5 @@ void ACHuman::Asign()
 	TSubclassOf<UCAnimInstance> animInstance;
 	CHelpers::GetClass<UCAnimInstance>(&animInstance, "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'");
 	GetMesh()->SetAnimClass(animInstance);
-
 }
 

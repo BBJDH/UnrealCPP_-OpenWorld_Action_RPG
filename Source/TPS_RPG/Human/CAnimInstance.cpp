@@ -26,7 +26,7 @@ void UCAnimInstance::NativeBeginPlay()
 	Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
 	//Test
-	Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
+	//Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(Owner);
 	CheckNull(weapon);

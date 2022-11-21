@@ -85,7 +85,6 @@ void ACHuman_Player::TestKeyBroadCast()
 void ACHuman_Player::HorizontalLook(float const InAxisValue)
 {
 	AddControllerYawInput(InAxisValue);
-
 }
 
 void ACHuman_Player::VerticalLook(float const InAxisValue)
