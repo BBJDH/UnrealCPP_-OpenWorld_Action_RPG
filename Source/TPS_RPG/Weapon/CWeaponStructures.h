@@ -67,7 +67,7 @@ public:
 		float StopTime;
 
 	UPROPERTY(EditAnywhere)
-		class USoundWave* Sound;
+		class USoundBase* Sound;
 
 	UPROPERTY(EditAnywhere)
 		class UFXSystemAsset* Effect;

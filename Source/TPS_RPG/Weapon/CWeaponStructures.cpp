@@ -3,8 +3,7 @@
 #include "GameFramework/Character.h"
 #include "Component/CStateComponent.h"
 #include "Animation/AnimMontage.h"
-#include "Sound/SoundWave.h"
-
+#include "Niagara/Classes/NiagaraSystem.h"
 void FDoActionData::DoAction(ACharacter* InOwner)
 {
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(InOwner);
@@ -82,6 +81,7 @@ void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
 	transform.SetLocation(InLocation);
 	transform.SetScale3D(EffectScale);
 	transform.AddToTranslation(EffectLocation);
-
-	CHelpers::PlayEffect(InWorld, Effect, transform);
+	
+	CHelpers::PlayNiagaraEffect(InWorld, Cast<UNiagaraSystem>(Effect), transform);
+	CHelpers::PlayParticleEffect(InWorld, Cast<UParticleSystem>(Effect) , transform);
 }

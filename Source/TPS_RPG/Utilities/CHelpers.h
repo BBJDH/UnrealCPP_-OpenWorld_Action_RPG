@@ -2,7 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Particles/ParticleSystem.h"
-
+#include "Niagara/Classes/NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #define CheckTrue(p) {if(p==true) return;} // True시 함수 종료
 #define CheckTrueResult(p,result) {if(p==true) return result;}// True시 함수 종료, 값리턴
 
@@ -168,29 +169,52 @@ public:
 	}
 
 
-	static void PlayEffect(UWorld* InWorld, UFXSystemAsset* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
+	static void PlayParticleEffect(UWorld* InWorld, UParticleSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
 	{
-		UParticleSystem* particle = Cast<UParticleSystem>(InEffect);
-
+		CheckNull(InEffect);
+		
 		FVector location = InTransform.GetLocation();
 		FRotator rotation = FRotator(InTransform.GetRotation());
 		FVector scale = InTransform.GetScale3D();
 
-
 		if (!!InMesh)
 		{
-			if (!!particle)
+			if (!!InEffect)
 			{
-				UGameplayStatics::SpawnEmitterAttached(particle, InMesh, InSocketName, location, rotation, scale);
+				UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
 
 				return;
 			}
 		}
 
-		if (!!particle)
+		if (!!InEffect)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(InWorld, particle, InTransform);
+			UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
 
+			return;
+		}
+	}
+	static void PlayNiagaraEffect(UWorld* InWorld, UNiagaraSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
+	{
+		CheckNull(InEffect);
+		FVector location = InTransform.GetLocation();
+		FRotator rotation = FRotator(InTransform.GetRotation());
+		FVector scale = InTransform.GetScale3D();
+
+		if (!!InMesh)
+		{
+			if (!!InEffect)
+			{
+				//UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
+				UNiagaraFunctionLibrary::SpawnSystemAttached(InEffect, InMesh, InSocketName, location, rotation, EAttachLocation::SnapToTarget, true);
+				return;
+			}
+		}
+
+		if (!!InEffect)
+		{
+			//UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(InWorld, InEffect, InTransform.GetLocation(), InTransform.Rotator(), InTransform.GetScale3D());
 			return;
 		}
 	}
