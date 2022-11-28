@@ -28,7 +28,8 @@ void UCDoAction_Combo::Begin_DoAction()
 	CheckFalse(bExist);
 
 	bExist = false;
-
+	//TODO: 콤보 인덱스 재처리,Action Name으로 찾은 인덱스 + Index
+	//Idle로 돌아온다면 Index 초기화,
 	++Index;
 
 	CheckFalse(Index < DoActionDatas.Num());

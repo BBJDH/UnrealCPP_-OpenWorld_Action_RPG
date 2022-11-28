@@ -152,10 +152,14 @@ void ACHuman::Hitted()
 
 		FVector start = GetActorLocation();
 		FVector target = DamageData.Attacker->GetActorLocation();
-		FVector direction = target - start;
+		FVector lookAt = target - start;
+		lookAt.Z = 0;
+
+		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
 		direction.Normalize();
 
-		LaunchCharacter(-direction * data->Launch, false, false);
+
+		LaunchCharacter(direction * data->Launch, false, false);
 		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
 	}
 
@@ -187,7 +191,7 @@ void ACHuman::Asign()
 	this->bUseControllerRotationYaw = false;
 	//캐릭터무브먼트에 지정된 가속만큼 이동방향으로 회전방향을 잡아줌
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->MaxWalkSpeed = MAX_WALK_SPEED;
+	GetCharacterMovement()->MaxWalkSpeed = 600;
 
 	USkeletalMesh* mesh = nullptr;
 

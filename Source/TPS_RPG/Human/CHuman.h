@@ -58,9 +58,6 @@ private:
 	void Dead();
 
 
-
-	
-
 public:
 	FActionCall StartFall;
 	FActionCall EndFall;
@@ -92,10 +89,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
 
-
-private:
-	//내부 설정변수
-	float const MAX_WALK_SPEED = 600;
 
 private:
 	struct FDamageData

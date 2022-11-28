@@ -30,6 +30,8 @@ struct FDoActionData
 
 public:
 	UPROPERTY(EditAnywhere)
+		FString ActionName;
+	UPROPERTY(EditAnywhere)
 		class UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
@@ -41,6 +43,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool bFixedCamera;
 
+	UPROPERTY(EditAnywhere)
+		bool InAir;
+
 public:
 	void DoAction(class ACharacter* InOwner);
 };
@@ -51,6 +56,7 @@ struct FHitData
 	GENERATED_BODY()
 
 public:
+
 	UPROPERTY(EditAnywhere)
 		class UAnimMontage* Montage;
 
@@ -71,6 +77,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		class UFXSystemAsset* Effect;
+
+	UPROPERTY(EditAnywhere)
+		FRotator LaunchRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditAnywhere)
 		FVector EffectLocation = FVector::ZeroVector;

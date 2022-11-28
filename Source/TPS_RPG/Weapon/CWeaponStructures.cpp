@@ -4,12 +4,12 @@
 #include "Component/CStateComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Niagara/Classes/NiagaraSystem.h"
+
 void FDoActionData::DoAction(ACharacter* InOwner)
 {
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(InOwner);
 	if (!!state)
 		state->SetActionMode();
-
 
 	if (!!Montage)
 		InOwner->PlayAnimMontage(Montage, PlayRatio);
@@ -47,7 +47,6 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 			characters.Add(character);
 		}
 	}
-
 
 	FTimerDelegate timerDelegate = FTimerDelegate::CreateLambda
 	(

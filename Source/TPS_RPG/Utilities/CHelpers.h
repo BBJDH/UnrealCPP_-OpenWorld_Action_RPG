@@ -26,10 +26,10 @@
 	Text->Text = FText::FromString(GetName().Replace(TEXT("Default__"), TEXT(""))); \
 }
 
-
 #define and &&
 #define or ||
 #define not !
+
 
 //언리얼에 필요한 기본적인 요소들 헤더
 
