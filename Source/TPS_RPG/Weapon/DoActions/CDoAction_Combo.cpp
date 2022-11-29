@@ -2,24 +2,34 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Component/CStateComponent.h"
+#include "Component/CStatusComponent.h"
 
 void UCDoAction_Combo::DoAction()
 {
 	Super::DoAction();
 	CheckFalse(DoActionDatas.Num() > 0);
 
-	if (bEnable)
+	if (IsComboEnable)
 	{
-		bEnable = false;
+		IsComboEnable = false;
 		bExist = true;
 
 		return;
 	}
 
 	CheckFalse(State->IsIdleMode());
-	CheckFalse(Index < DoActionDatas.Num());
+	CheckFalse(ActionIndex < DoActionDatas.Num());
 
-	DoActionDatas[Index].DoAction(Owner);
+	DoActionDatas[ActionIndex].DoAction(Owner);
+}
+
+void UCDoAction_Combo::DoUpperAction()
+{
+	Super::DoUpperAction();
+	CheckFalse(DoActionDatas.Num() > 0);
+	CheckFalse(State->IsIdleMode());
+	CheckFalse(ActionIndex < DoActionDatas.Num());
+	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
 void UCDoAction_Combo::Begin_DoAction()
@@ -30,24 +40,24 @@ void UCDoAction_Combo::Begin_DoAction()
 	bExist = false;
 	//TODO: 콤보 인덱스 재처리,Action Name으로 찾은 인덱스 + Index
 	//Idle로 돌아온다면 Index 초기화,
-	++Index;
+	++ActionIndex;
 
-	CheckFalse(Index < DoActionDatas.Num());
-	DoActionDatas[Index].DoAction(Owner);
+	CheckFalse(ActionIndex < DoActionDatas.Num());
+	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
 void UCDoAction_Combo::End_DoAction()
 {
 	Super::End_DoAction();
 
-	Index = 0;
+	ActionIndex = 0;
 }
 
 void UCDoAction_Combo::OffAttachmentCollision()
 {
 	Super::OffAttachmentCollision();
 
-	if (DoActionDatas[Index].bFixedCamera)
+	if (DoActionDatas[ActionIndex].FixedCamera)
 	{
 		float angle = -2.0f;
 		ACharacter* candidate = nullptr;
@@ -83,11 +93,12 @@ void UCDoAction_Combo::OnAttachmentBeginOverlap(class ACharacter* InAttacker, cl
 {
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
 	CheckNull(InOther);
-	CheckFalse(Index < HitDatas.Num());
+	CheckFalse(ActionIndex < HitDatas.Num());
 
-	for (ACharacter* elem : HittedCharacters)
+	for (auto const & elem : HittedCharacters)
 		CheckTrue(elem == InOther);
 
 	HittedCharacters.Add(InOther);
-	HitDatas[Index].SendDamage(InAttacker, InOther);
+	HitDatas[ActionIndex].SendDamage(InAttacker, InOther);
 }
+

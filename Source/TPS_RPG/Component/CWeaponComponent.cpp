@@ -111,3 +111,10 @@ void UCWeaponComponent::DoAction()
 	if (!!GetDoAction())
 		GetDoAction()->DoAction();
 }
+
+void UCWeaponComponent::DoUpperAction()
+{
+	CheckTrue(IsUnarmedMode());
+	if (!!GetDoAction())
+		GetDoAction()->DoUpperAction();
+}

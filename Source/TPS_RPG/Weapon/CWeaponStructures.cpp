@@ -42,7 +42,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 
 		if (!!character)
 		{
-			character->CustomTimeDilation = 1e-3f;
+			character->CustomTimeDilation = 5e-2f;
 
 			characters.Add(character);
 		}
@@ -56,7 +56,6 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 				character->CustomTimeDilation = 1.0f;
 		}
 	);
-
 	
 	FTimerHandle handle;
 	InWorld->GetTimerManager().SetTimer(handle, timerDelegate, StopTime, false);

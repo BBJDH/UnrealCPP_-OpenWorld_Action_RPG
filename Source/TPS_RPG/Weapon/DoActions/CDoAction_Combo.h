@@ -10,11 +10,12 @@ class TPS_RPG_API UCDoAction_Combo : public UCDoAction
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE void EnableCombo() { bEnable = true; }
-	FORCEINLINE void DisableCombo() { bEnable = false; }
+	FORCEINLINE void EnableCombo() { IsComboEnable = true; }
+	FORCEINLINE void DisableCombo() { IsComboEnable = false; }
 
 public:
 	void DoAction() override;
+	void DoUpperAction() override;
 	void Begin_DoAction() override;
 	void End_DoAction() override;
 
@@ -23,9 +24,7 @@ public:
 	void OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther) override;
 
 private:
-	int32 Index;
-
-	bool bEnable;
+	bool IsComboEnable;
 	bool bExist;
 
 private:

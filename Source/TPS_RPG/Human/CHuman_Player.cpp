@@ -57,11 +57,9 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("GreatSword", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetGreatSwordMode);
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
-
-
+	PlayerInputComponent->BindAction("UpperAttack", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoUpperAction);
 	//Test
 	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyBroadCast);
-
 
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);

@@ -5,6 +5,8 @@
 #include "Weapon/CWeaponStructures.h"
 #include "CDoAction.generated.h"
 
+//DECLARE_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, EActionType);
+
 UCLASS(Abstract)
 class TPS_RPG_API UCDoAction : public UObject
 {
@@ -18,6 +20,7 @@ public:
 
 public:
 	virtual void DoAction();
+	virtual void DoUpperAction();
 	virtual void Begin_DoAction();
 	virtual void End_DoAction();
 
@@ -34,14 +37,23 @@ public:
 	UFUNCTION()
 		virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther) { }
 
+private:
+	void FindActionIdex(EActionType const NewType);
+	void ChangedType(EActionType const InType);
+public:
+	//FActionTypeChanged OnActionTypeChaged;
+
 protected:
 	class ACharacter* Owner;
 	class UWorld* World;
 
 	class UCStateComponent* State;
+	class UCStatusComponent* Status;
 
+	EActionType ActionType;
 protected:
-	bool bBeginAction;
+	int32 ActionIndex;
+	bool BeginAction;
 
 	TArray<FDoActionData> DoActionDatas;
 	TArray<FHitData> HitDatas;

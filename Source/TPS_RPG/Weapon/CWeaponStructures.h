@@ -16,11 +16,12 @@ public:
 	UPROPERTY(EditAnywhere)
 		float PlayRatio = 1;
 
-	UPROPERTY(EditAnywhere)
-		bool bCanMove = true;
+};
 
-	UPROPERTY(EditAnywhere)
-		bool bUseControlRotation = true;
+UENUM()
+enum class EActionType
+{
+	Normal, Airborne, R_Skill, Execution, Ctrl_1_Skill, Max
 };
 
 USTRUCT()
@@ -30,18 +31,16 @@ struct FDoActionData
 
 public:
 	UPROPERTY(EditAnywhere)
-		FString ActionName;
+		EActionType ActionCommand;
 	UPROPERTY(EditAnywhere)
 		class UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
 		float PlayRatio = 1;
 
-	UPROPERTY(EditAnywhere)
-		bool bCanMove = true;
 
 	UPROPERTY(EditAnywhere)
-		bool bFixedCamera;
+		bool FixedCamera;
 
 	UPROPERTY(EditAnywhere)
 		bool InAir;
@@ -93,6 +92,8 @@ public:
 	void PlayHitStop(class UWorld* InWorld);
 	void PlaySound(class ACharacter* InOwner);
 	void PlayEffect(class UWorld* InWorld, const FVector& InLocation);
+
+
 };
 
 USTRUCT()

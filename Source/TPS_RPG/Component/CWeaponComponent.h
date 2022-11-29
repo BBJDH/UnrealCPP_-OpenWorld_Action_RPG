@@ -48,6 +48,7 @@ public:
 	void SetGreatSwordMode();
 
 	void DoAction();
+	void DoUpperAction();
 
 private:
 	void SetMode(EWeaponType InType);
