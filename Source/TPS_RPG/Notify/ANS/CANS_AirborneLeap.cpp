@@ -42,5 +42,7 @@ void UCANS_AirborneLeap::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 	if (IsKeyPressed)
 	{
 		Player->LaunchCharacter(FVector(0, 0, 1200), false, false);
+		if (Player->StartFall.IsBound())
+			Player->StartFall.Broadcast();
 	}
 }

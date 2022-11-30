@@ -28,6 +28,7 @@ void UCDoAction::Tick(float InDeltaTime)
 void UCDoAction::DoAction()
 {
 	ChangedType(EActionType::Normal);
+	CLog::Print(Status->IsInAir());
 }
 
 void UCDoAction::DoUpperAction()
@@ -45,18 +46,24 @@ void UCDoAction::End_DoAction()
 	BeginAction = false;
 
 	State->SetIdleMode();
-	ChangedType(EActionType::Normal);
 }
+
 void UCDoAction::FindActionIdex(EActionType const NewType)
 {
 	//FDoActionData 에서 status의 Inair, 현재 무기의 액션 커멘드를 확인
+
 	ActionIndex = 0;
 	for (auto const& elem : DoActionDatas)
 	{
 		if (Status->IsInAir() == elem.InAir and elem.ActionCommand == NewType)
+		{
+			if (Status->IsInAir() == elem.InAir)
 			break;
+		}
 		ActionIndex++;
 	}
+	CLog::Print("FindIndex InAir :");
+	CLog::Print(Status->IsInAir());
 }
 
 void UCDoAction::ChangedType(EActionType const NewType)
