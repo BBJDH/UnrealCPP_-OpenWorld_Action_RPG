@@ -13,6 +13,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FActionCall);
 
+
 UCLASS()
 class TPS_RPG_API ACHuman : public ACharacter
 {

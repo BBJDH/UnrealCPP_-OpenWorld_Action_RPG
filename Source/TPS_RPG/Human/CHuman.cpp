@@ -149,7 +149,6 @@ void ACHuman::Hitted()
 		data->PlaySound(this);
 		data->PlayEffect(GetWorld(), GetActorLocation());
 
-
 		FVector start = GetActorLocation();
 		FVector target = DamageData.Attacker->GetActorLocation();
 		FVector lookAt = target - start;
@@ -157,10 +156,22 @@ void ACHuman::Hitted()
 
 		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
 		direction.Normalize();
+		if(data->IsLaunchAttacker)
+		{
+			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, false);
+			ACHuman* attacker = Cast<ACHuman>(DamageData.Attacker);
 
+			CheckNull(attacker);
+
+			if (attacker->StartFall.IsBound())
+				attacker->StartFall.Broadcast();
+		}
 
 		LaunchCharacter(direction * data->Launch, false, false);
-		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+		FRotator lookAtRotation = UKismetMathLibrary::FindLookAtRotation(start, target);
+		lookAtRotation.Pitch = 0;
+		lookAtRotation.Roll = 0;
+		SetActorRotation(lookAtRotation);
 	}
 
 	DamageData.Attacker = nullptr;

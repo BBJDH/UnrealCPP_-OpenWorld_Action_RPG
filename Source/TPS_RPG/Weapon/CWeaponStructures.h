@@ -78,6 +78,9 @@ public:
 		class UFXSystemAsset* Effect;
 
 	UPROPERTY(EditAnywhere)
+		bool IsLaunchAttacker;
+
+	UPROPERTY(EditAnywhere)
 		FRotator LaunchRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditAnywhere)
