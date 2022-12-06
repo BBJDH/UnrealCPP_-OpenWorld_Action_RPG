@@ -84,7 +84,6 @@ void ACHuman::OnJumpPressed()
 		case 1: Montage->PlaySecondJump(); break;
 		}
 	}
-
 	//AnimInstance, Status ÀüÆÄ
 	if (StartFall.IsBound())
 		StartFall.Broadcast();
@@ -116,8 +115,6 @@ void ACHuman::OnMoveRight(float const InAxisValue)
 	AddMovementInput(direction, InAxisValue);
 }
 
-
-
 void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
 {
 	switch (InNewType)
@@ -135,10 +132,8 @@ void ACHuman::Hitted()
 	if (Status->GetHealth() <= 0.0f)
 	{
 		State->SetDeadMode();
-
 		return;
 	}
-
 
 	if (!!DamageData.Event && !!DamageData.Event->HitData)
 	{
@@ -173,7 +168,6 @@ void ACHuman::Hitted()
 		lookAtRotation.Roll = 0;
 		SetActorRotation(lookAtRotation);
 	}
-
 	DamageData.Attacker = nullptr;
 	DamageData.Event = nullptr;
 }

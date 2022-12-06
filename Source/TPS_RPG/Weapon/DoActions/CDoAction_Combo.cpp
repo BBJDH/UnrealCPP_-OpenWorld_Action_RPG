@@ -16,7 +16,6 @@ void UCDoAction_Combo::DoAction()
 
 		return;
 	}
-
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
 
@@ -26,6 +25,8 @@ void UCDoAction_Combo::DoAction()
 void UCDoAction_Combo::DoUpperAction()
 {
 	Super::DoUpperAction();
+
+
 	CheckFalse(DoActionDatas.Num() > 0);
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
@@ -50,7 +51,7 @@ void UCDoAction_Combo::End_DoAction()
 {
 	Super::End_DoAction();
 
-	ActionIndex = 0;
+
 }
 
 void UCDoAction_Combo::OffAttachmentCollision()

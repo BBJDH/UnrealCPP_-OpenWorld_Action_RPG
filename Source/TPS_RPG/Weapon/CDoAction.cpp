@@ -22,13 +22,13 @@ void UCDoAction::BeginPlay(ACAttachment* InAttachment, UCEquipment* InEquipment,
 
 void UCDoAction::Tick(float InDeltaTime)
 {
+	CLog::Print(Status->IsInAir());
 
 }
 
 void UCDoAction::DoAction()
 {
 	ChangedType(EActionType::Normal);
-	CLog::Print(Status->IsInAir());
 }
 
 void UCDoAction::DoUpperAction()
@@ -44,33 +44,29 @@ void UCDoAction::Begin_DoAction()
 void UCDoAction::End_DoAction()
 {
 	BeginAction = false;
-
 	State->SetIdleMode();
+	FindActionIdex(ActionType);
 }
 
 void UCDoAction::FindActionIdex(EActionType const NewType)
 {
 	//FDoActionData 에서 status의 Inair, 현재 무기의 액션 커멘드를 확인
 
-	ActionIndex = 0;
-	for (auto const& elem : DoActionDatas)
+	for(int i=0; i< DoActionDatas.Max(); i++)
 	{
-		if (Status->IsInAir() == elem.InAir and elem.ActionCommand == NewType)
+		if(Status->IsInAir() == DoActionDatas[i].InAir and DoActionDatas[i].ActionCommand == NewType)
 		{
-			if (Status->IsInAir() == elem.InAir)
+			ActionIndex = i;
 			break;
 		}
-		ActionIndex++;
 	}
-	CLog::Print("FindIndex InAir :");
-	CLog::Print(Status->IsInAir());
+
 }
 
 void UCDoAction::ChangedType(EActionType const NewType)
 {
 	EActionType const PrevType = this->ActionType;
 	this->ActionType = NewType;
-
 	if(PrevType != NewType)
 		FindActionIdex(NewType);
 	//외부 이벤트로 사용시 바인딩 처리해두어야 함  ChangedType 이용
