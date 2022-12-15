@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
+#include "Components/TimelineComponent.h"
 #include "CAnimNotify_Dash.generated.h"
-
 /**
  * 
  */
@@ -14,8 +14,21 @@ class TPS_RPG_API UCAnimNotify_Dash : public UAnimNotify
 {
 	GENERATED_BODY()
 
+
+
 public:
 	FString GetNotifyName_Implementation() const override;
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
-	
+
+private:
+
+	void DashSetup();
+
+
+
+private:
+
+	UPROPERTY(EditAnywhere)
+		class ACHuman_Player* Owner;
+
 };

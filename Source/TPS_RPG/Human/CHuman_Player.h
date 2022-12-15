@@ -19,7 +19,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
+	virtual void Tick(float DeltaSeconds) override;
 protected:
 
 	virtual void Asign() override;
@@ -31,7 +31,28 @@ protected:
 	void HorizontalLook(float const InAxisValue);
 	void VerticalLook(float const InAxisValue);
 
+
+	//TODO : Dash Ã³¸®Áß
 public:
 	//Test
 	FActionCall TestKeyEvent;
+
+	//Dash Timeline
+	FTimeline DashTimeline;
+
+	UPROPERTY(EditAnywhere, Category = "Dash")
+		class UCurveFloat* CurveFloat;
+	void DashEvent();
+	void TimelineProgress();
+	void TimelineStop();
+
+//private:
+//	UPROPERTY(EditAnywhere)
+//		float const BackUp_MaxWalkSpeed = 600.0f;
+//
+//	UPROPERTY(EditAnywhere)
+//		float const BackUp_MaxAcceleration = 2048.0f;
+//
+//	UPROPERTY(EditAnywhere)
+//		FRotator const BackUp_RotationRate = { 0,0,360 };
 };

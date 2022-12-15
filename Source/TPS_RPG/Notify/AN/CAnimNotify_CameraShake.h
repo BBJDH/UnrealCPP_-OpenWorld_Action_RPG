@@ -17,7 +17,6 @@ class TPS_RPG_API UCAnimNotify_CameraShake : public UAnimNotify
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TSubclassOf<class UMatineeCameraShake> CameraShakeClass;
-
 public:
 	FString GetNotifyName_Implementation() const override;
 

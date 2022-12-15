@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Component/CStateComponent.h"
+#include "Components/TimelineComponent.h"
 #include "CHuman.generated.h"
 /*
  ======================================
@@ -49,7 +50,7 @@ private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType);
 
-
+	
 	/*
 	 * 액션마다 고유의 피격 몽타주를 재생시키면 보스의 특수화를 어떻게 할까
 	 *오버라이딩을 이용해서 구현한다면 몽땅 따로 특수화를 해줘야하는가
@@ -62,6 +63,7 @@ private:
 public:
 	FActionCall StartFall;
 	FActionCall EndFall;
+
 
 
 	//컴포넌트

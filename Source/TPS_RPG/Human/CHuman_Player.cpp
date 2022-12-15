@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
 
@@ -13,10 +14,17 @@ ACHuman_Player::ACHuman_Player():ACHuman()
 	Asign();
 }
 
+
 void ACHuman_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	Bind(PlayerInputComponent);
+}
+
+void ACHuman_Player::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	DashTimeline.TickTimeline(DeltaSeconds);
 }
 
 void ACHuman_Player::Asign()
@@ -90,3 +98,29 @@ void ACHuman_Player::VerticalLook(float const InAxisValue)
 	AddControllerPitchInput(InAxisValue);
 
 }
+
+void ACHuman_Player::DashEvent()
+{
+	CheckNull(CurveFloat);
+
+	FOnTimelineFloat timelineProgress;
+	timelineProgress.BindUFunction(this, FName("TimelineProgress"));
+	DashTimeline.AddInterpFloat(CurveFloat, timelineProgress);
+
+	DashTimeline.PlayFromStart();
+}
+
+void ACHuman_Player::TimelineProgress()
+{
+	AddMovementInput(this->GetActorForwardVector());
+}
+
+void ACHuman_Player::TimelineStop()
+{
+	
+	//this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
+	//this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
+	//this->GetCharacterMovement()->RotationRate = BackUp_RotationRate;
+	this->GetCharacterMovement()->StopMovementImmediately();
+}
+
