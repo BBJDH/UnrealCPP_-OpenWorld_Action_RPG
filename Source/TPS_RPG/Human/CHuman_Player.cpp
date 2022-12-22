@@ -29,14 +29,11 @@ void ACHuman_Player::Tick(float DeltaSeconds)
 
 void ACHuman_Player::Asign()
 {
-
 	/*
 	======================================
 				SpringArm Setting
 	======================================
 	*/
-
-
 	SpringArm->SetRelativeLocation(FVector(0, 0, 60));
 	SpringArm->SocketOffset = FVector(0, 60, 0);
 	SpringArm->TargetArmLength = 600;
@@ -66,8 +63,9 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAction("GreatSword", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetGreatSwordMode);
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 	PlayerInputComponent->BindAction("UpperAttack", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoUpperAction);
+
 	//Test
-	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyBroadCast);
+	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::DashEvent);
 
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);
@@ -96,18 +94,22 @@ void ACHuman_Player::HorizontalLook(float const InAxisValue)
 void ACHuman_Player::VerticalLook(float const InAxisValue)
 {
 	AddControllerPitchInput(InAxisValue);
-
 }
 
 void ACHuman_Player::DashEvent()
 {
 	CheckNull(CurveFloat);
-
+	DashSetup();
 	FOnTimelineFloat timelineProgress;
 	timelineProgress.BindUFunction(this, FName("TimelineProgress"));
 	DashTimeline.AddInterpFloat(CurveFloat, timelineProgress);
 
+	FOnTimelineEvent timelineFinishedCallback;
+	timelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
+	DashTimeline.SetTimelineFinishedFunc(timelineFinishedCallback);
+
 	DashTimeline.PlayFromStart();
+	//이벤트를 직접 입력하여 타임라인 동작하는지 확인 -> TimelineProgress가 호출되지 않음
 }
 
 void ACHuman_Player::TimelineProgress()
@@ -117,10 +119,16 @@ void ACHuman_Player::TimelineProgress()
 
 void ACHuman_Player::TimelineStop()
 {
-	
-	//this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
-	//this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
-	//this->GetCharacterMovement()->RotationRate = BackUp_RotationRate;
+	this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
+	this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
+	this->GetCharacterMovement()->RotationRate = BackUp_RotationRate;
 	this->GetCharacterMovement()->StopMovementImmediately();
+}
+
+void ACHuman_Player::DashSetup()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 2000.0f;
+	GetCharacterMovement()->MaxAcceleration = 100000.0f;
+	GetCharacterMovement()->RotationRate = FRotator(0, 0, 100000000.0f);
 }
 

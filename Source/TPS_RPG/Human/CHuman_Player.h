@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -20,8 +19,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Tick(float DeltaSeconds) override;
-protected:
 
+protected:
 	virtual void Asign() override;
 	void Bind(UInputComponent* const PlayerInputComponent);
 
@@ -43,16 +42,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Dash")
 		class UCurveFloat* CurveFloat;
 	void DashEvent();
+	UFUNCTION()
 	void TimelineProgress();
+	UFUNCTION()
 	void TimelineStop();
+	void DashSetup();
 
-//private:
-//	UPROPERTY(EditAnywhere)
-//		float const BackUp_MaxWalkSpeed = 600.0f;
-//
-//	UPROPERTY(EditAnywhere)
-//		float const BackUp_MaxAcceleration = 2048.0f;
-//
-//	UPROPERTY(EditAnywhere)
-//		FRotator const BackUp_RotationRate = { 0,0,360 };
+private:
+	float const  BackUp_MaxWalkSpeed = 600;
+	float const BackUp_MaxAcceleration = 2048.0f;
+	FRotator const BackUp_RotationRate = { 0,0,360 };
 };
