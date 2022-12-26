@@ -21,6 +21,8 @@ public:
 public:
 	virtual void DoAction();
 	virtual void DoUpperAction();
+	virtual void Do_R_Action();
+
 	virtual void Begin_DoAction();
 	virtual void End_DoAction();
 

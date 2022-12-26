@@ -43,13 +43,12 @@ public:
 		class UCurveFloat* CurveFloat;
 	void DashEvent();
 	UFUNCTION()
-	void TimelineProgress();
+		void TimelineProgress(float const Axis);
 	UFUNCTION()
-	void TimelineStop();
+		void TimelineStop();
 	void DashSetup();
 
 private:
 	float const  BackUp_MaxWalkSpeed = 600;
 	float const BackUp_MaxAcceleration = 2048.0f;
-	FRotator const BackUp_RotationRate = { 0,0,360 };
 };

@@ -49,6 +49,7 @@ public:
 
 	void DoAction();
 	void DoUpperAction();
+	void Do_R_Action();
 
 private:
 	void SetMode(EWeaponType InType);

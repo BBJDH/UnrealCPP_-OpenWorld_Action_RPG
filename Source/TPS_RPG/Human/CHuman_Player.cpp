@@ -55,7 +55,7 @@ void ACHuman_Player::Asign()
 void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 {
 	CheckNull(PlayerInputComponent);
-
+	
 	//Action
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACHuman_Player::OnJumpPressed);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACHuman_Player::OnJumpReleased);
@@ -63,9 +63,10 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAction("GreatSword", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::SetGreatSwordMode);
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 	PlayerInputComponent->BindAction("UpperAttack", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoUpperAction);
+	PlayerInputComponent->BindAction("R_Skill", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Do_R_Action);
 
 	//Test
-	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::DashEvent);
+	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyBroadCast);
 
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);
@@ -82,8 +83,7 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 
 void ACHuman_Player::TestKeyBroadCast() 
 {
-	if (TestKeyEvent.IsBound())
-		TestKeyEvent.Broadcast();
+
 }
 
 void ACHuman_Player::HorizontalLook(float const InAxisValue)
@@ -100,6 +100,8 @@ void ACHuman_Player::DashEvent()
 {
 	CheckNull(CurveFloat);
 	DashSetup();
+	DisableInput(Cast<APlayerController>(GetController()));
+
 	FOnTimelineFloat timelineProgress;
 	timelineProgress.BindUFunction(this, FName("TimelineProgress"));
 	DashTimeline.AddInterpFloat(CurveFloat, timelineProgress);
@@ -112,23 +114,22 @@ void ACHuman_Player::DashEvent()
 	//이벤트를 직접 입력하여 타임라인 동작하는지 확인 -> TimelineProgress가 호출되지 않음
 }
 
-void ACHuman_Player::TimelineProgress()
+void ACHuman_Player::TimelineProgress(float const Axis)
 {
-	AddMovementInput(this->GetActorForwardVector());
+	AddMovementInput(Axis*this->GetActorForwardVector());
 }
 
 void ACHuman_Player::TimelineStop()
 {
+	EnableInput(Cast<APlayerController>(GetController()));
 	this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
 	this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
-	this->GetCharacterMovement()->RotationRate = BackUp_RotationRate;
 	this->GetCharacterMovement()->StopMovementImmediately();
 }
 
 void ACHuman_Player::DashSetup()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 2000.0f;
-	GetCharacterMovement()->MaxAcceleration = 100000.0f;
-	GetCharacterMovement()->RotationRate = FRotator(0, 0, 100000000.0f);
+	GetCharacterMovement()->MaxWalkSpeed = 20000.0f;
+	GetCharacterMovement()->MaxAcceleration = 1000000000.0f;
 }
 

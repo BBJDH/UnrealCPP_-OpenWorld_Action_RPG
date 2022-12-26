@@ -33,6 +33,16 @@ void UCDoAction_Combo::DoUpperAction()
 	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
+void UCDoAction_Combo::Do_R_Action()
+{
+	Super::Do_R_Action();
+
+	CheckFalse(DoActionDatas.Num() > 0);
+	CheckFalse(State->IsIdleMode());
+	CheckFalse(ActionIndex < DoActionDatas.Num());
+	DoActionDatas[ActionIndex].DoAction(Owner);
+}
+
 void UCDoAction_Combo::Begin_DoAction()
 {
 	Super::Begin_DoAction();
@@ -50,8 +60,6 @@ void UCDoAction_Combo::Begin_DoAction()
 void UCDoAction_Combo::End_DoAction()
 {
 	Super::End_DoAction();
-
-
 }
 
 void UCDoAction_Combo::OffAttachmentCollision()

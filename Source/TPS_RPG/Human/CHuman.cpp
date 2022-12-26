@@ -104,6 +104,7 @@ void ACHuman::OnMoveForward(float const InAxisValue)
 	FVector const direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
 	//Rotator(카메라가 바라보는 Yaw)의 Q(X,Y,Z) , GetForwardVector()는 외적하여 길이를 늘인상태
 
+	//CLog::Print(static_cast<int>(SpringArm->bUsePawnControlRotation));
 	AddMovementInput(direction, InAxisValue);
 }
 

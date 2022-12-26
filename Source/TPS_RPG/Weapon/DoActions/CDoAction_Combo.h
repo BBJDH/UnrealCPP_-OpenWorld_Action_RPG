@@ -16,6 +16,9 @@ public:
 public:
 	void DoAction() override;
 	void DoUpperAction() override;
+	void Do_R_Action() override;
+
+
 	void Begin_DoAction() override;
 	void End_DoAction() override;
 

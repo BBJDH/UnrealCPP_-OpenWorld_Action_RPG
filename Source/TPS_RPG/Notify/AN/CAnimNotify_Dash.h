@@ -22,13 +22,6 @@ public:
 
 private:
 
-	void DashSetup();
-
-
-
-private:
-
 	UPROPERTY(EditAnywhere)
 		class ACHuman_Player* Owner;
-
 };

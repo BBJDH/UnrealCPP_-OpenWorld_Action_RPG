@@ -20,7 +20,6 @@ void UCWeaponAsset::BeginPlay(ACharacter* InOwner)
 
 		Attachment = InOwner->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, params);
 	}
-
 	
 	Equipment = NewObject<UCEquipment>(this);
 	Equipment->BeginPlay(InOwner, EquipmentData);

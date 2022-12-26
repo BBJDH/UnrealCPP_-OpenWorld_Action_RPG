@@ -27,21 +27,13 @@ void UCAnimNotify_Dash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 	if (Owner->GetCharacterMovement()->IsFalling())
 		return;
 
-	DashSetup();
 	CheckNull(Owner->GetController());
 
 	APlayerController* PlayerController = Cast<APlayerController>(Owner->GetController());
 	CheckNull(PlayerController);
 
 	PlayerController->DisableInput(PlayerController);
-
 	Owner->DashEvent();
 	
 }
 
-void UCAnimNotify_Dash::DashSetup()
-{
-	Owner->GetCharacterMovement()->MaxWalkSpeed = 2000000.0f;
-	Owner->GetCharacterMovement()->MaxAcceleration = 1000000000.0f;
-	Owner->GetCharacterMovement()->RotationRate = FRotator(0,0, 100000000.0f);
-}

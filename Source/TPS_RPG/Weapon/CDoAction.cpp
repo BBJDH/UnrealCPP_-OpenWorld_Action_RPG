@@ -23,7 +23,6 @@ void UCDoAction::BeginPlay(ACAttachment* InAttachment, UCEquipment* InEquipment,
 void UCDoAction::Tick(float InDeltaTime)
 {
 	CLog::Print(Status->IsInAir());
-
 }
 
 void UCDoAction::DoAction()
@@ -34,6 +33,11 @@ void UCDoAction::DoAction()
 void UCDoAction::DoUpperAction()
 {
 	ChangedType(EActionType::Airborne);
+}
+
+void UCDoAction::Do_R_Action()
+{
+	ChangedType(EActionType::R_Skill);
 }
 
 void UCDoAction::Begin_DoAction()
@@ -60,7 +64,6 @@ void UCDoAction::FindActionIdex(EActionType const NewType)
 			break;
 		}
 	}
-
 }
 
 void UCDoAction::ChangedType(EActionType const NewType)
