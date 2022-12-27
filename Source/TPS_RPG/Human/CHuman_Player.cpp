@@ -99,7 +99,7 @@ void ACHuman_Player::VerticalLook(float const InAxisValue)
 void ACHuman_Player::DashEvent()
 {
 	CheckNull(CurveFloat);
-	DashSetup();
+	DashSetup(); 
 	DisableInput(Cast<APlayerController>(GetController()));
 
 	FOnTimelineFloat timelineProgress;
@@ -109,9 +109,8 @@ void ACHuman_Player::DashEvent()
 	FOnTimelineEvent timelineFinishedCallback;
 	timelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
 	DashTimeline.SetTimelineFinishedFunc(timelineFinishedCallback);
-
+	
 	DashTimeline.PlayFromStart();
-	//이벤트를 직접 입력하여 타임라인 동작하는지 확인 -> TimelineProgress가 호출되지 않음
 }
 
 void ACHuman_Player::TimelineProgress(float const Axis)

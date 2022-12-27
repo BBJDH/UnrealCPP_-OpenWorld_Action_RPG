@@ -27,13 +27,6 @@ void UCAnimNotify_Dash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 	if (Owner->GetCharacterMovement()->IsFalling())
 		return;
 
-	CheckNull(Owner->GetController());
-
-	APlayerController* PlayerController = Cast<APlayerController>(Owner->GetController());
-	CheckNull(PlayerController);
-
-	PlayerController->DisableInput(PlayerController);
 	Owner->DashEvent();
-	
 }
 

@@ -9,9 +9,15 @@ public class TPS_RPG : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		bUseUnity = false;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Niagara" });
 
 		PublicIncludePaths.Add(ModuleDirectory);
+
+		PublicDependencyModuleNames.Add("Core");
+		PublicDependencyModuleNames.Add("CoreUObject");
+		PublicDependencyModuleNames.Add("Engine");
+		PublicDependencyModuleNames.Add("InputCore");
+		PublicDependencyModuleNames.Add("Niagara");
+		PublicDependencyModuleNames.Add("AIModule");
 		//포함 디렉토리 추가,  CPP_Basic 기준경로를 포함시킨다
 	}
 }

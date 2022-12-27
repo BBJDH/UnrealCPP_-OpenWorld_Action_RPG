@@ -31,21 +31,26 @@ protected:
 	void VerticalLook(float const InAxisValue);
 
 
-	//TODO : Dash 贸府吝
+
 public:
 	//Test
 	FActionCall TestKeyEvent;
-
+	// Dash 贸府吝
 	//Dash Timeline
 	FTimeline DashTimeline;
 
 	UPROPERTY(EditAnywhere, Category = "Dash")
 		class UCurveFloat* CurveFloat;
+
+
 	void DashEvent();
+
+private:
 	UFUNCTION()
 		void TimelineProgress(float const Axis);
 	UFUNCTION()
 		void TimelineStop();
+
 	void DashSetup();
 
 private:
