@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/CWeaponStructures.h"
 
 ACHuman_Player::ACHuman_Player():ACHuman()
 {

@@ -21,6 +21,7 @@ void ACAttachment::BeginPlay()
 		component->OnComponentBeginOverlap.AddDynamic(this, &ACAttachment::OnComponentBeginOverlap);
 		component->OnComponentEndOverlap.AddDynamic(this, &ACAttachment::OnComponentEndOverlap);
 	}
+
 	OffCollision();
 
 	Super::BeginPlay();

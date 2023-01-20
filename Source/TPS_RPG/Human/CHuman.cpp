@@ -169,6 +169,7 @@ void ACHuman::Hitted()
 		lookAtRotation.Roll = 0;
 		SetActorRotation(lookAtRotation);
 	}
+
 	DamageData.Attacker = nullptr;
 	DamageData.Event = nullptr;
 }

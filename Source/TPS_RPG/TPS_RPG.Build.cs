@@ -18,6 +18,7 @@ public class TPS_RPG : ModuleRules
 		PublicDependencyModuleNames.Add("InputCore");
 		PublicDependencyModuleNames.Add("Niagara");
 		PublicDependencyModuleNames.Add("AIModule");
+		PublicDependencyModuleNames.Add("GameplayTasks");
 		//포함 디렉토리 추가,  CPP_Basic 기준경로를 포함시킨다
 	}
 }

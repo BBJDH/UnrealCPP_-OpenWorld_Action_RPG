@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "Human/CHuman.h"
 #include "CHuman_Player.generated.h"
 
@@ -17,7 +18,6 @@ public:
 	ACHuman_Player();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual void Tick(float DeltaSeconds) override;
 
 protected:
@@ -25,12 +25,10 @@ protected:
 	void Bind(UInputComponent* const PlayerInputComponent);
 
 	//TestKey
-	void TestKeyBroadCast() ;
+	void TestKeyBroadCast();
 
 	void HorizontalLook(float const InAxisValue);
 	void VerticalLook(float const InAxisValue);
-
-
 
 public:
 	//Test

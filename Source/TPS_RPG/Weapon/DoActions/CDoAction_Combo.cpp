@@ -1,8 +1,9 @@
 #include "Weapon/DoActions/CDoAction_Combo.h"
+
+#include "GenericTeamAgentInterface.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Component/CStateComponent.h"
-#include "Component/CStatusComponent.h"
 
 void UCDoAction_Combo::DoAction()
 {
@@ -16,6 +17,7 @@ void UCDoAction_Combo::DoAction()
 
 		return;
 	}
+
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
 
@@ -103,10 +105,17 @@ void UCDoAction_Combo::OnAttachmentBeginOverlap(class ACharacter* InAttacker, cl
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
 	CheckNull(InOther);
 	CheckFalse(ActionIndex < HitDatas.Num());
-
+	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(Owner);
+	CheckNull(teamagentInterface);
+	uint8 ownerID = teamagentInterface->GetGenericTeamId();
+	CheckTrue(ownerID == Cast<IGenericTeamAgentInterface>(InOther)->GetGenericTeamId());
 	for (auto const & elem : HittedCharacters)
+	{
+		// elem은 충돌체 안에 충돌한 Character 클래스 중복 체크
+		// 이미 충돌했던 액터들과 일치한다면 여기서 탈출
 		CheckTrue(elem == InOther);
-
+	}
+	//새로 충돌된 객체들만 여기서 호출
 	HittedCharacters.Add(InOther);
 	HitDatas[ActionIndex].SendDamage(InAttacker, InOther);
 }

@@ -38,7 +38,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		float PlayRatio = 1;
 
-
 	UPROPERTY(EditAnywhere)
 		bool FixedCamera;
 
