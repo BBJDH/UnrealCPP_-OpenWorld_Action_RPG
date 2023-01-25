@@ -44,9 +44,13 @@ void ACAIController::OnPossess(APawn* InPawn)
 	Owner = Cast<ACHuman_AI>(InPawn);
 	SetGenericTeamId(Owner->GetGenericTeamId());
 	//BehaviorTree에 설정된 블랙보드를 AI컨트롤러의 블랙보드 컴포넌트에 등록
+
+	CheckNull(Owner->GetBehaviorTree());
+
 	UseBlackboard(Owner->GetBehaviorTree()->BlackboardAsset, Blackboard);
 
 	AIState = CHelpers::GetComponent<UCAIStateComponent>(Owner);
+	//CheckNull(AIState);
 	AIState->SetBlackboard(Blackboard);
 
 	RunBehaviorTree(Owner->GetBehaviorTree());

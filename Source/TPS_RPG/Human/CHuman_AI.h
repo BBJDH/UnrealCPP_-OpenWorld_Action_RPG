@@ -12,19 +12,23 @@ class TPS_RPG_API ACHuman_AI : public ACHuman
 	GENERATED_BODY()
 
 public:
+	ACHuman_AI();
 
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 
-public:
-	ACHuman_AI();
+protected:
+	virtual void BeginPlay() override;
+
+
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCAIStateComponent* AIState;
 
 
-protected:
-	virtual void BeginPlay() override;
 
 };

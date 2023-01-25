@@ -4,6 +4,7 @@
 #include "Human/AI/CBTService_Melee.h"
 
 #include "Global.h"
+#include "Component/CAIStateComponent.h"
 #include "Human/CHuman_AI.h"
 #include "Human/AI/CAIController.h"
 
@@ -11,7 +12,7 @@
 UCBTService_Melee::UCBTService_Melee()
 {
 	NodeName = "Melee";
-	Interval = 0.1f;
+	Interval = 0.01f;
 	RandomDeviation = 0.0f;
 }
 
@@ -20,16 +21,16 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
-	ACHuman_AI* ai = Cast<ACHuman_AI>(controller->GetPawn());
-	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
+	ACHuman_AI* OwnerCharacter = Cast<ACHuman_AI>(controller->GetPawn());
+	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 
-	//UCAIStateComponent* aiState = CHelpers::GetComponent<UCAIStateComponent>(ai);
+	UCAIStateComponent* aiState = CHelpers::GetComponent<UCAIStateComponent>(OwnerCharacter);
 
-	//if (state->IsHittedMode())
-	//{
-	//	aiState->SetHittedMode();
-	//	return;
-	//}
+	if (state->IsHittedMode())
+	{
+		aiState->SetWaitMode();
+		return;
+	}
 
 	//ACPlayer* player = aiState->GetTargetPlayer();
 	//if (player == nullptr)
@@ -51,5 +52,5 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	//	return;
 	//}
 
-	//aiState->SetApproachMode();
+	aiState->SetTraceMode();
 }

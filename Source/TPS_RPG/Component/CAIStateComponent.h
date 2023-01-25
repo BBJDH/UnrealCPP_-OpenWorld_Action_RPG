@@ -30,7 +30,6 @@ public:
 	void SetBattleMode();
 
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
-
 protected:
 	virtual void BeginPlay() override;
 

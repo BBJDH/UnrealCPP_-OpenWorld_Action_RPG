@@ -68,7 +68,6 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 
 	//Test
 	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyBroadCast);
-
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACHuman_Player::OnMoveRight);

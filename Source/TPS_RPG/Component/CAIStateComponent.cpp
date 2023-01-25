@@ -38,7 +38,6 @@ void UCAIStateComponent::SetBattleMode()
 	ChangeType(EAIState::Battle);
 }
 
-
 void UCAIStateComponent::BeginPlay()
 {
 	Super::BeginPlay();
