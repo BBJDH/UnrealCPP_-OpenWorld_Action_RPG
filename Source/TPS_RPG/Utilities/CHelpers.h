@@ -137,7 +137,7 @@ public:
 	static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
 	{
 		ConstructorHelpers::FClassFinder<T> asset(*InPath);
-		*OutClass = asset.Class;
+		*OutClass = asset.Class; 
 	}
 
 	template<typename T>

@@ -33,6 +33,8 @@ void ACHuman::BeginPlay()
 void ACHuman::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//if (this->GetCharacterMovement()->IsFalling())
+	//	CLog::Print("Falling");
 }
 
 float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -152,6 +154,7 @@ void ACHuman::Hitted()
 
 		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
 		direction.Normalize();
+
 		if(data->IsLaunchAttacker)
 		{
 			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, false);

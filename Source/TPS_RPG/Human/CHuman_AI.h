@@ -20,10 +20,13 @@ protected:
 	virtual void BeginPlay() override;
 
 
-
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
+
+protected:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UWidgetComponent* HealthBarWidget;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
