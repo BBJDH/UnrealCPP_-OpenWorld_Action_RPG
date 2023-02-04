@@ -13,6 +13,7 @@ public:
 	UCStatusComponent();
 	void Damage(float InAmount);
 	FORCEINLINE float GetHealth() const { return Health; }
+	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 
 	FORCEINLINE bool IsInAir() const { return InAir; }
 	void CheckFarFromGround();
