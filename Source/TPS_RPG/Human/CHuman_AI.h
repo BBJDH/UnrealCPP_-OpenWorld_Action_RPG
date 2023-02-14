@@ -15,6 +15,7 @@ public:
 	ACHuman_AI();
 
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	virtual void BeginPlay() override;

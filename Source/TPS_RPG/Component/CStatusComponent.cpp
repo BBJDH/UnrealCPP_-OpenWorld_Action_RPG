@@ -11,7 +11,7 @@ UCStatusComponent::UCStatusComponent():InAir(false)
 void UCStatusComponent::CheckFarFromGround()
 {
 	FVector const traceStart = OwnerCharacter->GetActorLocation();
-	FVector const traceEnd = { traceStart.X,traceStart.Y,traceStart.Z - MAX_Ground_Far };
+	FVector const traceEnd = { traceStart.X,traceStart.Y,traceStart.Z - Falling_Distance };
 	TArray<AActor*> ignoreActors;
 	ignoreActors.Add(OwnerCharacter);
 	FHitResult HitResult{};

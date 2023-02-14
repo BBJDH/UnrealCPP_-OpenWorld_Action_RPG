@@ -23,6 +23,19 @@ ACHuman_AI::ACHuman_AI()
 	
 }
 
+float ACHuman_AI::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	UCUserWidget_HealthBar* healthBar = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
+
+	if(healthBar != nullptr)
+		healthBar->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
+
+	return damage;
+}
+
 void ACHuman_AI::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,6 +45,8 @@ void ACHuman_AI::BeginPlay()
 	HealthBarWidget->InitWidget();
 	
 	UCUserWidget_HealthBar * healthBar = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
+	CheckNull(healthBar);
+
 	healthBar->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
 	healthBar->SetNameText(this->GetName());
 	healthBar->SetControllerNameText(this->GetController()->GetName());

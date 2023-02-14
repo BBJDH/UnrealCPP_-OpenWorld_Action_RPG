@@ -39,6 +39,16 @@ public:
 
 };
 
+/*==========================================================
+ *
+ *
+ *			UCFeetComponent
+ *
+ *
+ *==========================================================
+ */
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_RPG_API UCFeetComponent : public UActorComponent
 {
@@ -47,6 +57,8 @@ class TPS_RPG_API UCFeetComponent : public UActorComponent
 	
 public:	
 	UCFeetComponent();
+
+
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -63,7 +75,12 @@ protected:
 private:
 	void Trace(FName InName, float & OutDistance, FRotator& OutRotation);
 
-
+	//내부 함수
+	//직렬화 해야 델리게이트에서 찾기 가능
+	UFUNCTION()
+		void StartInAir();
+	UFUNCTION()
+		void EndInAir();
 
 
 
@@ -95,7 +112,7 @@ private:
 
 	FFeetData Data;
 
-
+	bool IsOnTrace;
 
 		
 };

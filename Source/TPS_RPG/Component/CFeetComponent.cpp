@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Human/CHuman.h"
 
 //#define LOG_UCFeetComponent 1
 
@@ -12,6 +13,7 @@ UCFeetComponent::UCFeetComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	DrawDebug = EDrawDebugTrace::Type::ForOneFrame;
+	IsOnTrace = true;
 }
 
 
@@ -19,12 +21,18 @@ void UCFeetComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	CheckNull(OwnerCharacter);
+
+	Cast<ACHuman>(OwnerCharacter)->StartFall.AddUFunction(this, "StartInAir");
+	Cast<ACHuman>(OwnerCharacter)->EndFall.AddUFunction(this, "EndInAir");
 }
 
 
 void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	CheckFalse(IsOnTrace);
 
 	float leftDistance, rightDistance;		//받아올 발 간격
 	FRotator leftRotation, rightRotation;	//받아올 발 회전각
@@ -132,5 +140,16 @@ RotationFromX를 사용해도 된다
 	//하지만 애초에 값을 Z/X로 넣어준다면?
 	OutRotation = FRotator(pitch, 0, roll);
 
+}
+
+void UCFeetComponent::StartInAir()
+{
+
+	IsOnTrace = false;
+}
+
+void UCFeetComponent::EndInAir()
+{
+	IsOnTrace = true;
 }
 

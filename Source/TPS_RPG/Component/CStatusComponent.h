@@ -32,7 +32,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 		float MaxHealth = 100;
 
-	float const MAX_Ground_Far = 400;
+	float const Falling_Distance = 400;
 
 private:
 	class ACharacter* OwnerCharacter;

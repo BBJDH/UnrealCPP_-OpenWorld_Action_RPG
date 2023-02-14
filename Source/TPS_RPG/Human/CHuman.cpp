@@ -1,6 +1,9 @@
 
 
 #include "CHuman.h"
+
+#include <string>
+
 #include "Global.h"
 
 #include "CAnimInstance.h"
@@ -47,7 +50,6 @@ float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	DamageData.Event = (FHitDamageEvent*)&DamageEvent;
 
 	State->SetHittedMode();
-
 	return damage;
 }
 
@@ -55,12 +57,12 @@ float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 void ACHuman::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
-
+	CustomJumpCount = 0;
 	if (this->GetVelocity().Z < -1000)
 		Montage->PlayLended();
 
-	//AnimInstance, Status 전파
-	if (EndFall.IsBound() and Status->IsInAir())
+	//AnimInstance, Status, FeetComponent 전파
+	if (EndFall.IsBound() /*and Status->IsInAir()*/)
 		EndFall.Broadcast();
 }
 
@@ -68,15 +70,16 @@ void ACHuman::Falling()
 {
 	Super::Falling();
 
-	//AnimInstance, Status 전파
-	if (StartFall.IsBound() and Status->IsInAir() )
+	//AnimInstance, Status, FeetComponent 전파... 더 늘어난다면 디버깅은...?
+	if (StartFall.IsBound()/* and Status->IsInAir()*/ )
 		StartFall.Broadcast();
 }
 
 void ACHuman::OnJumpPressed()
 {
 	Super::Jump();
-	//점프 이벤트 전달 Animinstance
+	//bPressedJump = true;
+
 
 	if(Super::CanJump())
 	{
@@ -86,7 +89,8 @@ void ACHuman::OnJumpPressed()
 		case 1: Montage->PlaySecondJump(); break;
 		}
 	}
-	//AnimInstance, Status 전파
+
+	//AnimInstance, Status, FeetComponent 전파
 	if (StartFall.IsBound())
 		StartFall.Broadcast();
 }
@@ -94,6 +98,7 @@ void ACHuman::OnJumpPressed()
 
 void ACHuman::OnJumpReleased()
 {
+	//bPressedJump = false;
 	Super::StopJumping();
 }
 
@@ -180,6 +185,15 @@ void ACHuman::Hitted()
 void ACHuman::Dead()
 {
 }
+
+//void ACHuman::ClearJumpInput(float DeltaTime)
+//{
+//	Super::ClearJumpInput(DeltaTime);
+//	if (JumpKeyHoldTime >= GetJumpMaxHoldTime())
+//	{
+//		CLog::Print("Clear!!");
+//	}
+//}
 
 
 void ACHuman::Asign()

@@ -9,11 +9,11 @@
 #include "GameFramework/CharacterMovementComponent.h"
 //#define LOG_UCFeetComponent 1
 
-void UCAnimInstance::ToggleIK()
-{
-	IsOnFeetIK = !IsOnFeetIK;
-	CLog::Print(IsOnFeetIK);
-}
+//void UCAnimInstance::ToggleIK()
+//{
+//	IsOnFeetIK = !IsOnFeetIK;
+//	CLog::Print(IsOnFeetIK);
+//}
 
 void UCAnimInstance::NativeBeginPlay()
 {

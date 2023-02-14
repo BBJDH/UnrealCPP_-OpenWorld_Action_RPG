@@ -24,16 +24,16 @@ class TPS_RPG_API ACHuman
 
 public:
 	ACHuman();
-	virtual void Tick(float DeltaTime) override;
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	void Tick(float DeltaTime) override;
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
 
 protected:
-	virtual void BeginPlay() override;
 	virtual void Asign();
+	void BeginPlay() override;
 
-	virtual void Landed(const FHitResult& Hit) override;
-	virtual void Falling() override;
+	void Landed(const FHitResult& Hit) override;
+	void Falling() override;
 
 	//BindAction
 	void OnJumpPressed();
@@ -55,6 +55,10 @@ private:
 	 */
 	void Hitted();
 	void Dead();
+
+
+	//Test
+	//void ClearJumpInput(float DeltaTime) override;
 
 
 public:
@@ -101,6 +105,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		uint8 TeamID = 1;
+
+	int CustomJumpCount = 0;
 
 };
 

@@ -37,8 +37,8 @@ private:
 
 
 	//Test¿ë
-	UFUNCTION()
-	void ToggleIK();
+	//UFUNCTION()
+	//void ToggleIK();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Feet IK")
