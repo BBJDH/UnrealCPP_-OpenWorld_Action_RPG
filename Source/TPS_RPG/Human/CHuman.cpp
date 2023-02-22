@@ -61,18 +61,20 @@ void ACHuman::Landed(const FHitResult& Hit)
 	if (this->GetVelocity().Z < -1000)
 		Montage->PlayLended();
 
+	EndFall();
 	//AnimInstance, Status, FeetComponent 전파
-	if (EndFall.IsBound() /*and Status->IsInAir()*/)
-		EndFall.Broadcast();
+	//if (EndFall.IsBound() /*and Status->IsInAir()*/)
+	//	EndFall.Broadcast();
 }
 
 void ACHuman::Falling()
 {
 	Super::Falling();
 
+	StartFall();
 	//AnimInstance, Status, FeetComponent 전파... 더 늘어난다면 디버깅은...?
-	if (StartFall.IsBound()/* and Status->IsInAir()*/ )
-		StartFall.Broadcast();
+	//if (StartFall.IsBound()/* and Status->IsInAir()*/ )
+	//	StartFall.Broadcast();
 }
 
 void ACHuman::OnJumpPressed()
@@ -90,9 +92,10 @@ void ACHuman::OnJumpPressed()
 		}
 	}
 
+	StartFall();
 	//AnimInstance, Status, FeetComponent 전파
-	if (StartFall.IsBound())
-		StartFall.Broadcast();
+	//if (StartFall.IsBound())
+	//	StartFall.Broadcast();
 }
 
 
@@ -167,8 +170,9 @@ void ACHuman::Hitted()
 
 			CheckNull(attacker);
 
-			if (attacker->StartFall.IsBound())
-				attacker->StartFall.Broadcast();
+			StartFall();
+			/*if (attacker->StartFall.IsBound())
+				attacker->StartFall.Broadcast();*/
 		}
 
 		LaunchCharacter(direction * data->Launch, false, false);
@@ -184,6 +188,27 @@ void ACHuman::Hitted()
 
 void ACHuman::Dead()
 {
+}
+
+void ACHuman::StartFall()
+{
+	//AnimInstance, Status, FeetComponent 전파
+	UAnimInstance * animInstance =  this->GetMesh()->GetAnimInstance();
+	CheckNull(animInstance);
+	Cast<UCAnimInstance>(animInstance)->StartInAir();
+	Status->StartInAir();
+	Feet->StartInAir();
+
+}
+
+void ACHuman::EndFall()
+{
+	//AnimInstance, Status, FeetComponent 전파
+	UAnimInstance* animInstance = this->GetMesh()->GetAnimInstance();
+	CheckNull(animInstance);
+	Cast<UCAnimInstance>(animInstance)->EndInAir();
+	Status->EndInAir();
+	Feet->EndInAir();
 }
 
 //void ACHuman::ClearJumpInput(float DeltaTime)
@@ -228,6 +253,8 @@ void ACHuman::Asign()
 
 	TSubclassOf<UCAnimInstance> animInstance;
 	CHelpers::GetClass<UCAnimInstance>(&animInstance, "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'");
+
 	GetMesh()->SetAnimClass(animInstance);
+	//위의 함수는 내부적으로 이함수를 호출 GetMesh()->SetAnimInstanceClass(animInstance);
 }
 

@@ -23,8 +23,8 @@ void UCFeetComponent::BeginPlay()
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	CheckNull(OwnerCharacter);
 
-	Cast<ACHuman>(OwnerCharacter)->StartFall.AddUFunction(this, "StartInAir");
-	Cast<ACHuman>(OwnerCharacter)->EndFall.AddUFunction(this, "EndInAir");
+	//Cast<ACHuman>(OwnerCharacter)->StartFall.AddUFunction(this, "StartInAir");
+	//Cast<ACHuman>(OwnerCharacter)->EndFall.AddUFunction(this, "EndInAir");
 }
 
 

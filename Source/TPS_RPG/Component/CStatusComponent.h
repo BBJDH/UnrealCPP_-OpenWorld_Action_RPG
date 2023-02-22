@@ -18,15 +18,14 @@ public:
 	FORCEINLINE bool IsInAir() const { return InAir; }
 	void CheckFarFromGround();
 
+	UFUNCTION()
+		void StartInAir() { InAir = true; }
+	UFUNCTION()
+		void EndInAir() { InAir = false; }
+
 protected:
 	virtual void BeginPlay() override;
 
-
-private:
-	UFUNCTION()
-		void StartInAir(){ InAir = true; }
-	UFUNCTION()
-		void EndInAir(){ InAir = false; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")

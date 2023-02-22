@@ -22,8 +22,8 @@ void UCAnimInstance::NativeBeginPlay()
 	Owner = Cast<ACharacter>(TryGetPawnOwner());
 
 	CheckNull(Owner);
-	Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
-	Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
+	//Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
+	//Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
 	//Test
 	//Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");

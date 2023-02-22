@@ -16,6 +16,12 @@ class TPS_RPG_API UCAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION()
+		void StartInAir();
+	UFUNCTION()
+		void EndInAir();
+
 protected:
 
 
@@ -30,10 +36,10 @@ private:
 private:
 	//내부 함수
 	//직렬화 해야 델리게이트에서 찾기 가능
-	UFUNCTION()
-	void StartInAir();
-	UFUNCTION()
-	void EndInAir();
+	//UFUNCTION()
+	//void StartInAir();
+	//UFUNCTION()
+	//void EndInAir();
 
 
 	//Test용

@@ -27,6 +27,8 @@ public:
 	void Tick(float DeltaTime) override;
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
+	void StartFall();
+	void EndFall();
 
 protected:
 	virtual void Asign();
@@ -57,13 +59,14 @@ private:
 	void Dead();
 
 
+
 	//Test
 	//void ClearJumpInput(float DeltaTime) override;
 
 
-public:
-	FActionCall StartFall;
-	FActionCall EndFall;
+//public:
+//	FActionCall StartFall;
+//	FActionCall EndFall;
 
 
 
