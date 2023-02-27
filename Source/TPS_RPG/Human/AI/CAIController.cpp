@@ -20,14 +20,14 @@ ACAIController::ACAIController()
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
 	Sight->SightRadius = 600;
 	Sight->LoseSightRadius = 800;
-	Sight->PeripheralVisionAngleDegrees = 45;
-	Sight->SetMaxAge(2);
+	Sight->PeripheralVisionAngleDegrees = 150;	//인식범위 각
+	Sight->SetMaxAge(2);	//2초 후 잊혀짐
 
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
 	Sight->DetectionByAffiliation.bDetectNeutrals = false;
 	Sight->DetectionByAffiliation.bDetectFriendlies = false;
-
-	Perception->ConfigureSense(*Sight);
+	
+	Perception->ConfigureSense(*Sight);	//시야감지
 	Perception->SetDominantSense(*Sight->GetSenseImplementation()); 
 }
 
@@ -65,7 +65,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	TArray<AActor*> actors;
 	//어떤 감지로 뜬것을 가져올지 (nullptr은 모든 감지)
-	Perception->GetCurrentlyPerceivedActors(nullptr, actors);
+	Perception->GetCurrentlyPerceivedActors(TSubclassOf<UAISense_Sight>(), actors);
 
 	ACHuman* Target = nullptr;
 	for (AActor* actor : actors)

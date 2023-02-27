@@ -1,7 +1,6 @@
 #include "Component/CStatusComponent.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
-#include "Human/CHuman.h"
 
 UCStatusComponent::UCStatusComponent():InAir(false)
 {
@@ -43,8 +42,7 @@ void UCStatusComponent::BeginPlay()
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	Health = MaxHealth;
 
-
-	CheckNull(OwnerCharacter);
+	//CheckNull(OwnerCharacter);
 	//Cast<ACHuman>(OwnerCharacter)->StartFall.AddUFunction(this, "StartInAir");
 	//Cast<ACHuman>(OwnerCharacter)->EndFall.AddUFunction(this, "EndInAir");
 }

@@ -47,5 +47,5 @@ private:
 
 	//블랙보드 멤버 이름
 	UPROPERTY(EditAnywhere, Category = "Key")
-		FName AIStateKey = "AIStateType";
+		FName KeyNameOfAIState = "AIStateType";
 };

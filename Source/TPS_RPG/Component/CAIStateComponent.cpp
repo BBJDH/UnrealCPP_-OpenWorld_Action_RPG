@@ -45,14 +45,14 @@ void UCAIStateComponent::BeginPlay()
 
 EAIState UCAIStateComponent::GetType() const
 {
-	return static_cast<EAIState>(Blackboard->GetValueAsEnum(AIStateKey));
+	return static_cast<EAIState>(Blackboard->GetValueAsEnum(KeyNameOfAIState));
 }
 
 void UCAIStateComponent::ChangeType(EAIState const InType) const
 {
 
 	EAIState const PrevType = this->GetType();
-	Blackboard->SetValueAsEnum(AIStateKey, static_cast<uint8>(InType));
+	Blackboard->SetValueAsEnum(KeyNameOfAIState, static_cast<uint8>(InType));
 
 	if (OnAIStateTypeChaged.IsBound())
 		OnAIStateTypeChaged.Broadcast(PrevType,InType);
