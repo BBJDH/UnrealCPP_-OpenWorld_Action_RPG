@@ -97,7 +97,9 @@ private:
 		float TraceDistance = 88;
 	//땅하고 발의 높이(추적/수정할 높이)
 
-
+	UPROPERTY(EditAnywhere, Category = "Trace")
+		float OffsetDistance = 0;
+	//바닥으로부터 이격된것 보정값(주인공 캐릭터는 힐 높이 -5, 나머지는 0)
 
 
 	UPROPERTY(EditAnywhere, Category = "Trace")

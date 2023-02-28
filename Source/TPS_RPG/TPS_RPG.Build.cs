@@ -6,7 +6,8 @@ public class TPS_RPG : ModuleRules
 {
 	public TPS_RPG(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        PrivateDependencyModuleNames.AddRange(new string[] { "GameplayCameras" });
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		bUseUnity = false;
 	
 

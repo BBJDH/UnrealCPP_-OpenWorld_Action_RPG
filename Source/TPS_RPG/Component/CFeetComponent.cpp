@@ -7,12 +7,13 @@
 #include "Components/CapsuleComponent.h"
 #include "Human/CHuman.h"
 
-//#define LOG_UCFeetComponent 1
+#define LOG_UCFeetComponent 1
+//#define LOG_UCFeetComponent 0
 
 UCFeetComponent::UCFeetComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	DrawDebug = EDrawDebugTrace::Type::ForOneFrame;
+	DrawDebug = EDrawDebugTrace::Type::None;
 	IsOnTrace = true;
 }
 
@@ -125,7 +126,7 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 	0 => -TraceDistance 만큼 아래로 이동해야 한다
 **************************************/
 
-	OutDistance = length  - TraceDistance;
+	OutDistance = length + OffsetDistance - TraceDistance;
 
 	/*************************************
 RotationFromX를 사용해도 된다

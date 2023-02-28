@@ -8,6 +8,7 @@
 #include "CHuman_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 //#define LOG_UCFeetComponent 1
+#define LOG_UCFeetComponent 0
 
 //void UCAnimInstance::ToggleIK()
 //{

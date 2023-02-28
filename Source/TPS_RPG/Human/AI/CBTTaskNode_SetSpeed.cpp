@@ -28,5 +28,6 @@ EBTNodeResult::Type UCBTTaskNode_SetSpeed::ExecuteTask(UBehaviorTreeComponent& O
 
 	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 600;
 
+
 	return EBTNodeResult::Succeeded;
 }

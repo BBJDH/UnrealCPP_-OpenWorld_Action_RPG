@@ -50,13 +50,11 @@ void CLog::Log(FString const & InValue)
 {
 	//GLog->Log("GameProject", ELogVerbosity::Display, *InValue);
 	UE_LOG(GameProject, Display, TEXT("%s"), *InValue);
-
 }
 void CLog::Log(FVector const & InValue)
 {
 	//GLog->Log("GameProject", ELogVerbosity::Display, *InValue.ToString());
 	UE_LOG(GameProject, Display, TEXT("%s"), *InValue.ToString());
-
 }
 void CLog::Log(FRotator const & InValue)
 {
