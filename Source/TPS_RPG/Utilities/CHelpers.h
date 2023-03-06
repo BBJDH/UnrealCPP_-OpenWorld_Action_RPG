@@ -4,15 +4,16 @@
 #include "Particles/ParticleSystem.h"
 #include "Niagara/Classes/NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
-#define CheckTrue(p) {if(p==true) return;} // True시 함수 종료
-#define CheckTrueResult(p,result) {if(p==true) return result;}// True시 함수 종료, 값리턴
 
-#define CheckFalse(p) {if(p==false) return;}// false시 함수 종료
-#define CheckFalseResult(p,result) {if(p==false) return result;} // false시 함수 종료, 값리턴
+#define CheckTrue(p) {if((p)==true) return;} // True시 함수 종료
+#define CheckTrueResult(p,result) {if((p)==true) return result;}// True시 함수 종료, 값리턴
+
+#define CheckFalse(p) {if((p)==false) return;}// false시 함수 종료
+#define CheckFalseResult(p,result) {if((p)==false) return result;} // false시 함수 종료, 값리턴
 //True시 종료 리턴이 있다면 값 반환
 
-#define CheckNull(p) {if(p==nullptr) return;}	//nullptr이라면 해당 함수 종료
-#define CheckNullResult(p,result) {if(p==nullptr) return result;}// nullptr이라면 인자값p를 리턴
+#define CheckNull(p) {if((p)==nullptr) return;}	//nullptr이라면 해당 함수 종료
+#define CheckNullResult(p,result) {if((p)==nullptr) return result;}// nullptr이라면 인자값p를 리턴
 
 
 #define CreateTextRender() \
@@ -61,7 +62,7 @@ public:
 
 		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 
-			if (!!InParent)		//nullptr 체크
+			if (InParent !=nullptr)		//nullptr 체크
 			{
 				//부모 SceneComponent가 존재한다면
 				(*OutComponent)->SetupAttachment(InParent, InSocketName);
@@ -145,7 +146,7 @@ public:
 	{
 		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)//월드의 현재 레벨의 모든 액터 순회
 		{
-			if (!!actor && actor->IsA<T>()) //IsA 상속이다 : TRUE
+			if (actor != nullptr && actor->IsA<T>()) //IsA 상속이다 : TRUE
 			{
 				return Cast<T>(actor);
 			}
@@ -160,7 +161,7 @@ public:
 
 		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)//월드의 현재 레벨의 모든 액터 순회
 		{
-			if (!!actor && actor->IsA<T>()) //IsA 상속이다 : TRUE
+			if (actor != nullptr && actor->IsA<T>()) //IsA 상속이다 : TRUE
 			{
 				OutArray.Add(Cast<T>(actor));
 			}
@@ -177,9 +178,9 @@ public:
 		FRotator rotation = FRotator(InTransform.GetRotation());
 		FVector scale = InTransform.GetScale3D();
 
-		if (!!InMesh)
+		if (InMesh != nullptr)
 		{
-			if (!!InEffect)
+			if (InEffect != nullptr)
 			{
 				UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
 
@@ -187,7 +188,7 @@ public:
 			}
 		}
 
-		if (!!InEffect)
+		if (InEffect != nullptr)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
 
@@ -201,9 +202,9 @@ public:
 		FRotator rotation = FRotator(InTransform.GetRotation());
 		FVector scale = InTransform.GetScale3D();
 
-		if (!!InMesh)
+		if (InMesh != nullptr)
 		{
-			if (!!InEffect)
+			if (InEffect != nullptr)
 			{
 				//UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
 				UNiagaraFunctionLibrary::SpawnSystemAttached(InEffect, InMesh, InSocketName, location, rotation, EAttachLocation::SnapToTarget, true);
@@ -211,7 +212,7 @@ public:
 			}
 		}
 
-		if (!!InEffect)
+		if (InEffect != nullptr)
 		{
 			//UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(InWorld, InEffect, InTransform.GetLocation(), InTransform.Rotator(), InTransform.GetScale3D());

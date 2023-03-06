@@ -64,7 +64,7 @@ void CLog::Log(FRotator const & InValue)
 void CLog::Log(UObject const * InValue)
 {
 	FString str{};
-	if (!!InValue)
+	if (InValue !=nullptr)
 		str.Append(InValue->GetName());
 
 	str.Append(InValue ? " : Not Null" : " : Null");
@@ -128,7 +128,7 @@ void CLog::Print(FRotator const & InValue, int32 InKey, float InDuration, FColor
 void CLog::Print(UObject const * InValue, int32 InKey, float InDuration, FColor InColor)
 {
 	FString str{};
-	if (!!InValue)
+	if (InValue != nullptr)
 		str.Append(InValue->GetName());
 
 	str.Append(InValue ? " : Not Null" : " : Null");

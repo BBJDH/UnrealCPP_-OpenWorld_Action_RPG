@@ -17,31 +17,24 @@ class TPS_RPG_API UCWeaponComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(EditAnywhere, Category = "DataAsset")
-		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
-
 public:
+
+	UCWeaponComponent();
+
+
+
+	class ACAttachment* GetAttachment();
+	class UCEquipment* GetEquipment();
+	class UCDoActionComponent* GetDoAction();
+
 	FORCEINLINE bool IsUnarmedMode() { return Type == EWeaponType::Max; }
 	FORCEINLINE bool IsSwordMode() { return Type == EWeaponType::Sword; }
 	FORCEINLINE bool IsHammerMode() { return Type == EWeaponType::Hammer; }
 	FORCEINLINE bool IsGreatSwordMode() { return Type == EWeaponType::GreatSword; }
 
-public:	
-	UCWeaponComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-protected:
-	virtual void BeginPlay() override;
-
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;		
-
-public:
-	class ACAttachment* GetAttachment();
-	class UCEquipment* GetEquipment();
-	class UCDoAction* GetDoAction();
-
-public:
+	void InitComboIndex();
 	void SetUnarmedMode();
 	void SetSwordMode();
 	void SetHammerMode();
@@ -51,6 +44,11 @@ public:
 	void DoUpperAction();
 	void Do_R_Action();
 
+
+
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	void SetMode(EWeaponType InType);
 	void ChangeType(EWeaponType InType);
@@ -59,6 +57,11 @@ public:
 	FWeaponTypeChanged OnWeaponTypeChange;
 
 private:
+
+	UPROPERTY(EditAnywhere, Category = "DataAsset")
+		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
+
 	class ACharacter* Owner;
 	EWeaponType Type = EWeaponType::Max;
+
 };

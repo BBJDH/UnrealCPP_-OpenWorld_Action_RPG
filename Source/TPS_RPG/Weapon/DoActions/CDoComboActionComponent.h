@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Weapon/CDoAction.h"
-#include "CDoAction_Combo.generated.h"
+#include "Weapon/CDoActionComponent.h"
+#include "CDoComboActionComponent.generated.h"
 
 UCLASS(Blueprintable)
-class TPS_RPG_API UCDoAction_Combo : public UCDoAction
+class TPS_RPG_API UCDoComboActionComponent : public UCDoActionComponent
 {
 	GENERATED_BODY()
 

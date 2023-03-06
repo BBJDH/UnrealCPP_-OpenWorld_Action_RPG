@@ -1,8 +1,8 @@
 #include "CAnimNotifyState_Combo.h"
 #include "Global.h"
 #include "Component/CWeaponComponent.h"
-#include "Weapon/CDoAction.h"
-#include "Weapon/DoActions/CDoAction_Combo.h"
+#include "Weapon/CDoActionComponent.h"
+#include "Weapon/DoActions/CDoComboActionComponent.h"
 
 FString UCAnimNotifyState_Combo::GetNotifyName_Implementation() const
 {
@@ -19,7 +19,7 @@ void UCAnimNotifyState_Combo::NotifyBegin(USkeletalMeshComponent * MeshComp, UAn
 	CheckNull(weapon);
 	CheckNull(weapon->GetDoAction());
 
-	UCDoAction_Combo* combo = Cast<UCDoAction_Combo>(weapon->GetDoAction());
+	UCDoComboActionComponent* combo = Cast<UCDoComboActionComponent>(weapon->GetDoAction());
 	CheckNull(combo);
 
 	combo->EnableCombo();
@@ -36,7 +36,7 @@ void UCAnimNotifyState_Combo::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnim
 	CheckNull(weapon);
 	CheckNull(weapon->GetDoAction());
 
-	UCDoAction_Combo* combo = Cast<UCDoAction_Combo>(weapon->GetDoAction());
+	UCDoComboActionComponent* combo = Cast<UCDoComboActionComponent>(weapon->GetDoAction());
 	CheckNull(combo);
 
 	combo->DisableCombo();

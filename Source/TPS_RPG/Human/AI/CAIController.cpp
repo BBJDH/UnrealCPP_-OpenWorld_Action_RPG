@@ -71,7 +71,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 	for (AActor* actor : actors)
 	{
 		Target = Cast<ACHuman>(actor);
-		if (!!Target)
+		if (Target != nullptr)
 			break;
 	}
 	Blackboard->SetValueAsObject("Target", Target);

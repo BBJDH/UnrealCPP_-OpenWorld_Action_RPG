@@ -45,7 +45,7 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(Owner);
 
 	CheckNull(feet);
-	if (!!feet &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
+	if (feet != nullptr &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
 	{
 		IsOnFeetIK = true;
 		FeetIKData = feet->GetData();

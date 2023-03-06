@@ -1,11 +1,11 @@
-#include "Weapon/DoActions/CDoAction_Combo.h"
+#include "Weapon/DoActions/CDoComboActionComponent.h"
 
 #include "GenericTeamAgentInterface.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Component/CStateComponent.h"
 
-void UCDoAction_Combo::DoAction()
+void UCDoComboActionComponent::DoAction()
 {
 	Super::DoAction();
 	CheckFalse(DoActionDatas.Num() > 0);
@@ -24,10 +24,9 @@ void UCDoAction_Combo::DoAction()
 	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
-void UCDoAction_Combo::DoUpperAction()
+void UCDoComboActionComponent::DoUpperAction()
 {
 	Super::DoUpperAction();
-
 
 	CheckFalse(DoActionDatas.Num() > 0);
 	CheckFalse(State->IsIdleMode());
@@ -35,7 +34,7 @@ void UCDoAction_Combo::DoUpperAction()
 	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
-void UCDoAction_Combo::Do_R_Action()
+void UCDoComboActionComponent::Do_R_Action()
 {
 	Super::Do_R_Action();
 
@@ -45,11 +44,11 @@ void UCDoAction_Combo::Do_R_Action()
 	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
-void UCDoAction_Combo::Begin_DoAction()
+void UCDoComboActionComponent::Begin_DoAction()
 {
 	Super::Begin_DoAction();
 	CheckFalse(bExist);
-
+	
 	bExist = false;
 	//TODO: 콤보 인덱스 재처리,Action Name으로 찾은 인덱스 + Index
 	//Idle로 돌아온다면 Index 초기화,
@@ -59,12 +58,12 @@ void UCDoAction_Combo::Begin_DoAction()
 	DoActionDatas[ActionIndex].DoAction(Owner);
 }
 
-void UCDoAction_Combo::End_DoAction()
+void UCDoComboActionComponent::End_DoAction()
 {
 	Super::End_DoAction();
 }
 
-void UCDoAction_Combo::OffAttachmentCollision()
+void UCDoComboActionComponent::OffAttachmentCollision()
 {
 	Super::OffAttachmentCollision();
 
@@ -87,7 +86,7 @@ void UCDoAction_Combo::OffAttachmentCollision()
 			}
 		}
 
-		if (!!candidate)
+		if (candidate != nullptr)
 		{
 			FRotator rotator = UKismetMathLibrary::FindLookAtRotation(Owner->GetActorLocation(), candidate->GetActorLocation());
 			FRotator target = FRotator(0, rotator.Yaw, 0);
@@ -100,7 +99,7 @@ void UCDoAction_Combo::OffAttachmentCollision()
 	HittedCharacters.Empty();
 }
 
-void UCDoAction_Combo::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther)
+void UCDoComboActionComponent::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther)
 {
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
 	CheckNull(InOther);

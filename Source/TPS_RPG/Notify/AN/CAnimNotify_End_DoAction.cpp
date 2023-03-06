@@ -2,7 +2,7 @@
 
 #include "Global.h"
 #include "Component/CWeaponComponent.h"
-#include "Weapon/CDoAction.h"
+#include "Weapon/CDoActionComponent.h"
 
 FString UCAnimNotify_End_DoAction::GetNotifyName_Implementation() const
 {

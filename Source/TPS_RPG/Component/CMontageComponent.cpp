@@ -64,7 +64,7 @@ void UCMontageComponent::PlayAnimMontage(EMontageType const InType) const
 	CheckNull(Owner);
 
 	FMontageData* data = Datas[static_cast<int32>(InType)];
-	if (!!data && !!data->Montage)
+	if (data != nullptr && data->Montage != nullptr)
 		Owner->PlayAnimMontage(data->Montage, data->PlayRatio);
 }
 

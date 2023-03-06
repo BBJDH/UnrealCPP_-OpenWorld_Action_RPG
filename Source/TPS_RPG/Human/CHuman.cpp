@@ -146,7 +146,7 @@ void ACHuman::Hitted()
 		return;
 	}
 
-	if (!!DamageData.Event && !!DamageData.Event->HitData)
+	if (DamageData.Event != nullptr && DamageData.Event->HitData != nullptr)
 	{
 		FHitData* data = DamageData.Event->HitData;
 
@@ -198,6 +198,7 @@ void ACHuman::StartFall()
 	Cast<UCAnimInstance>(animInstance)->StartInAir();
 	Status->StartInAir();
 	Feet->StartInAir();
+	Weapon->InitComboIndex();
 
 }
 
@@ -209,6 +210,8 @@ void ACHuman::EndFall()
 	Cast<UCAnimInstance>(animInstance)->EndInAir();
 	Status->EndInAir();
 	Feet->EndInAir();
+	Weapon->InitComboIndex();
+
 }
 
 //void ACHuman::ClearJumpInput(float DeltaTime)

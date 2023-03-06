@@ -16,7 +16,7 @@ void UCEquipment::Equip()
 	State->SetEquipMode();
 
 
-	if (!!Data.Montage)
+	if (Data.Montage != nullptr)
 	{
 		OwnerCharacter->PlayAnimMontage(Data.Montage, Data.PlayRatio);
 	}

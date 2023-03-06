@@ -7,8 +7,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Human/CHuman.h"
 
-#define LOG_UCFeetComponent 1
-//#define LOG_UCFeetComponent 0
+//#define LOG_UCFeetComponent 1
+#define LOG_UCFeetComponent 0
 
 UCFeetComponent::UCFeetComponent()
 {

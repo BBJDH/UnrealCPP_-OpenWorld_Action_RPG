@@ -8,10 +8,10 @@
 void FDoActionData::DoAction(ACharacter* InOwner)
 {
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(InOwner);
-	if (!!state)
+	if (state != nullptr)
 		state->SetActionMode();
 
-	if (!!Montage)
+	if (Montage != nullptr)
 		InOwner->PlayAnimMontage(Montage, PlayRatio);
 }
 
@@ -19,7 +19,7 @@ void FDoActionData::DoAction(ACharacter* InOwner)
 
 void FHitData::PlayMontage(ACharacter* InOwner)
 {
-	if (!!Montage)
+	if (Montage != nullptr)
 		InOwner->PlayAnimMontage(Montage, PlayRatio);
 }
 
@@ -40,7 +40,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 	{
 		ACharacter* character = Cast<ACharacter>(actor);
 
-		if (!!character)
+		if (character != nullptr)
 		{
 			character->CustomTimeDilation = 5e-2f;
 
