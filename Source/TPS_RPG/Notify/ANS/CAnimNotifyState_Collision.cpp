@@ -11,27 +11,52 @@ FString UCAnimNotifyState_Collision::GetNotifyName_Implementation() const
 void UCAnimNotifyState_Collision::NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	if (IsValid(MeshComp) == false)
+	{
+		return;
+	}
+	if (IsValid(MeshComp->GetOwner()) == false)
+	{
+		return;
+	}
 
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNull(weapon);
-	CheckNull(weapon->GetAttachment());
+	UCWeaponComponent* OwnerWC = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
 
-	weapon->GetAttachment()->OnCollision();
+	if (IsValid(OwnerWC) == false)
+	{
+		return;
+	}
+	if (IsValid(OwnerWC->GetAttachment()) == false)
+	{
+		return;
+	}
+
+	OwnerWC->GetAttachment()->OnCollision();
 }
 
 void UCAnimNotifyState_Collision::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
 {
 	Super::NotifyEnd(MeshComp, Animation);
 
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	if (IsValid(MeshComp) == false)
+	{
+		return;
+	}
+	if (IsValid(MeshComp->GetOwner()) == false)
+	{
+		return;
+	}
 
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNull(weapon);
-	CheckNull(weapon->GetEquipment());
+	UCWeaponComponent* OwnerWC = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
 
-	weapon->GetAttachment()->OffCollision();
+	if (IsValid(OwnerWC) == false)
+	{
+		return;
+	}
+	if (IsValid(OwnerWC->GetAttachment()) == false)
+	{
+		return;
+	}
+	OwnerWC->GetAttachment()->OffCollision();
 }
 

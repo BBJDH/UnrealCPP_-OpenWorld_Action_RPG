@@ -163,12 +163,12 @@ void ACHuman::Hitted()
 		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
 		direction.Normalize();
 
-		LaunchCharacter(direction * data->Launch, false, false);
+		LaunchCharacter(direction * data->Launch, false, true);
 
 
 		if(data->IsLaunchAttacker)
 		{
-			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, false);
+			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, true);
 			ACHuman* attacker = Cast<ACHuman>(DamageData.Attacker);
 
 			CheckNull(attacker);

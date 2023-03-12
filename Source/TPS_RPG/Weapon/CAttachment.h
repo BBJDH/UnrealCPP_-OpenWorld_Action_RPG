@@ -26,9 +26,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnUnequip();
 
-public:
+
 	void OnCollision();
 	void OffCollision();
+
+	void OnAirCollision();
+	void OffAirCollision();
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Attachment")
@@ -58,5 +61,4 @@ protected:
 
 protected:
 	TArray<class UShapeComponent*> Collisions;
-
 };

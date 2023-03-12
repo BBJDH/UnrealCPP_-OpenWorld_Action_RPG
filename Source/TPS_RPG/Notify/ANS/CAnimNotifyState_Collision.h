@@ -10,8 +10,9 @@ class TPS_RPG_API UCAnimNotifyState_Collision : public UAnimNotifyState
 	GENERATED_BODY()
 	
 public:
-	FString GetNotifyName_Implementation() const override;
+	virtual FString GetNotifyName_Implementation() const override;
 
 	virtual void NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration) override;
+
 	virtual void NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation) override;
 };

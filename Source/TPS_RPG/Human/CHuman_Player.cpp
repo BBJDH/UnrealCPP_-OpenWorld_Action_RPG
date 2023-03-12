@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/CAttachment.h"
 #include "Weapon/CWeaponStructures.h"
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
@@ -90,7 +91,8 @@ void ACHuman_Player::TestKeyFunctionPressed()
 	FString StrToString = "TestKey Pressed";
 	UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
 
-	GetCapsuleComponent()->SetCapsuleRadius(88);
+	//GetCapsuleComponent()->SetWorldScale3D(FVector(1,2,1));
+	Weapon->GetAttachment()->OnAirCollision();
 }
 
 void ACHuman_Player::TestKeyFunctionReleased()
@@ -98,7 +100,9 @@ void ACHuman_Player::TestKeyFunctionReleased()
 	FString StrToString = "TestKey Released";
 	UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
 
-	GetCapsuleComponent()->SetCapsuleRadius(42);
+	//GetCapsuleComponent()->SetWorldScale3D(FVector(1, 1, 1));
+	Weapon->GetAttachment()->OffAirCollision();
+
 }
 
 void ACHuman_Player::HorizontalLook(float const InAxisValue)

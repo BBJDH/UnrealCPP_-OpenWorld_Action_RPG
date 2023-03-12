@@ -45,6 +45,33 @@ void ACAttachment::OffCollision()
 		component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void ACAttachment::OnAirCollision()
+{
+	if (OnAttachmentCollision.IsBound())
+		OnAttachmentCollision.Broadcast();
+
+	for (UShapeComponent* component : Collisions)
+	{
+		component->SetRelativeScale3D(FVector(1, 2, 1));
+		//component->SetWorldScale3D(FVector(1, 2, 1));
+		component->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+}
+
+void ACAttachment::OffAirCollision()
+{
+	if (OffAttachmentCollision.IsBound())
+		OffAttachmentCollision.Broadcast();
+
+	for (UShapeComponent* component : Collisions)
+	{
+		component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//component->SetWorldScale3D(FVector(1, 1, 1));
+		component->SetRelativeScale3D(FVector(1, 1, 1));
+
+	}
+}
+
 void ACAttachment::AttachTo(FName InSocketName)
 {
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);

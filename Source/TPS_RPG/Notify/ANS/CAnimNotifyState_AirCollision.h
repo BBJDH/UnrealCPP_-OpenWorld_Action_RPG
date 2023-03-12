@@ -14,7 +14,9 @@ class TPS_RPG_API UCAnimNotifyState_AirCollision : public UAnimNotifyState
 {
 	GENERATED_BODY()
 
-
 public:
-	void Test();
+	FString GetNotifyName_Implementation() const override;
+
+	void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
+	void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 };
