@@ -163,6 +163,9 @@ void ACHuman::Hitted()
 		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
 		direction.Normalize();
 
+		LaunchCharacter(direction * data->Launch, false, false);
+
+
 		if(data->IsLaunchAttacker)
 		{
 			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, false);
@@ -175,7 +178,6 @@ void ACHuman::Hitted()
 				attacker->StartFall.Broadcast();*/
 		}
 
-		LaunchCharacter(direction * data->Launch, false, false);
 		FRotator lookAtRotation = UKismetMathLibrary::FindLookAtRotation(start, target);
 		lookAtRotation.Pitch = 0;
 		lookAtRotation.Roll = 0;

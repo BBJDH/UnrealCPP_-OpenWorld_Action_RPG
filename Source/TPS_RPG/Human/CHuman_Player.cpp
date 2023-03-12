@@ -5,10 +5,13 @@
 #include "Global.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Weapon/CWeaponStructures.h"
+
+DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 ACHuman_Player::ACHuman_Player():ACHuman()
 {
@@ -67,7 +70,8 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAction("R_Skill", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Do_R_Action);
 
 	//Test
-	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyBroadCast);
+	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyFunctionPressed);
+	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Released, this, &ACHuman_Player::TestKeyFunctionReleased);
 	//Axis
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACHuman_Player::OnMoveRight);
@@ -81,9 +85,20 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom", Zoom, &UCZoomComponent::SetZoomValue);
 }
 
-void ACHuman_Player::TestKeyBroadCast() 
+void ACHuman_Player::TestKeyFunctionPressed()
 {
+	FString StrToString = "TestKey Pressed";
+	UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
 
+	GetCapsuleComponent()->SetCapsuleRadius(88);
+}
+
+void ACHuman_Player::TestKeyFunctionReleased()
+{
+	FString StrToString = "TestKey Released";
+	UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
+
+	GetCapsuleComponent()->SetCapsuleRadius(42);
 }
 
 void ACHuman_Player::HorizontalLook(float const InAxisValue)

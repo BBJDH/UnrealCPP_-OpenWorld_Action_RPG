@@ -25,7 +25,8 @@ protected:
 	void Bind(UInputComponent* const PlayerInputComponent);
 
 	//TestKey
-	void TestKeyBroadCast();
+	void TestKeyFunctionPressed();
+	void TestKeyFunctionReleased();
 
 	void HorizontalLook(float const InAxisValue);
 	void VerticalLook(float const InAxisValue);
