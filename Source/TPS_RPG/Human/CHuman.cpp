@@ -21,6 +21,9 @@
 #include "Component/CStatusComponent.h"
 #include "Weapon/CWeaponStructures.h"
 
+DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
+
+
 ACHuman::ACHuman()
 {
 	Asign();
@@ -29,6 +32,8 @@ ACHuman::ACHuman()
 void ACHuman::BeginPlay()
 {
 	Super::BeginPlay();
+	//FString StrToString = "CPP_Human";
+	//UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACHuman::OnStateTypeChanged);
 }

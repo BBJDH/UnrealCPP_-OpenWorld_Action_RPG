@@ -16,6 +16,7 @@ class TPS_RPG_API ACHuman_Player : public ACHuman
 
 public:
 	ACHuman_Player();
+	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaSeconds) override;

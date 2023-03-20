@@ -19,6 +19,14 @@ ACHuman_Player::ACHuman_Player():ACHuman()
 	Asign();
 }
 
+void ACHuman_Player::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//FString StrToString = "CPP_Human_Player";
+	//UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
+}
+
 
 void ACHuman_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
