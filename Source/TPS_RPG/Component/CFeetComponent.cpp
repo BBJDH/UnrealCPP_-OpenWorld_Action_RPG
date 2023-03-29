@@ -35,13 +35,13 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	CheckFalse(IsOnTrace);
 
-	float leftDistance, rightDistance;		//받아올 발 간격
-	FRotator leftRotation, rightRotation;	//받아올 발 회전각
+	float MoveAmountOfLeftFeet{}, MoveAmountOfRightFeet{};		//받아올 발 간격
+	FRotator RotationOfLeftFeet{}, RotationOfRightFeet{};	//받아올 발 회전각
 
-	Trace(LeftSocket, leftDistance, leftRotation);
-	Trace(RightSocket, rightDistance, rightRotation);
+	Trace(LeftSocket, MoveAmountOfLeftFeet, RotationOfLeftFeet);
+	Trace(RightSocket, MoveAmountOfRightFeet, RotationOfRightFeet);
 
-	float offset = FMath::Min(leftDistance, rightDistance);
+	float MoveAmountOfPelvis = FMath::Min(MoveAmountOfLeftFeet, MoveAmountOfRightFeet);
 	//양발중에 가장 작은 길이(높이)를 가져옴
 
 	/*************************************
@@ -52,15 +52,15 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Offset을 통해 가장 작은 높이를 가져와 (-TraceDistance ~ +TraceDistance) 
 	Pelvis를 먼저 조정해 높이를 잡고
 **************************************/
-	Data.PelvisDistance.Z = UKismetMathLibrary::FInterpTo(Data.PelvisDistance.Z, offset, DeltaTime, InterpSpeed);
+	Data.PelvisDistance.Z = UKismetMathLibrary::FInterpTo(Data.PelvisDistance.Z, MoveAmountOfPelvis, DeltaTime, InterpSpeed);
 	//선형보간(델타식) 변동값, 목표값, 델타시간, 보간속도
 
-	Data.LeftDistance.X = UKismetMathLibrary::FInterpTo(Data.LeftDistance.X, (leftDistance - offset), DeltaTime, InterpSpeed);
-	Data.RightDistance.X = UKismetMathLibrary::FInterpTo(Data.RightDistance.X, -(rightDistance - offset), DeltaTime, InterpSpeed);
+	Data.LeftDistance.X = UKismetMathLibrary::FInterpTo(Data.LeftDistance.X, (MoveAmountOfLeftFeet - MoveAmountOfPelvis), DeltaTime, InterpSpeed);
+	Data.RightDistance.X = UKismetMathLibrary::FInterpTo(Data.RightDistance.X, -(MoveAmountOfRightFeet - MoveAmountOfPelvis), DeltaTime, InterpSpeed);
 	//둘다 위Pelvis 만큼 높이를 올리거나 낮춤
 
-	Data.LeftRotation = UKismetMathLibrary::RInterpTo(Data.LeftRotation, leftRotation, DeltaTime, InterpSpeed);
-	Data.RightRotation = UKismetMathLibrary::RInterpTo(Data.RightRotation, rightRotation, DeltaTime, InterpSpeed);
+	Data.LeftRotation = UKismetMathLibrary::RInterpTo(Data.LeftRotation, RotationOfLeftFeet, DeltaTime, InterpSpeed);
+	Data.RightRotation = UKismetMathLibrary::RInterpTo(Data.RightRotation, RotationOfRightFeet, DeltaTime, InterpSpeed);
 #if LOG_UCFeetComponent
 	CLog::Print(Data.PelvisDistance, 11);
 	CLog::Print(Data.LeftDistance, 12);
@@ -73,37 +73,37 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 }
 
-void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRotation)
+void UCFeetComponent::Trace(FName InSocketName, float & OutDistance, FRotator& OutRotation)
 {
-	FVector socktetWorldPos = OwnerCharacter->GetMesh()->GetSocketLocation(InName);
+	FVector WorldPosOfSocktet = OwnerCharacter->GetMesh()->GetSocketLocation(InSocketName);
 	// 소켓의 월드 좌표를 얻어온다, InName으로부터 
 
-	float z = OwnerCharacter->GetActorLocation().Z;
+	float StartOfVectorZ = OwnerCharacter->GetActorLocation().Z;
 	//캐릭터의 월드 Z 값
-	FVector start = FVector(socktetWorldPos.X, socktetWorldPos.Y, z);
+	FVector StartOfVector = FVector(WorldPosOfSocktet.X, WorldPosOfSocktet.Y, StartOfVectorZ);
 	//해당 소켓의 월드 x,y 좌표, 높이는 플레이어의 z이므로 허리부터 시작한다
 
-	z = start.Z - OwnerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - TraceDistance;
+	float EndOfVectorZ = StartOfVector.Z - OwnerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() - DistanceOfDonwFeet;
 	//z를 재정의, 캡슐 컴포넌트 밑바닥에서 TraceDistance 만큼 더 땅을 파고간 거리까지 Trace 검사
-	FVector end = FVector(socktetWorldPos.X, socktetWorldPos.Y, z);
+	FVector EndOfVector = FVector(WorldPosOfSocktet.X, WorldPosOfSocktet.Y, EndOfVectorZ);
 
-	TArray<AActor*> ignores;
-	ignores.Add(OwnerCharacter);
+	TArray<AActor*> ArrayOfIgnores;
+	ArrayOfIgnores.Add(OwnerCharacter);
 	//충돌 무시목록에는 자신 캐릭터를 넣었다
 
-	FHitResult hitResult;
+	FHitResult HitResult;
 	//충돌 정보를 가져올 구조체 미리 생성
 	//TODO: 정확도 개선
 	UKismetSystemLibrary::LineTraceSingle
 	(
 		GetWorld(),
-		start,
-		end,
+		StartOfVector,
+		EndOfVector,
 		UEngineTypes::ConvertToTraceType(ECC_Visibility),	
 		true,								//복합충돌 켬, 정밀하게 발을 맞추기 위해
-		ignores,
+		ArrayOfIgnores,
 		DrawDebug,
-		hitResult,
+		HitResult,
 		true,								//트레이스를 수행할 컴포넌트도 대상에서 제외
 		FLinearColor::Green,
 		FLinearColor::Red
@@ -112,11 +112,11 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 	OutRotation = FRotator::ZeroRotator;
 	//반환할 두 값을 초기화
 
-	CheckFalse(hitResult.bBlockingHit);
+	CheckFalse(HitResult.bBlockingHit);
 	//Trace 결과가 없다면 여기서 종료
 
 
-	float length = (hitResult.ImpactPoint - hitResult.TraceEnd).Size();
+	float LengthOfEndToImpact = (HitResult.ImpactPoint - HitResult.TraceEnd).Size();
 
 
 /*************************************
@@ -126,20 +126,20 @@ void UCFeetComponent::Trace(FName InName, float & OutDistance, FRotator& OutRota
 	0 => -TraceDistance 만큼 아래로 이동해야 한다
 **************************************/
 
-	OutDistance = length + OffsetDistance - TraceDistance;
+	OutDistance = LengthOfEndToImpact + OffsetDistance - DistanceOfDonwFeet;
 
 	/*************************************
 RotationFromX를 사용해도 된다
 	UKismetMathLibrary::MakeRotFromX();
 
 **************************************/
-	float roll = UKismetMathLibrary::DegAtan2(hitResult.ImpactNormal.Y, hitResult.ImpactNormal.Z);
+	float OutRotationOfRoll = UKismetMathLibrary::DegAtan2(HitResult.ImpactNormal.Y, HitResult.ImpactNormal.Z);
 	//Y/Z 탄젠트 역함수 즉 Z축에서 Y축으로의 회전값 -> Roll과 회전방향과 같이 같아짐
 	//외적 방향과 동일
-	float pitch = -UKismetMathLibrary::DegAtan2(hitResult.ImpactNormal.X, hitResult.ImpactNormal.Z);
+	float OutRotationOfPitch= -UKismetMathLibrary::DegAtan2(HitResult.ImpactNormal.X, HitResult.ImpactNormal.Z);
 	//X/Z 탄젠트 역함수 즉 Z축에서 X축으로의 회전값 -> pitch 회전과 반대 방향이므로 - 를 붙여준다
 	//하지만 애초에 값을 Z/X로 넣어준다면?
-	OutRotation = FRotator(pitch, 0, roll);
+	OutRotation = FRotator(OutRotationOfPitch, 0, OutRotationOfRoll);
 
 }
 

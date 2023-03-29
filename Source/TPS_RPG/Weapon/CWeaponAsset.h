@@ -10,6 +10,32 @@ class TPS_RPG_API UCWeaponAsset : public UDataAsset
 {
 	GENERATED_BODY()
 	
+
+
+public:
+	//FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
+	FORCEINLINE class UCEquipment* GetEquipment() { return Equipment; }
+	FORCEINLINE class UCDoActionComponent* GetDoAction() { return DoAction; }
+
+public:
+	UCWeaponAsset();
+
+	TSubclassOf<class ACAttachment> GetAttachmentClass();
+
+	void CallBeginPlay(ACharacter* InOwner);
+
+
+
+private:
+	//UPROPERTY()
+	//	class ACAttachment* Attachment;
+
+	UPROPERTY()
+		class UCEquipment* Equipment;
+
+	UPROPERTY()
+		class UCDoActionComponent* DoAction;
+
 private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ACAttachment> AttachmentClass;
@@ -26,24 +52,4 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TArray<FHitData> HitDatas;
-
-public:
-	FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
-	FORCEINLINE class UCEquipment* GetEquipment() { return Equipment; }
-	FORCEINLINE class UCDoActionComponent* GetDoAction() { return DoAction; }
-
-public:
-	UCWeaponAsset();
-
-	void BeginPlay(class ACharacter* InOwner);
-
-private:
-	UPROPERTY()
-		class ACAttachment* Attachment;
-
-	UPROPERTY()
-		class UCEquipment* Equipment;
-
-	UPROPERTY()
-		class UCDoActionComponent* DoAction;
 };

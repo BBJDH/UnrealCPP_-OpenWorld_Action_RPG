@@ -27,10 +27,14 @@ public:
 	class UCEquipment* GetEquipment();
 	class UCDoActionComponent* GetDoAction();
 
-	FORCEINLINE bool IsUnarmedMode() { return Type == EWeaponType::Max; }
-	FORCEINLINE bool IsSwordMode() { return Type == EWeaponType::Sword; }
-	FORCEINLINE bool IsHammerMode() { return Type == EWeaponType::Hammer; }
-	FORCEINLINE bool IsGreatSwordMode() { return Type == EWeaponType::GreatSword; }
+
+	void BeginEquip();
+	void EndEquip();
+
+	FORCEINLINE bool IsUnarmedMode() { return CurrentWeaponType == EWeaponType::Max; }
+	FORCEINLINE bool IsSwordMode() { return CurrentWeaponType == EWeaponType::Sword; }
+	FORCEINLINE bool IsHammerMode() { return CurrentWeaponType == EWeaponType::Hammer; }
+	FORCEINLINE bool IsGreatSwordMode() { return CurrentWeaponType == EWeaponType::GreatSword; }
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -44,6 +48,8 @@ public:
 	void DoUpperAction();
 	void Do_R_Action();
 
+
+	void DestroyWeapons();
 
 
 protected:
@@ -61,7 +67,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "DataAsset")
 		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
 
-	class ACharacter* Owner;
-	EWeaponType Type = EWeaponType::Max;
+	UPROPERTY()
+		class ACAttachment* Attachments[(int32)EWeaponType::Max];
+
+	class ACharacter* OwnerCharacter;
+	EWeaponType CurrentWeaponType = EWeaponType::Max;
 
 };

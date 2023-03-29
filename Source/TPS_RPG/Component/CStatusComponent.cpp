@@ -4,41 +4,43 @@
 
 UCStatusComponent::UCStatusComponent():InAir(false)
 {
-
+	
 }
 
-void UCStatusComponent::CheckFarFromGround()
-{
-	FVector const traceStart = OwnerCharacter->GetActorLocation();
-	FVector const traceEnd = { traceStart.X,traceStart.Y,traceStart.Z - Falling_Distance };
-	TArray<AActor*> ignoreActors;
-	ignoreActors.Add(OwnerCharacter);
-	FHitResult HitResult{};
-
-	UKismetSystemLibrary::LineTraceSingle
-	(
-		GetWorld(),
-		traceStart,
-		traceEnd,
-		UEngineTypes::ConvertToTraceType(ECC_Visibility),
-		false,
-		ignoreActors,
-		EDrawDebugTrace::ForDuration,
-		HitResult,
-		true,
-		FLinearColor::Green,
-		FLinearColor::Red
-	);
-
-	if (HitResult.bBlockingHit)
-		InAir =false;
-	InAir = true;
-}
+//void UCStatusComponent::CheckFarFromGround()
+//{
+//	FVector const traceStart = OwnerCharacter->GetActorLocation();
+//	FVector const traceEnd = { traceStart.X,traceStart.Y,traceStart.Z - Falling_Distance };
+//	TArray<AActor*> ignoreActors;
+//	ignoreActors.Add(OwnerCharacter);
+//	FHitResult HitResult{};
+//
+//	UKismetSystemLibrary::LineTraceSingle
+//	(
+//		GetWorld(),
+//		traceStart,
+//		traceEnd,
+//		UEngineTypes::ConvertToTraceType(ECC_Visibility),
+//		false,
+//		ignoreActors,
+//		EDrawDebugTrace::ForDuration,
+//		HitResult,
+//		true,
+//		FLinearColor::Green,
+//		FLinearColor::Red
+//	);
+//
+//	if (HitResult.bBlockingHit)
+//		InAir =false;
+//	InAir = true;
+//}
 
 void UCStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AActor* Temp = GetOwner();
+	FString Result = Temp->GetName();
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	Health = MaxHealth;
 

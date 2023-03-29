@@ -27,6 +27,7 @@ void ACAttachment::BeginPlay()
 	Super::BeginPlay();
 }
 
+
 void ACAttachment::OnCollision()
 {
 	if (OnAttachmentCollision.IsBound())

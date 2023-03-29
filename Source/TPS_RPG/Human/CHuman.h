@@ -24,18 +24,20 @@ class TPS_RPG_API ACHuman
 
 public:
 	ACHuman();
+	virtual void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
 	void StartFall();
 	void EndFall();
 
-protected:
-	virtual void Asign();
-	void BeginPlay() override;
+	void NotifyDead();
 
-	void Landed(const FHitResult& Hit) override;
-	void Falling() override;
+protected:
+	
+
+	virtual void Landed(const FHitResult& Hit) override;
+	virtual void Falling() override;
 
 	//BindAction
 	void OnJumpPressed();
@@ -48,7 +50,7 @@ protected:
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType);
-
+	void Asign();
 	
 	/*
 	 * 액션마다 고유의 피격 몽타주를 재생시키면 보스의 특수화를 어떻게 할까
@@ -58,7 +60,8 @@ private:
 	void Hitted();
 	void Dead();
 
-
+	FVector GetVectorLookAtActor(AActor const* InActor);
+	void SetActorRotation2D(FRotator LookAtRotator);
 
 	//Test
 	//void ClearJumpInput(float DeltaTime) override;
@@ -81,8 +84,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontageComponent* Montage;
 
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCZoomComponent* Zoom;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCFeetComponent* Feet;

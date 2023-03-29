@@ -94,7 +94,7 @@ public:
 	void PlayHitStop(class UWorld* InWorld);
 	void PlaySound(class ACharacter* InOwner);
 	void PlayEffect(class UWorld* InWorld, const FVector& InLocation);
-
+	void HitLaunch(class ACharacter* InOwner, FRotator const & InLookAtRotator, ACharacter * InAttacker);
 
 };
 

@@ -12,17 +12,17 @@ class TPS_RPG_API UCZoomComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UCZoomComponent();
+
 	void SetZoomValue(float InValue);
 
-
-public:	
-	UCZoomComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+private:
+	void InterpCurrentZoomLength(float const DeltaTime);
 
 
 private:
@@ -35,10 +35,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Zooming")
 		FVector2D ZoomRange = FVector2D(100, 800);
 
-
-private:
 	class USpringArmComponent* SpringArm;
 
-	float CurrentValue;
+	float DestValueOfZoomLength;
 		
 };

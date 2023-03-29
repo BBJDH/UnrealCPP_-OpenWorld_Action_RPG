@@ -1,9 +1,6 @@
 
 
 #include "CHuman.h"
-
-#include <string>
-
 #include "Global.h"
 
 #include "CAnimInstance.h"
@@ -16,7 +13,6 @@
 
 #include "Component/CFeetComponent.h"
 #include "Component/CWeaponComponent.h"
-#include "Component/CZoomComponent.h"
 #include "Component/CStateComponent.h"
 #include "Component/CStatusComponent.h"
 #include "Weapon/CWeaponStructures.h"
@@ -24,7 +20,7 @@
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 
-ACHuman::ACHuman()
+ACHuman::ACHuman() 
 {
 	Asign();
 }
@@ -32,6 +28,12 @@ ACHuman::ACHuman()
 void ACHuman::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//if(Status->HasBegunPlay()==false)
+	//{
+	//	
+	//}
+	
 	//FString StrToString = "CPP_Human";
 	//UE_LOG(GameProject, Display, TEXT("%s"), *StrToString);
 
@@ -48,14 +50,14 @@ void ACHuman::Tick(float DeltaTime)
 float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float AmountOfDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	DamageData.Amount = damage;
+	DamageData.Amount = AmountOfDamage;
 	DamageData.Attacker = Cast<ACharacter>(EventInstigator->GetPawn());
 	DamageData.Event = (FHitDamageEvent*)&DamageEvent;
 
 	State->SetHittedMode();
-	return damage;
+	return AmountOfDamage;
 }
 
 
@@ -114,21 +116,21 @@ void ACHuman::OnMoveForward(float const InAxisValue)
 {
 	//전방이면 InAxisValue 1, 후방이면 -1
 
-	FRotator const rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
 	//컨트롤러가 바라보는 전방 벡터 Yaw 값을 가져옴
-	FVector const direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
+	FVector const DirectionOfForward = FQuat(RotaterOfView).GetForwardVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
 	//Rotator(카메라가 바라보는 Yaw)의 Q(X,Y,Z) , GetForwardVector()는 외적하여 길이를 늘인상태
 
 	//CLog::Print(static_cast<int>(SpringArm->bUsePawnControlRotation));
-	AddMovementInput(direction, InAxisValue);
+	AddMovementInput(DirectionOfForward, InAxisValue);
 }
 
 void ACHuman::OnMoveRight(float const InAxisValue)
 {
-	FRotator const rotator = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector const direction = FQuat(rotator).GetRightVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
+	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
+	FVector const DirectionORight = FQuat(RotaterOfView).GetRightVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
 
-	AddMovementInput(direction, InAxisValue);
+	AddMovementInput(DirectionORight, InAxisValue);
 }
 
 void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
@@ -142,51 +144,33 @@ void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewTy
 
 void ACHuman::Hitted()
 {
+	CheckNull(DamageData.Event);
+	CheckNull(DamageData.Event->HitData);
+	//CheckTrue(State->IsDeadMode())
+	
+	
 	Status->Damage(DamageData.Amount);
 	DamageData.Amount = 0;
+
+	FHitData* HitdataOfEnemyWeapon = DamageData.Event->HitData;
+
+	HitdataOfEnemyWeapon->PlayMontage(this);
+	HitdataOfEnemyWeapon->PlayHitStop(GetWorld());
+	HitdataOfEnemyWeapon->PlaySound(this);
+	HitdataOfEnemyWeapon->PlayEffect(GetWorld(), GetActorLocation());
+
+	FVector LookAtAttacker = GetVectorLookAtActor(DamageData.Attacker);
+	LookAtAttacker.Z = 0;
+	
+	HitdataOfEnemyWeapon->HitLaunch(this, LookAtAttacker.Rotation(), DamageData.Attacker);
+	
+	SetActorRotation2D(LookAtAttacker.Rotation());
+
 
 	if (Status->GetHealth() <= 0.0f)
 	{
 		State->SetDeadMode();
 		return;
-	}
-
-	if (DamageData.Event != nullptr && DamageData.Event->HitData != nullptr)
-	{
-		FHitData* data = DamageData.Event->HitData;
-
-		data->PlayMontage(this);
-		data->PlayHitStop(GetWorld());
-		data->PlaySound(this);
-		data->PlayEffect(GetWorld(), GetActorLocation());
-
-		FVector start = GetActorLocation();
-		FVector target = DamageData.Attacker->GetActorLocation();
-		FVector lookAt = target - start;
-		lookAt.Z = 0;
-
-		FVector direction = FQuat( lookAt.Rotation() + data->LaunchRotation).GetForwardVector();
-		direction.Normalize();
-
-		LaunchCharacter(direction * data->Launch, false, true);
-
-
-		if(data->IsLaunchAttacker)
-		{
-			DamageData.Attacker->LaunchCharacter(direction * data->Launch*1.02f, false, true);
-			ACHuman* attacker = Cast<ACHuman>(DamageData.Attacker);
-
-			CheckNull(attacker);
-
-			StartFall();
-			/*if (attacker->StartFall.IsBound())
-				attacker->StartFall.Broadcast();*/
-		}
-
-		FRotator lookAtRotation = UKismetMathLibrary::FindLookAtRotation(start, target);
-		lookAtRotation.Pitch = 0;
-		lookAtRotation.Roll = 0;
-		SetActorRotation(lookAtRotation);
 	}
 
 	DamageData.Attacker = nullptr;
@@ -195,14 +179,37 @@ void ACHuman::Hitted()
 
 void ACHuman::Dead()
 {
+	CheckNull(GetCapsuleComponent());
+	CheckNull(GetController());
+	GetCapsuleComponent()->SetCollisionProfileName("RagdollWithNoCam");
+	Montage->PlayDead();
+
+	GetController()->UnPossess();
+}
+
+//Normalized Return
+FVector ACHuman::GetVectorLookAtActor(AActor const* InActor)
+{
+	FVector const LocationOfSelf = GetActorLocation();
+	FVector const LocationOfDest= InActor->GetActorLocation();
+	FVector LookAtDest = LocationOfDest - LocationOfSelf;
+	LookAtDest.Normalize();
+	return LookAtDest;
+}
+
+void ACHuman::SetActorRotation2D(FRotator LookAtRotator)
+{
+	LookAtRotator.Pitch = 0;
+	LookAtRotator.Roll = 0;
+	SetActorRotation(LookAtRotator);
 }
 
 void ACHuman::StartFall()
 {
 	//AnimInstance, Status, FeetComponent 전파
-	UAnimInstance * animInstance =  this->GetMesh()->GetAnimInstance();
-	CheckNull(animInstance);
-	Cast<UCAnimInstance>(animInstance)->StartInAir();
+	UAnimInstance * SelfAnimInstance =  this->GetMesh()->GetAnimInstance();
+	CheckNull(SelfAnimInstance);
+	Cast<UCAnimInstance>(SelfAnimInstance)->StartInAir();
 	Status->StartInAir();
 	Feet->StartInAir();
 	Weapon->InitComboIndex();
@@ -212,13 +219,19 @@ void ACHuman::StartFall()
 void ACHuman::EndFall()
 {
 	//AnimInstance, Status, FeetComponent 전파
-	UAnimInstance* animInstance = this->GetMesh()->GetAnimInstance();
-	CheckNull(animInstance);
-	Cast<UCAnimInstance>(animInstance)->EndInAir();
+	UAnimInstance* SelfAnimInstance = this->GetMesh()->GetAnimInstance();
+	CheckNull(SelfAnimInstance);
+	Cast<UCAnimInstance>(SelfAnimInstance)->EndInAir();
 	Status->EndInAir();
 	Feet->EndInAir();
 	Weapon->InitComboIndex();
 
+}
+
+void ACHuman::NotifyDead()
+{
+	Weapon->DestroyWeapons();
+	Destroy();
 }
 
 //void ACHuman::ClearJumpInput(float DeltaTime)
@@ -241,9 +254,8 @@ void ACHuman::Asign()
 	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
-
+	
 	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
-	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
 	CHelpers::CreateActorComponent<UCFeetComponent>(this, &Feet, "Feet");
 
 	//Pawn Yaw를 컨트롤러에 귀속시키지 않음
@@ -261,10 +273,10 @@ void ACHuman::Asign()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0)); //Pitch Yaw Roll
 
-	TSubclassOf<UCAnimInstance> animInstance;
-	CHelpers::GetClass<UCAnimInstance>(&animInstance, "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'");
+	TSubclassOf<UCAnimInstance> ClassOfAnimInstance;
+	CHelpers::GetClass<UCAnimInstance>(&ClassOfAnimInstance, "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'");
 
-	GetMesh()->SetAnimClass(animInstance);
+	GetMesh()->SetAnimClass(ClassOfAnimInstance);
 	//위의 함수는 내부적으로 이함수를 호출 GetMesh()->SetAnimInstanceClass(animInstance);
 }
 

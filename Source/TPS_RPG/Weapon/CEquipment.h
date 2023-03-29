@@ -16,10 +16,10 @@ public:
 	void BeginPlay(class ACharacter* InOwner, const FEquipmentData& InData);
 
 public:
-	void Equip();
-	void Begin_Equip();
+	void Equip(class ACAttachment* InAttachment);
+	void Begin_Equip(class ACAttachment* InAttachment);
 	void End_Equip();
-	void Unequip();
+	void Unequip(class ACAttachment* InAttachment);
 
 public:
 	FEquipmentBehavior OnBeginEquip;

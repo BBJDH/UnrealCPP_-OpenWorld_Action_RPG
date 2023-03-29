@@ -64,6 +64,6 @@ protected:
 		EWeaponType WeaponType;
 
 private: 
-	ACharacter* Owner;
+	ACharacter* OwnerCharacter;
 
 };

@@ -18,7 +18,7 @@ void UCAnimNotifyState_Equip::NotifyBegin(USkeletalMeshComponent * MeshComp, UAn
 	CheckNull(weapon);
 	CheckNull(weapon->GetEquipment());
 
-	weapon->GetEquipment()->Begin_Equip();
+	weapon->BeginEquip();
 }
 
 void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
@@ -32,5 +32,5 @@ void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnim
 	CheckNull(weapon);
 	CheckNull(weapon->GetEquipment());
 
-	weapon->GetEquipment()->End_Equip();
+	weapon->EndEquip();
 }

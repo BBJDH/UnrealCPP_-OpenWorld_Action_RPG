@@ -15,7 +15,14 @@ void UCZoomComponent::BeginPlay()
 	Super::BeginPlay();
 	SpringArm = CHelpers::GetComponent<USpringArmComponent>(GetOwner());
 	CheckNull(SpringArm);
-	CurrentValue = SpringArm->TargetArmLength;
+	DestValueOfZoomLength = SpringArm->TargetArmLength;
+}
+
+void UCZoomComponent::InterpCurrentZoomLength(float const DeltaTime)
+{
+	CheckNull(SpringArm);
+	CheckTrue(UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength, DestValueOfZoomLength));
+	SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(SpringArm->TargetArmLength, DestValueOfZoomLength, DeltaTime, ZoomInterpSpeed);
 }
 
 
@@ -23,14 +30,12 @@ void UCZoomComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	CheckNull(SpringArm);
-	CheckTrue(UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength, CurrentValue));
-	SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(SpringArm->TargetArmLength, CurrentValue, DeltaTime, ZoomInterpSpeed);
+	InterpCurrentZoomLength(DeltaTime);
 }
 
 void UCZoomComponent::SetZoomValue(float InValue)
 {
-	CurrentValue += (ZoomSpeed * InValue);
-	CurrentValue = FMath::Clamp(CurrentValue, ZoomRange.X, ZoomRange.Y);
+	DestValueOfZoomLength += (ZoomSpeed * InValue);
+	DestValueOfZoomLength = FMath::Clamp(DestValueOfZoomLength, ZoomRange.X, ZoomRange.Y);
 	//FMath::Clamp 제한된 값을 반환
 }

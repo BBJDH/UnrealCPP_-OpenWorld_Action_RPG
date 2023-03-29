@@ -42,6 +42,9 @@ void ACHuman_Player::Tick(float DeltaSeconds)
 
 void ACHuman_Player::Asign()
 {
+
+	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
+
 	/*
 	======================================
 				SpringArm Setting
@@ -129,13 +132,13 @@ void ACHuman_Player::DashEvent()
 	DashSetup(); 
 	DisableInput(Cast<APlayerController>(GetController()));
 
-	FOnTimelineFloat timelineProgress;
-	timelineProgress.BindUFunction(this, FName("TimelineProgress"));
-	DashTimeline.AddInterpFloat(CurveFloat, timelineProgress);
+	FOnTimelineFloat TimelineProgress;
+	TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
+	DashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
 
-	FOnTimelineEvent timelineFinishedCallback;
-	timelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
-	DashTimeline.SetTimelineFinishedFunc(timelineFinishedCallback);
+	FOnTimelineEvent TimelineFinishedCallback;
+	TimelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
+	DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
 	
 	DashTimeline.PlayFromStart();
 }

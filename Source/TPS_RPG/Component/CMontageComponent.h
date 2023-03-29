@@ -36,9 +36,6 @@ class TPS_RPG_API UCMontageComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(EditAnywhere, Category = "DataTable")
-		class UDataTable* MontageData;
 
 public:	
 	UCMontageComponent();
@@ -58,8 +55,11 @@ private:
 	void PlayAnimMontage(EMontageType const InType)const;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "DataTable")
+		class UDataTable* SettedMontageData;
+
 	class ACharacter* Owner;
 
-	FMontageData* Datas[static_cast<int32>(EMontageType::Max)];
+	FMontageData* DatasOfPlayMontage[static_cast<int32>(EMontageType::Max)];
 		
 };

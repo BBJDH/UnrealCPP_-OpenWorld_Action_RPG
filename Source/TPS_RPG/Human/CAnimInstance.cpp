@@ -4,8 +4,6 @@
 #include "Human/CAnimInstance.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
-#include "CHuman.h"
-#include "CHuman_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 //#define LOG_UCFeetComponent 1
 #define LOG_UCFeetComponent 0
@@ -20,35 +18,37 @@ void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
-	Owner = Cast<ACharacter>(TryGetPawnOwner());
+	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 
-	CheckNull(Owner);
+	CheckNull(OwnerCharacter);
 	//Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
 	//Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
 	//Test
 	//Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
 
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(Owner);
-	CheckNull(weapon);
+	//UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(OwnerCharacter);
+	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	CheckNull(WeaponComponent);
 
-	weapon->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
+	WeaponComponent->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	CheckNull(Owner);
+	CheckNull(OwnerCharacter);
 	
-	Speed = Owner->GetVelocity().Size2D();
+	Speed = OwnerCharacter->GetVelocity().Size2D();
 
-	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(Owner);
+	//UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
+	UCFeetComponent* FeetIKComponent = Cast<UCFeetComponent>(OwnerCharacter->GetComponentByClass(UCFeetComponent::StaticClass()));
 
-	CheckNull(feet);
-	if (feet != nullptr &&  Owner->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
+	CheckNull(FeetIKComponent);
+	if (FeetIKComponent != nullptr && OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
 	{
 		IsOnFeetIK = true;
-		FeetIKData = feet->GetData();
+		FeetIKData = FeetIKComponent->GetData();
 #if LOG_UCFeetComponent
 		CLog::Print(FeetIKData.PelvisDistance, 11);
 		CLog::Print(FeetIKData.LeftDistance, 12);

@@ -15,7 +15,7 @@ class TPS_RPG_API UCDoActionComponent : public UObject
 public:
 	UCDoActionComponent();
 
-	virtual void BeginPlay(class ACAttachment* InAttachment, class UCEquipment* InEquipment, class ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas);
+	virtual void BeginPlay(/*class ACAttachment* InAttachment,*/ class UCEquipment* InEquipment, class ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas);
 	virtual void Tick(float InDeltaTime);
 
 	UFUNCTION()

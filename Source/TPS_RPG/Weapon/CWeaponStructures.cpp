@@ -83,3 +83,25 @@ void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
 	CHelpers::PlayNiagaraEffect(InWorld, Cast<UNiagaraSystem>(Effect), transform);
 	CHelpers::PlayParticleEffect(InWorld, Cast<UParticleSystem>(Effect) , transform);
 }
+
+void FHitData::HitLaunch(ACharacter* InOwner, FRotator const& InLookAtRotator , ACharacter * InAttacker)
+{
+	CheckNull(InOwner);
+
+	//FVector const LocationOfSelf = InOwner->GetActorLocation();
+	//FVector const LocationOfAttacker = InAttacker->GetActorLocation();
+	//FVector LookAtAttacker = LocationOfAttacker - LocationOfSelf;
+	//LookAtAttacker.Z = 0;
+	
+	FVector LaunchDirection = FQuat(InLookAtRotator + this->LaunchRotation).GetForwardVector();
+	LaunchDirection.Normalize();
+
+	InOwner->LaunchCharacter(LaunchDirection * this->Launch, false, true);
+
+	CheckNull(InAttacker);
+	if (this->IsLaunchAttacker)
+	{
+		InAttacker->LaunchCharacter(LaunchDirection * this->Launch * 1.02f, false, true);
+	}
+
+}

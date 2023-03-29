@@ -9,7 +9,7 @@ UCDoActionComponent::UCDoActionComponent()
 
 }
 
-void UCDoActionComponent::BeginPlay(ACAttachment* InAttachment, UCEquipment* InEquipment, ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
+void UCDoActionComponent::BeginPlay(/*ACAttachment* InAttachment, */UCEquipment* InEquipment, ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
 {
 	Owner = InOwner;
 	World = Owner->GetWorld();

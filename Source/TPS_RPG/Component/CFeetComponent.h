@@ -63,11 +63,9 @@ public:
 	UFUNCTION()
 		void EndInAir();
 
-public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
-public:
 	FORCEINLINE const FFeetData& GetData() { return Data; }
 
 
@@ -94,7 +92,7 @@ private:
 	//발을 붙이기까지의 시간
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-		float TraceDistance = 88;
+		float DistanceOfDonwFeet = 88;
 	//땅하고 발의 높이(추적/수정할 높이)
 
 	UPROPERTY(EditAnywhere, Category = "Trace")

@@ -16,7 +16,7 @@ public:
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 
 	FORCEINLINE bool IsInAir() const { return InAir; }
-	void CheckFarFromGround();
+	//void CheckFarFromGround();
 
 	UFUNCTION()
 		void StartInAir() { InAir = true; }
@@ -31,7 +31,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 		float MaxHealth = 100;
 
-	float const Falling_Distance = 400;
 
 private:
 	class ACharacter* OwnerCharacter;

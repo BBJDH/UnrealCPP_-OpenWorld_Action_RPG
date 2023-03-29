@@ -21,37 +21,44 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaSeconds) override;
 
+	void DashEvent();
+
+
 protected:
-	virtual void Asign() override;
 	void Bind(UInputComponent* const PlayerInputComponent);
+
+	void HorizontalLook(float const InAxisValue);
+	void VerticalLook(float const InAxisValue);
+
 
 	//TestKey
 	void TestKeyFunctionPressed();
 	void TestKeyFunctionReleased();
 
-	void HorizontalLook(float const InAxisValue);
-	void VerticalLook(float const InAxisValue);
+private:
+	 void Asign();
+
+	void DashSetup();
+
+	UFUNCTION()
+		void TimelineProgress(float const Axis);
+	UFUNCTION()
+		void TimelineStop();
+
+
 
 public:
-	//Test
-	FActionCall TestKeyEvent;
-	// Dash Ã³¸®Áß
+
 	//Dash Timeline
 	FTimeline DashTimeline;
 
 	UPROPERTY(EditAnywhere, Category = "Dash")
 		class UCurveFloat* CurveFloat;
 
+protected:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCZoomComponent* Zoom;
 
-	void DashEvent();
-
-private:
-	UFUNCTION()
-		void TimelineProgress(float const Axis);
-	UFUNCTION()
-		void TimelineStop();
-
-	void DashSetup();
 
 private:
 	float const  BackUp_MaxWalkSpeed = 600;

@@ -7,7 +7,7 @@
 #include "Components/WidgetComponent.h"
 #include "Widgets/CUserWidget_HealthBar.h"
 
-ACHuman_AI::ACHuman_AI()
+ACHuman_AI::ACHuman_AI():ACHuman()
 {
 	CHelpers::CreateActorComponent<UCAIStateComponent>(this, &AIState, "AIState");
 	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthBarWidget, "HealthBar",this->GetMesh());

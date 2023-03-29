@@ -15,20 +15,20 @@ UCMontageComponent::UCMontageComponent()
 void UCMontageComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CheckNull(MontageData);
+	CheckNull(SettedMontageData);
 
 	Owner = Cast<ACharacter>(GetOwner());
 
 
-	TArray<FMontageData*> subDatas;
-	MontageData->GetAllRows("", subDatas);
+	TArray<FMontageData*> LoadedDatas;
+	SettedMontageData->GetAllRows("", LoadedDatas);
 
 	for (int32 i = 0; i < static_cast<int32>(EMontageType::Max); i++)
 	{
-		for (FMontageData* elem : subDatas)
+		for (FMontageData* elem : LoadedDatas)
 		{
 			if (static_cast<EMontageType>(i) == elem->Type)
-				Datas[i] = elem;
+				DatasOfPlayMontage[i] = elem;
 		}
 	}
 }
@@ -63,9 +63,9 @@ void UCMontageComponent::PlayAnimMontage(EMontageType const InType) const
 {
 	CheckNull(Owner);
 
-	FMontageData* data = Datas[static_cast<int32>(InType)];
-	if (data != nullptr && data->Montage != nullptr)
-		Owner->PlayAnimMontage(data->Montage, data->PlayRatio);
+	FMontageData* MontageDateToPlay = DatasOfPlayMontage[static_cast<int32>(InType)];
+	if (MontageDateToPlay != nullptr && MontageDateToPlay->Montage != nullptr)
+		Owner->PlayAnimMontage(MontageDateToPlay->Montage, MontageDateToPlay->PlayRatio);
 }
 
 
