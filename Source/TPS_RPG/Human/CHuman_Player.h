@@ -6,9 +6,6 @@
 #include "Human/CHuman.h"
 #include "CHuman_Player.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class TPS_RPG_API ACHuman_Player : public ACHuman
 {
@@ -21,8 +18,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaSeconds) override;
 
-	void DashEvent();
-
+	//Notify Call
+	void NotifyDashEvent();
 
 protected:
 	void Bind(UInputComponent* const PlayerInputComponent);
@@ -30,22 +27,19 @@ protected:
 	void HorizontalLook(float const InAxisValue);
 	void VerticalLook(float const InAxisValue);
 
-
 	//TestKey
 	void TestKeyFunctionPressed();
 	void TestKeyFunctionReleased();
 
 private:
-	 void Asign();
 
+	//Constrctor Function
+	void Asign();
+
+	//Dash
 	void DashSetup();
-
-	UFUNCTION()
-		void TimelineProgress(float const Axis);
-	UFUNCTION()
-		void TimelineStop();
-
-
+	void TimelineProgress(float const Axis);
+	void TimelineStop();
 
 public:
 

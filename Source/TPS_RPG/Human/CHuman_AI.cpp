@@ -40,8 +40,6 @@ void ACHuman_AI::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	//무조건 위젯 쓸때 BeginPlay에서 init 해줘야함
 	HealthBarWidget->InitWidget();
 	
 	UCUserWidget_HealthBar * healthBar = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());

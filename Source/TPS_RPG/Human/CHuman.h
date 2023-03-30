@@ -6,11 +6,6 @@
 #include "Component/CStateComponent.h"
 #include "GenericTeamAgentInterface.h"
 #include "CHuman.generated.h"
-/*
- ======================================
-
- ======================================
- */
 
 DECLARE_MULTICAST_DELEGATE(FActionCall);
 
@@ -28,13 +23,15 @@ public:
 	void Tick(float DeltaTime) override;
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
+
+	//Broadcast Falling, Landed
 	void StartFall();
 	void EndFall();
 
+	//CallByNotify
 	void NotifyDead();
 
 protected:
-	
 
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void Falling() override;
@@ -50,27 +47,15 @@ protected:
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType);
+
+	//Constructor Function
 	void Asign();
-	
-	/*
-	 * 액션마다 고유의 피격 몽타주를 재생시키면 보스의 특수화를 어떻게 할까
-	 *오버라이딩을 이용해서 구현한다면 몽땅 따로 특수화를 해줘야하는가
-	 *
-	 */
-	void Hitted();
+
+	void GetHit();
 	void Dead();
 
 	FVector GetVectorLookAtActor(AActor const* InActor);
 	void SetActorRotation2D(FRotator LookAtRotator);
-
-	//Test
-	//void ClearJumpInput(float DeltaTime) override;
-
-
-//public:
-//	FActionCall StartFall;
-//	FActionCall EndFall;
-
 
 
 	//컴포넌트
@@ -83,7 +68,6 @@ protected:
 	//커스텀 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontageComponent* Montage;
-
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCFeetComponent* Feet;

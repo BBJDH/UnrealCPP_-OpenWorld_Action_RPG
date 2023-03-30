@@ -26,7 +26,7 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 	UCAIStateComponent* aiState = CHelpers::GetComponent<UCAIStateComponent>(OwnerCharacter);
 
-	if (state->IsHittedMode())
+	if (state->IsGetHitMode())
 	{
 		aiState->SetWaitMode();
 		return;

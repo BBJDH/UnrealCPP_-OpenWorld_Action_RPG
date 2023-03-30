@@ -27,6 +27,6 @@ void UCAnimNotify_Dash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 	if (Owner->GetCharacterMovement()->IsFalling())
 		return;
 
-	Owner->DashEvent();
+	Owner->NotifyDashEvent();
 }
 

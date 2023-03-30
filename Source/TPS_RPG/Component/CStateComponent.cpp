@@ -32,9 +32,9 @@ void UCStateComponent::SetEquipMode()
 	ChangeType(EStateType::Equip);
 }
 
-void UCStateComponent::SetHittedMode()
+void UCStateComponent::SetGetHitMode()
 {
-	ChangeType(EStateType::Hitted);
+	ChangeType(EStateType::GetHit);
 }
 
 void UCStateComponent::SetDeadMode()
