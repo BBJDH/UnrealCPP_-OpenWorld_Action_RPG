@@ -41,8 +41,8 @@ protected:
 	void OnJumpReleased();
 
 	//BindAxis
-	void OnMoveForward(float const InAxisValue);
-	void OnMoveRight(float const InAxisValue);
+	//void OnMoveForward(float const InAxisValue);
+	//void OnMoveRight(float const InAxisValue);
 
 private:
 	UFUNCTION()
@@ -80,6 +80,9 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCMoveComponent* Move;
 
 
 private:

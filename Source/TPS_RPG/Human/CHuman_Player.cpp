@@ -3,6 +3,7 @@
 
 #include "Human/CHuman_Player.h"
 #include "Global.h"
+#include "Component/CMoveComponent.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -69,14 +70,17 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoAction);
 	PlayerInputComponent->BindAction("UpperAttack", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::DoUpperAction);
 	PlayerInputComponent->BindAction("R_Skill", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Do_R_Action);
+	PlayerInputComponent->BindAction("Sprint/Avoid", EInputEvent::IE_Pressed, Move, &UCMoveComponent::OnSprint);
+	PlayerInputComponent->BindAction("Sprint/Avoid", EInputEvent::IE_Released, Move, &UCMoveComponent::OffSprint);
+
 
 	//Test
 	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Pressed, this, &ACHuman_Player::TestKeyFunctionPressed);
 	PlayerInputComponent->BindAction("TestKey", EInputEvent::IE_Released, this, &ACHuman_Player::TestKeyFunctionReleased);
 
 	//Axis
-	PlayerInputComponent->BindAxis("MoveForward", this, &ACHuman_Player::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ACHuman_Player::OnMoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", Move, &UCMoveComponent::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", Move, &UCMoveComponent::OnMoveRight);
 
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACHuman_Player::HorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACHuman_Player::VerticalLook);
@@ -106,39 +110,39 @@ void ACHuman_Player::VerticalLook(float const InAxisValue)
 	AddControllerPitchInput(InAxisValue);
 }
 
-void ACHuman_Player::NotifyDashEvent()
-{
-	CheckNull(CurveFloat);
-	DashSetup(); 
-	DisableInput(Cast<APlayerController>(GetController()));
-
-	FOnTimelineFloat TimelineProgress;
-	TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
-	DashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-
-	FOnTimelineEvent TimelineFinishedCallback;
-	TimelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
-	DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
-	
-	DashTimeline.PlayFromStart();
-}
-
-void ACHuman_Player::TimelineProgress(float const Axis)
-{
-	AddMovementInput(Axis*this->GetActorForwardVector());
-}
-
-void ACHuman_Player::TimelineStop()
-{
-	EnableInput(Cast<APlayerController>(GetController()));
-	this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
-	this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
-	this->GetCharacterMovement()->StopMovementImmediately();
-}
-
-void ACHuman_Player::DashSetup()
-{
-	GetCharacterMovement()->MaxWalkSpeed = 20000.0f;
-	GetCharacterMovement()->MaxAcceleration = 1000000000.0f;
-}
-
+//void ACHuman_Player::NotifyDashEvent()
+//{
+//	CheckNull(CurveFloat);
+//	DashSetup(); 
+//	DisableInput(Cast<APlayerController>(GetController()));
+//
+//	FOnTimelineFloat TimelineProgress;
+//	TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
+//	DashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
+//
+//	FOnTimelineEvent TimelineFinishedCallback;
+//	TimelineFinishedCallback.BindUFunction(this, FName("TimelineStop"));
+//	DashTimeline.SetTimelineFinishedFunc(TimelineFinishedCallback);
+//	
+//	DashTimeline.PlayFromStart();
+//}
+//
+//void ACHuman_Player::TimelineProgress(float const Axis)
+//{
+//	AddMovementInput(Axis*this->GetActorForwardVector());
+//}
+//
+//void ACHuman_Player::TimelineStop()
+//{
+//	EnableInput(Cast<APlayerController>(GetController()));
+//	this->GetCharacterMovement()->MaxWalkSpeed = BackUp_MaxWalkSpeed;
+//	this->GetCharacterMovement()->MaxAcceleration = BackUp_MaxAcceleration;
+//	this->GetCharacterMovement()->StopMovementImmediately();
+//}
+//
+//void ACHuman_Player::DashSetup()
+//{
+//	GetCharacterMovement()->MaxWalkSpeed = 20000.0f;
+//	GetCharacterMovement()->MaxAcceleration = 1000000000.0f;
+//}
+//

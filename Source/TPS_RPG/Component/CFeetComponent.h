@@ -69,13 +69,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		float OffsetDistance = 0;
 
-
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		FName LeftSocketName = "Foot_L";
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		FName RightSocketName = "Foot_R";
 
+	UPROPERTY(VisibleDefaultsOnly)
 	class ACharacter* OwnerCharacter;
 
 	FFeetData CurrentIKData;

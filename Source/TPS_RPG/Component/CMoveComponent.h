@@ -15,46 +15,41 @@ class TPS_RPG_API UCMoveComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(EditAnywhere, Category = "Speed")
-		float Speed[(int32)ESpeedType::Max] = { 200, 400, 600 };
+public:	
+	UCMoveComponent();
 
-	UPROPERTY(EditAnywhere, Category = "Mouse")
-		FVector2D MouseSpeed = FVector2D(45, 45);
+	void OnMoveForward(float InAxis) ;
+	void OnMoveRight(float InAxis) ;
+	void OnHorizontalLook(float InAxis) const;
+	void OnVerticalLook(float InAxis) const;
 
-public:
+	void SetSpeed(ESpeedType InType);
+
+	void OnSprint();
+	void OffSprint();
+
+	void EnableControlRotation();
+	void DisableControlRotation();
+
 	FORCEINLINE void Move() { bCanMove = true; }
 	FORCEINLINE void Stop() { bCanMove = false; }
 
 	FORCEINLINE void EnableFixedCamera() { bFixedCamera = true; }
 	FORCEINLINE void DisableFixedCamera() { bFixedCamera = false; }
 
-public:	
-	UCMoveComponent();
-
 protected:
 	virtual void BeginPlay() override;
 
-public:
-	void OnMoveForward(float InAxis);
-	void OnMoveRight(float InAxis);
-	void OnHorizontalLook(float InAxis);
-	void OnVerticalLook(float InAxis);
-
-public:
-	void SetSpeed(ESpeedType InType);
-
-	void OnSprint();
-	void OffSprint();
-
-public:
-	void EnableControlRotation();
-	void DisableControlRotation();
-
 private:
-	class ACharacter* Owner;
+	UPROPERTY(EditAnywhere, Category = "Speed")
+		float WalkSpeed[static_cast<int32>(ESpeedType::Max)] = { 200, 600, 1000 };
 
-private:
+	UPROPERTY(EditAnywhere, Category = "Mouse")
+		FVector2D SpeedOfMouseScroll = FVector2D(45, 45);
+
+	UPROPERTY(VisibleDefaultsOnly)
+	class ACharacter* OwnerCharacter;
+
 	bool bCanMove = true;
 	bool bFixedCamera;
 };

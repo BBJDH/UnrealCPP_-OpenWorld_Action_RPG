@@ -37,9 +37,9 @@ private:
 	void Asign();
 
 	//Dash
-	void DashSetup();
-	void TimelineProgress(float const Axis);
-	void TimelineStop();
+	//void DashSetup();
+	//void TimelineProgress(float const Axis);
+	//void TimelineStop();
 
 public:
 
@@ -54,7 +54,7 @@ protected:
 		class UCZoomComponent* Zoom;
 
 
-private:
-	float const  BackUp_MaxWalkSpeed = 600;
-	float const BackUp_MaxAcceleration = 2048.0f;
+//private:
+//	float const  BackUp_MaxWalkSpeed = 600;
+//	float const BackUp_MaxAcceleration = 2048.0f;
 };

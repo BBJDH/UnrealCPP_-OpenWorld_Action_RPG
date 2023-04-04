@@ -99,7 +99,7 @@ void UCWeaponComponent::InitComboIndex()
 
 void UCWeaponComponent::SetUnarmedMode()
 {
-	GetEquipment()->Unequip(Attachments[(int32)EWeaponType::Max]);
+	GetEquipment()->Unequip(Attachments[static_cast<int32>(CurrentWeaponType)]);
 	ChangeType(EWeaponType::Max);
 }
 
@@ -128,12 +128,12 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 	}
 	else if (IsUnarmedMode() == false)
 	{
-		GetEquipment()->Unequip(Attachments[(int32)InType]);
+		GetEquipment()->Unequip(Attachments[static_cast<int32>(InType)]);
 	}
 
-	if (DataAssets[(int32)InType] != nullptr)
+	if (DataAssets[static_cast<int32>(InType)] != nullptr)
 	{
-		DataAssets[(int32)InType]->GetEquipment()->Equip(Attachments[(int32)InType]);
+		DataAssets[static_cast<int32>(InType)]->GetEquipment()->Equip(Attachments[static_cast<int32>(InType)]);
 
 		ChangeType(InType);
 	}

@@ -12,6 +12,7 @@
 #include "Component/CMontageComponent.h"
 
 #include "Component/CFeetComponent.h"
+#include "Component/CMoveComponent.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CStateComponent.h"
 #include "Component/CStatusComponent.h"
@@ -91,22 +92,21 @@ void ACHuman::OnJumpReleased()
 	Super::StopJumping();
 }
 
-void ACHuman::OnMoveForward(float const InAxisValue)
-{
-
-	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector const DirectionOfForward = FQuat(RotaterOfView).GetForwardVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
-
-	AddMovementInput(DirectionOfForward, InAxisValue);
-}
-
-void ACHuman::OnMoveRight(float const InAxisValue)
-{
-	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector const DirectionORight = FQuat(RotaterOfView).GetRightVector().GetSafeNormal2D();//포워드 벡터이지만 노멀라이즈가 필요
-
-	AddMovementInput(DirectionORight, InAxisValue);
-}
+//void ACHuman::OnMoveForward(float const InAxisValue)
+//{
+//	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
+//	FVector const DirectionOfForward = FQuat(RotaterOfView).GetForwardVector().GetSafeNormal2D();
+//
+//	AddMovementInput(DirectionOfForward, InAxisValue);
+//}
+//
+//void ACHuman::OnMoveRight(float const InAxisValue)
+//{
+//	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
+//	FVector const DirectionORight = FQuat(RotaterOfView).GetRightVector().GetSafeNormal2D();
+//
+//	AddMovementInput(DirectionORight, InAxisValue);
+//}
 
 //캐릭터 상태 변화 감지
 void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
@@ -221,6 +221,7 @@ void ACHuman::Asign()
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
 	CHelpers::CreateActorComponent<UCFeetComponent>(this, &Feet, "Feet");
+	CHelpers::CreateActorComponent<UCMoveComponent>(this, &Move, "Move");
 
 
 	this->bUseControllerRotationYaw = false;

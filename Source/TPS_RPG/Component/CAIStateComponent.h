@@ -43,6 +43,7 @@ public:
 	FAIStateTypeChaged OnAIStateTypeChaged;
 
 private:
+	UPROPERTY(VisibleDefaultsOnly)
 	class UBlackboardComponent* Blackboard;
 
 	//블랙보드 멤버 이름

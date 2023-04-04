@@ -12,7 +12,7 @@ void UCMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Owner = Cast<ACharacter>(GetOwner());
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	
 	SetSpeed(ESpeedType::Run);
 	DisableControlRotation();
@@ -22,39 +22,39 @@ void UCMoveComponent::OnMoveForward(float InAxis)
 {
 	CheckFalse(bCanMove);
 
-	FRotator rotator = FRotator(0, Owner->GetControlRotation().Yaw, 0);
+	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetForwardVector();
 
-	Owner->AddMovementInput(direction, InAxis);
+	OwnerCharacter->AddMovementInput(direction, InAxis);
 }
 
 void UCMoveComponent::OnMoveRight(float InAxis)
 {
 	CheckFalse(bCanMove);
 
-	FRotator rotator = FRotator(0, Owner->GetControlRotation().Yaw, 0);
+	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetRightVector();
 
-	Owner->AddMovementInput(direction, InAxis);
+	OwnerCharacter->AddMovementInput(direction, InAxis);
 }
 
-void UCMoveComponent::OnHorizontalLook(float InAxis)
+void UCMoveComponent::OnHorizontalLook(float InAxis)const
 {
 	CheckTrue(bFixedCamera);
 
-	Owner->AddControllerYawInput(InAxis * MouseSpeed.X * GetWorld()->GetDeltaSeconds());
+	OwnerCharacter->AddControllerYawInput(InAxis * SpeedOfMouseScroll.X * GetWorld()->GetDeltaSeconds());
 }
 
-void UCMoveComponent::OnVerticalLook(float InAxis)
+void UCMoveComponent::OnVerticalLook(float InAxis)const
 {
 	CheckTrue(bFixedCamera);
 
-	Owner->AddControllerPitchInput(InAxis * MouseSpeed.Y * GetWorld()->GetDeltaSeconds());
+	OwnerCharacter->AddControllerPitchInput(InAxis * SpeedOfMouseScroll.Y * GetWorld()->GetDeltaSeconds());
 }
 
 void UCMoveComponent::SetSpeed(ESpeedType InType)
 {
-	Owner->GetCharacterMovement()->MaxWalkSpeed = Speed[(int32)InType];
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed[static_cast<int32>(InType)];
 }
 
 void UCMoveComponent::OnSprint()
@@ -69,12 +69,12 @@ void UCMoveComponent::OffSprint()
 
 void UCMoveComponent::EnableControlRotation()
 {
-	Owner->bUseControllerRotationYaw = true;
-	Owner->GetCharacterMovement()->bOrientRotationToMovement = false;
+	OwnerCharacter->bUseControllerRotationYaw = true;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
 void UCMoveComponent::DisableControlRotation()
 {
-	Owner->bUseControllerRotationYaw = false;
-	Owner->GetCharacterMovement()->bOrientRotationToMovement = true;
+	OwnerCharacter->bUseControllerRotationYaw = false;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 }

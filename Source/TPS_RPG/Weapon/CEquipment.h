@@ -22,8 +22,8 @@ public:
 	void Unequip(class ACAttachment* InAttachment);
 
 public:
-	FEquipmentBehavior OnBeginEquip;
-	FEquipmentBehavior OnUnequip;
+	//FEquipmentBehavior OnBeginEquip;
+	//FEquipmentBehavior OnUnequip;
 	
 
 private:

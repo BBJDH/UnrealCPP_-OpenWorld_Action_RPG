@@ -65,10 +65,10 @@ public:
 private:
 
 	UPROPERTY(EditAnywhere, Category = "DataAsset")
-		class UCWeaponAsset* DataAssets[(int32)EWeaponType::Max];
+		class UCWeaponAsset* DataAssets[static_cast<int32>(EWeaponType::Max)];
 
 	UPROPERTY()
-		class ACAttachment* Attachments[(int32)EWeaponType::Max];
+		class ACAttachment* Attachments[static_cast<int32>(EWeaponType::Max)];
 
 	class ACharacter* OwnerCharacter;
 	EWeaponType CurrentWeaponType = EWeaponType::Max;
