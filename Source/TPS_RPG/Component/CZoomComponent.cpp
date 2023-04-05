@@ -37,5 +37,4 @@ void UCZoomComponent::SetZoomValue(float InValue)
 {
 	DestValueOfZoomLength += (ZoomSpeed * InValue);
 	DestValueOfZoomLength = FMath::Clamp(DestValueOfZoomLength, ZoomRange.X, ZoomRange.Y);
-	//FMath::Clamp 제한된 값을 반환
 }

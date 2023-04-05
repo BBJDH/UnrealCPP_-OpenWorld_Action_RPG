@@ -20,7 +20,7 @@ void UCMoveComponent::BeginPlay()
 
 void UCMoveComponent::OnMoveForward(float InAxis)
 {
-	CheckFalse(bCanMove);
+	CheckFalse(IsCanMove);
 
 	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetForwardVector();
@@ -30,7 +30,7 @@ void UCMoveComponent::OnMoveForward(float InAxis)
 
 void UCMoveComponent::OnMoveRight(float InAxis)
 {
-	CheckFalse(bCanMove);
+	CheckFalse(IsCanMove);
 
 	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetRightVector();
@@ -40,14 +40,14 @@ void UCMoveComponent::OnMoveRight(float InAxis)
 
 void UCMoveComponent::OnHorizontalLook(float InAxis)const
 {
-	CheckTrue(bFixedCamera);
+	CheckTrue(IsFixedCamera);
 
 	OwnerCharacter->AddControllerYawInput(InAxis * SpeedOfMouseScroll.X * GetWorld()->GetDeltaSeconds());
 }
 
 void UCMoveComponent::OnVerticalLook(float InAxis)const
 {
-	CheckTrue(bFixedCamera);
+	CheckTrue(IsFixedCamera);
 
 	OwnerCharacter->AddControllerPitchInput(InAxis * SpeedOfMouseScroll.Y * GetWorld()->GetDeltaSeconds());
 }
@@ -67,13 +67,13 @@ void UCMoveComponent::OffSprint()
 	SetSpeed(ESpeedType::Run);
 }
 
-void UCMoveComponent::EnableControlRotation()
+void UCMoveComponent::EnableControlRotation()const
 {
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
-void UCMoveComponent::DisableControlRotation()
+void UCMoveComponent::DisableControlRotation()const
 {
 	OwnerCharacter->bUseControllerRotationYaw = false;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;

@@ -21,43 +21,51 @@ public:
 
 	UCWeaponComponent();
 
-
-
 	class ACAttachment* GetAttachment();
 	class UCEquipment* GetEquipment();
 	class UCDoActionComponent* GetDoAction();
 
 
-	void BeginEquip();
-	void EndEquip();
+	//Check Current Weapon Mode
+	FORCEINLINE bool IsUnarmedMode() const { return CurrentWeaponType == EWeaponType::Max; }
+	FORCEINLINE bool IsSwordMode() const { return CurrentWeaponType == EWeaponType::Sword; }
+	FORCEINLINE bool IsHammerMode() const { return CurrentWeaponType == EWeaponType::Hammer; }
+	FORCEINLINE bool IsGreatSwordMode() const { return CurrentWeaponType == EWeaponType::GreatSword; }
 
-	FORCEINLINE bool IsUnarmedMode() { return CurrentWeaponType == EWeaponType::Max; }
-	FORCEINLINE bool IsSwordMode() { return CurrentWeaponType == EWeaponType::Sword; }
-	FORCEINLINE bool IsHammerMode() { return CurrentWeaponType == EWeaponType::Hammer; }
-	FORCEINLINE bool IsGreatSwordMode() { return CurrentWeaponType == EWeaponType::GreatSword; }
-
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
 	void InitComboIndex();
+
+	//Set Current Weapon Mode
 	void SetUnarmedMode();
 	void SetSwordMode();
 	void SetHammerMode();
 	void SetGreatSwordMode();
 
+	//Owners Call, Weapon's Action Command
 	void DoAction();
 	void DoUpperAction();
 	void Do_R_Action();
 
-
+	//Destroy All Having Weapons
 	void DestroyWeapons();
+
+	//Notify Call
+	void NotifyBeginEquip();
+	void NotifyEndEquip();
 
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	void SetMode(EWeaponType InType);
-	void ChangeType(EWeaponType InType);
+	//Weapon Mode Control
+	void SetMode(EWeaponType const InType);
+
+	//Change Current Weapon Type
+	void ChangeType(EWeaponType const InType);
 
 public:
 	FWeaponTypeChanged OnWeaponTypeChange;
@@ -70,6 +78,7 @@ private:
 	UPROPERTY()
 		class ACAttachment* Attachments[static_cast<int32>(EWeaponType::Max)];
 
+	UPROPERTY(VisibleDefaultsOnly)
 	class ACharacter* OwnerCharacter;
 	EWeaponType CurrentWeaponType = EWeaponType::Max;
 

@@ -4,6 +4,9 @@
 #include "Component/CStateComponent.h"
 #include "Component/CStatusComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
+
+
 UCDoActionComponent::UCDoActionComponent()
 {
 
@@ -11,11 +14,11 @@ UCDoActionComponent::UCDoActionComponent()
 
 void UCDoActionComponent::BeginPlay(/*ACAttachment* InAttachment, */UCEquipment* InEquipment, ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
 {
-	Owner = InOwner;
-	World = Owner->GetWorld();
+	OwnerCharacter = InOwner;
+	World = OwnerCharacter->GetWorld();
 
-	State = CHelpers::GetComponent<UCStateComponent>(Owner);
-	Status = CHelpers::GetComponent<UCStatusComponent>(Owner);
+	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
+	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
 	DoActionDatas = InDoActionDatas;
 	HitDatas = InHitDatas;
 }
@@ -59,19 +62,22 @@ void UCDoActionComponent::InitIndex()
 
 void UCDoActionComponent::FindActionIdex(EActionType const NewType)
 {
-	//FDoActionData 에서 status의 Inair, 현재 무기의 액션 커멘드를 확인
 	
 	if (DoActionDatas.IsValidIndex(0)==false or DoActionDatas.Max()==0 )
 		return;
 
 	for(int i=0; i< DoActionDatas.Max(); i++)
 	{
+		//if(OwnerCharacter == DoActionDatas[i].InAir and DoActionDatas[i].ActionCommand == NewType)
 		if(Status->IsInAir() == DoActionDatas[i].InAir and DoActionDatas[i].ActionCommand == NewType)
 		{
 			ActionIndex = i;
 			break;
 		}
 	}
+
+	UE_LOG(GameProject, Display, TEXT("%d"), ActionIndex);
+
 }
 
 void UCDoActionComponent::ChangedType(EActionType const NewType)

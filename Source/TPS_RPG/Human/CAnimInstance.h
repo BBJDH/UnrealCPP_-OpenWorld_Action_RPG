@@ -63,7 +63,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Weapon")
 		EWeaponType WeaponType;
 
-private: 
+private:
+	UPROPERTY(VisibleDefaultsOnly)
 	ACharacter* OwnerCharacter;
 
 };

@@ -46,10 +46,20 @@ public:
 	//FActionTypeChanged OnActionTypeChaged;
 
 protected:
-	class ACharacter* Owner;
+	UPROPERTY(VisibleDefaultsOnly)
+
+	class ACharacter* OwnerCharacter;
+
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UWorld* World;
 
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UCStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UCStatusComponent* Status;
 
 	EActionType ActionType;

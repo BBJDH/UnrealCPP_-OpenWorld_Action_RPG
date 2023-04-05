@@ -21,7 +21,7 @@ void UCDoComboActionComponent::DoAction()
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
 
-	DoActionDatas[ActionIndex].DoAction(Owner);
+	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::DoUpperAction()
@@ -31,7 +31,7 @@ void UCDoComboActionComponent::DoUpperAction()
 	CheckFalse(DoActionDatas.Num() > 0);
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
-	DoActionDatas[ActionIndex].DoAction(Owner);
+	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::Do_R_Action()
@@ -41,7 +41,7 @@ void UCDoComboActionComponent::Do_R_Action()
 	CheckFalse(DoActionDatas.Num() > 0);
 	CheckFalse(State->IsIdleMode());
 	CheckFalse(ActionIndex < DoActionDatas.Num());
-	DoActionDatas[ActionIndex].DoAction(Owner);
+	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::Begin_DoAction()
@@ -55,7 +55,7 @@ void UCDoComboActionComponent::Begin_DoAction()
 	++ActionIndex;
 
 	CheckFalse(ActionIndex < DoActionDatas.Num());
-	DoActionDatas[ActionIndex].DoAction(Owner);
+	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::End_DoAction()
@@ -73,10 +73,10 @@ void UCDoComboActionComponent::OffAttachmentCollision()
 		ACharacter* candidate = nullptr;
 		for (ACharacter* hitted : HittedCharacters)
 		{
-			FVector direction = hitted->GetActorLocation() - Owner->GetActorLocation();
+			FVector direction = hitted->GetActorLocation() - OwnerCharacter->GetActorLocation();
 			direction = direction.GetSafeNormal2D();
 
-			FVector forward = FQuat(Owner->GetControlRotation()).GetForwardVector();
+			FVector forward = FQuat(OwnerCharacter->GetControlRotation()).GetForwardVector();
 
 			float dot = FVector::DotProduct(direction, forward);
 			if (dot >= angle)
@@ -88,10 +88,10 @@ void UCDoComboActionComponent::OffAttachmentCollision()
 
 		if (candidate != nullptr)
 		{
-			FRotator rotator = UKismetMathLibrary::FindLookAtRotation(Owner->GetActorLocation(), candidate->GetActorLocation());
+			FRotator rotator = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), candidate->GetActorLocation());
 			FRotator target = FRotator(0, rotator.Yaw, 0);
 
-			AController* controller = Owner->GetController<AController>();
+			AController* controller = OwnerCharacter->GetController<AController>();
 			controller->SetControlRotation(target);
 		}
 	}
@@ -104,7 +104,7 @@ void UCDoComboActionComponent::OnAttachmentBeginOverlap(class ACharacter* InAtta
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
 	CheckNull(InOther);
 	CheckFalse(ActionIndex < HitDatas.Num());
-	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(Owner);
+	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(OwnerCharacter);
 	CheckNull(teamagentInterface);
 	uint8 ownerID = teamagentInterface->GetGenericTeamId();
 	CheckTrue(ownerID == Cast<IGenericTeamAgentInterface>(InOther)->GetGenericTeamId());

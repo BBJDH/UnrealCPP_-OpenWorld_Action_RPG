@@ -8,32 +8,32 @@ UCAIStateComponent::UCAIStateComponent()
 {
 }
 
-bool UCAIStateComponent::IsWaitMode()
+bool UCAIStateComponent::IsWaitMode() const
 {
 	return GetType() == EAIState::Wait;
 }
 
-bool UCAIStateComponent::IsTraceMode()
+bool UCAIStateComponent::IsTraceMode() const
 {
 	return GetType() == EAIState::Trace;
 }
 
-bool UCAIStateComponent::IsBattleMode()
+bool UCAIStateComponent::IsBattleMode() const
 {
 	return GetType() == EAIState::Battle;
 }
 
-void UCAIStateComponent::SetWaitMode()
+void UCAIStateComponent::SetWaitMode() const
 {
 	ChangeType(EAIState::Wait);
 }
 
-void UCAIStateComponent::SetTraceMode()
+void UCAIStateComponent::SetTraceMode() const
 {
 	ChangeType(EAIState::Trace);
 }
 
-void UCAIStateComponent::SetBattleMode()
+void UCAIStateComponent::SetBattleMode() const
 {
 	ChangeType(EAIState::Battle);
 }

@@ -40,7 +40,7 @@ protected:
 	void OnJumpPressed();
 	void OnJumpReleased();
 
-	//BindAxis
+	//BindAxis, Unused, Move to MoveComponent
 	//void OnMoveForward(float const InAxisValue);
 	//void OnMoveRight(float const InAxisValue);
 
@@ -58,14 +58,14 @@ private:
 	void SetActorRotation2D(FRotator LookAtRotator);
 
 
-	//ÄÄÆ÷³ÍÆ®
 protected:
+	//Components
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
-	//Ä¿½ºÅÒ 
+	//Custom 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontageComponent* Montage;
 

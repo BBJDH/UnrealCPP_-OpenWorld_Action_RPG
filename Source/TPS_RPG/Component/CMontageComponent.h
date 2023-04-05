@@ -58,7 +58,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "DataTable")
 		class UDataTable* SettedMontageData;
 
-	class ACharacter* Owner;
+	UPROPERTY(VisibleDefaultsOnly)
+	class ACharacter* OwnerCharacter;
 
 	FMontageData* DatasOfPlayMontage[static_cast<int32>(EMontageType::Max)];
 		

@@ -35,6 +35,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Zooming")
 		FVector2D ZoomRange = FVector2D(100, 800);
 
+	UPROPERTY(VisibleDefaultsOnly)
 	class USpringArmComponent* SpringArm;
 
 	float DestValueOfZoomLength;

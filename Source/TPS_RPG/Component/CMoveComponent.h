@@ -28,14 +28,14 @@ public:
 	void OnSprint();
 	void OffSprint();
 
-	void EnableControlRotation();
-	void DisableControlRotation();
+	void EnableControlRotation() const;
+	void DisableControlRotation() const;
 
-	FORCEINLINE void Move() { bCanMove = true; }
-	FORCEINLINE void Stop() { bCanMove = false; }
+	FORCEINLINE void Move() { IsCanMove = true; }
+	FORCEINLINE void Stop() { IsCanMove = false; }
 
-	FORCEINLINE void EnableFixedCamera() { bFixedCamera = true; }
-	FORCEINLINE void DisableFixedCamera() { bFixedCamera = false; }
+	FORCEINLINE void EnableFixedCamera() { IsFixedCamera = true; }
+	FORCEINLINE void DisableFixedCamera() { IsFixedCamera = false; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -50,6 +50,6 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 	class ACharacter* OwnerCharacter;
 
-	bool bCanMove = true;
-	bool bFixedCamera;
+	bool IsCanMove = true;
+	bool IsFixedCamera;
 };

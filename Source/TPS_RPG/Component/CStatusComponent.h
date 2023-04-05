@@ -33,6 +33,7 @@ private:
 
 
 private:
+	UPROPERTY(VisibleDefaultsOnly)
 	class ACharacter* OwnerCharacter;
 	float Health;
 	bool InAir;

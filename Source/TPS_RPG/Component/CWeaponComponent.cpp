@@ -17,7 +17,7 @@ void UCWeaponComponent::BeginPlay()
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 
-	for (int i = 0; i < (int32)EWeaponType::Max; i++)
+	for (int i = 0; i < static_cast<int32>(EWeaponType::Max); i++)
 	{
 		if (DataAssets[i]!= nullptr)
 		{
@@ -49,38 +49,38 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 ACAttachment* UCWeaponComponent::GetAttachment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(Attachments[(int32)CurrentWeaponType], nullptr);
+	CheckNullResult(Attachments[static_cast<int32>(CurrentWeaponType)], nullptr);
 
-	return Attachments[(int32)CurrentWeaponType];
+	return Attachments[static_cast<int32>(CurrentWeaponType)];
 }
 
 UCEquipment* UCWeaponComponent::GetEquipment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(DataAssets[(int32)CurrentWeaponType], nullptr);
+	CheckNullResult(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
 
-	return DataAssets[(int32)CurrentWeaponType]->GetEquipment();
+	return DataAssets[static_cast<int32>(CurrentWeaponType)]->GetEquipment();
 }
 
 UCDoActionComponent* UCWeaponComponent::GetDoAction()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(DataAssets[(int32)CurrentWeaponType], nullptr);
+	CheckNullResult(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
 
-	if (DataAssets[(int32)CurrentWeaponType]->GetDoAction() ==nullptr)
+	if (DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction() ==nullptr)
 	{
 		return nullptr;
 	}
 
-	return DataAssets[(int32)CurrentWeaponType]->GetDoAction();
+	return DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction();
 }
 
-void UCWeaponComponent::BeginEquip()
+void UCWeaponComponent::NotifyBeginEquip()
 {
-	GetEquipment()->Begin_Equip(Attachments[(int32)CurrentWeaponType]);
+	GetEquipment()->Begin_Equip(Attachments[static_cast<int32>(CurrentWeaponType)]);
 }
 
-void UCWeaponComponent::EndEquip()
+void UCWeaponComponent::NotifyEndEquip()
 {
 	GetEquipment()->End_Equip();
 }
@@ -118,7 +118,7 @@ void UCWeaponComponent::SetGreatSwordMode()
 	SetMode(EWeaponType::GreatSword);
 }
 
-void UCWeaponComponent::SetMode(EWeaponType InType)
+void UCWeaponComponent::SetMode(EWeaponType const InType)
 {
 	if (CurrentWeaponType == InType)
 	{
@@ -126,7 +126,8 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 
 		return;
 	}
-	else if (IsUnarmedMode() == false)
+
+	if (IsUnarmedMode() == false)
 	{
 		GetEquipment()->Unequip(Attachments[static_cast<int32>(InType)]);
 	}
@@ -139,9 +140,9 @@ void UCWeaponComponent::SetMode(EWeaponType InType)
 	}
 }
 
-void UCWeaponComponent::ChangeType(EWeaponType InType)
+void UCWeaponComponent::ChangeType(EWeaponType const InType)
 {
-	EWeaponType PrevType = CurrentWeaponType;
+	EWeaponType const PrevType = CurrentWeaponType;
 	CurrentWeaponType = InType;
 
 	if (OnWeaponTypeChange.IsBound())

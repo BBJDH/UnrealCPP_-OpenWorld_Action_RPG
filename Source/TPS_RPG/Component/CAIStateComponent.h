@@ -21,13 +21,13 @@ class TPS_RPG_API UCAIStateComponent : public UActorComponent
 public:	
 	UCAIStateComponent();
 
-	bool IsWaitMode();
-	bool IsTraceMode();
-	bool IsBattleMode();
+	bool IsWaitMode()const;
+	bool IsTraceMode()const;
+	bool IsBattleMode()const;
 
-	void SetWaitMode();
-	void SetTraceMode();
-	void SetBattleMode();
+	void SetWaitMode()const;
+	void SetTraceMode()const;
+	void SetBattleMode()const;
 
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
 protected:

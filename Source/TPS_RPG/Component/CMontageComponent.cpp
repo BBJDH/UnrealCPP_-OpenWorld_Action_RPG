@@ -17,7 +17,7 @@ void UCMontageComponent::BeginPlay()
 	Super::BeginPlay();
 	CheckNull(SettedMontageData);
 
-	Owner = Cast<ACharacter>(GetOwner());
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
 
 
 	TArray<FMontageData*> LoadedDatas;
@@ -61,11 +61,11 @@ void UCMontageComponent::PlayLended() const
 
 void UCMontageComponent::PlayAnimMontage(EMontageType const InType) const
 {
-	CheckNull(Owner);
+	CheckNull(OwnerCharacter);
 
 	FMontageData* MontageDateToPlay = DatasOfPlayMontage[static_cast<int32>(InType)];
 	if (MontageDateToPlay != nullptr && MontageDateToPlay->Montage != nullptr)
-		Owner->PlayAnimMontage(MontageDateToPlay->Montage, MontageDateToPlay->PlayRatio);
+		OwnerCharacter->PlayAnimMontage(MontageDateToPlay->Montage, MontageDateToPlay->PlayRatio);
 }
 
 

@@ -27,10 +27,17 @@ public:
 	
 
 private:
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class ACharacter* OwnerCharacter;
 
 private:
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UCMoveComponent* Move;
+
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UCStateComponent* State;
 
 private:

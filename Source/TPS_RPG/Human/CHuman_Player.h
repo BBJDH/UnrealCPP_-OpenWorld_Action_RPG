@@ -19,7 +19,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	//Notify Call
-	void NotifyDashEvent();
+	//void NotifyDashEvent();
 
 protected:
 	void Bind(UInputComponent* const PlayerInputComponent);
