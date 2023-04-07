@@ -20,10 +20,52 @@
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
-
 ACHuman::ACHuman() 
 {
-	Asign();
+	CheckNullUObject(GetCapsuleComponent());
+
+	PrimaryActorTick.bCanEverTick = true;
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
+	CheckNullUObject(SpringArm);
+
+	SpringArm->SetupAttachment(GetCapsuleComponent());
+
+	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CheckNullUObject(Camera);
+
+	Camera->SetupAttachment(SpringArm);
+
+	//Create Custom Component
+	Weapon = this->CreateDefaultSubobject<UCWeaponComponent>("Weapon");
+	CheckNullUObject(Weapon);
+
+	State = this->CreateDefaultSubobject<UCStateComponent>("State");
+	CheckNullUObject(State);
+
+	Status = this->CreateDefaultSubobject<UCStatusComponent>("Status");
+	CheckNullUObject(Status);
+
+	Montage = this->CreateDefaultSubobject<UCMontageComponent>("Montage");
+	CheckNullUObject(Montage);
+
+	Feet = this->CreateDefaultSubobject<UCFeetComponent>("Feet");
+	CheckNullUObject(Feet);
+
+	Move = this->CreateDefaultSubobject<UCMoveComponent>("Move");
+	CheckNullUObject(Move);
+
+
+	this->bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->MaxWalkSpeed = 600;
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
+	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+
+	ConstructorHelpers::FClassFinder<UCAnimInstance> const AssetFound(*FString( "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'"));
+	CheckNullUObject(AssetFound.Class);
+
+	GetMesh()->SetAnimClass(AssetFound.Class);
 }
 
 void ACHuman::BeginPlay()
@@ -41,8 +83,10 @@ void ACHuman::Tick(float DeltaTime)
 float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	float AmountOfDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	float const AmountOfDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	CheckNullUObjectResult(State, AmountOfDamage);
+	CheckNullUObjectResult(EventInstigator->GetPawn(), AmountOfDamage);
 	DamageData.Amount = AmountOfDamage;
 	DamageData.Attacker = Cast<ACharacter>(EventInstigator->GetPawn());
 	DamageData.Event = (FHitDamageEvent*)&DamageEvent;
@@ -60,7 +104,6 @@ void ACHuman::Landed(const FHitResult& Hit)
 		Montage->PlayLended();
 
 	EndFall();
-
 }
 
 void ACHuman::Falling()
@@ -92,21 +135,6 @@ void ACHuman::OnJumpReleased()
 	Super::StopJumping();
 }
 
-//void ACHuman::OnMoveForward(float const InAxisValue)
-//{
-//	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
-//	FVector const DirectionOfForward = FQuat(RotaterOfView).GetForwardVector().GetSafeNormal2D();
-//
-//	AddMovementInput(DirectionOfForward, InAxisValue);
-//}
-//
-//void ACHuman::OnMoveRight(float const InAxisValue)
-//{
-//	FRotator const RotaterOfView = FRotator(0, GetControlRotation().Yaw, 0);
-//	FVector const DirectionORight = FQuat(RotaterOfView).GetRightVector().GetSafeNormal2D();
-//
-//	AddMovementInput(DirectionORight, InAxisValue);
-//}
 
 //캐릭터 상태 변화 감지
 void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
@@ -123,7 +151,7 @@ void ACHuman::GetHit()
 {
 	CheckNull(DamageData.Event);
 	CheckNull(DamageData.Event->HitData);
-	
+	CheckNullUObject(Status);
 	Status->Damage(DamageData.Amount);
 	DamageData.Amount = 0;
 
@@ -151,10 +179,10 @@ void ACHuman::GetHit()
 	DamageData.Event = nullptr;
 }
 
-void ACHuman::Dead()
+void ACHuman::Dead() const
 {
-	CheckNull(GetCapsuleComponent());
-	CheckNull(GetController());
+	CheckNullUObject(GetCapsuleComponent());
+	CheckNullUObject(GetController());
 	GetCapsuleComponent()->SetCollisionProfileName("RagdollWithNoCam");
 	Montage->PlayDead();
 
@@ -162,8 +190,9 @@ void ACHuman::Dead()
 }
 
 //Normalized Return
-FVector ACHuman::GetVectorLookAtActor(AActor const* InActor)
+FVector ACHuman::GetVectorLookAtActor(AActor const* InActor) const
 {
+	CheckNullUObjectResult(InActor,FVector());
 	FVector const LocationOfSelf = GetActorLocation();
 	FVector const LocationOfDest= InActor->GetActorLocation();
 	FVector LookAtDest = LocationOfDest - LocationOfSelf;
@@ -179,11 +208,16 @@ void ACHuman::SetActorRotation2D(FRotator LookAtRotator)
 }
 
 //Broadcast Falling
-void ACHuman::StartFall()
+void ACHuman::StartFall() const
 {
+	CheckNullUObject(Status);
+	CheckNullUObject(Feet);
+	CheckNullUObject(Weapon);
+
 	UAnimInstance * SelfAnimInstance =  this->GetMesh()->GetAnimInstance();
-	CheckNull(SelfAnimInstance);
+	CheckNullUObject(SelfAnimInstance);
 	Cast<UCAnimInstance>(SelfAnimInstance)->StartInAir();
+
 	Status->StartInAir();
 	Feet->StartInAir();
 	Weapon->InitComboIndex();
@@ -191,11 +225,16 @@ void ACHuman::StartFall()
 }
 
 //Broadcast Landed
-void ACHuman::EndFall()
+void ACHuman::EndFall() const
 {
+	CheckNullUObject(Status);
+	CheckNullUObject(Feet);
+	CheckNullUObject(Weapon);
+
 	UAnimInstance* SelfAnimInstance = this->GetMesh()->GetAnimInstance();
-	CheckNull(SelfAnimInstance);
+	CheckNullUObject(SelfAnimInstance);
 	Cast<UCAnimInstance>(SelfAnimInstance)->EndInAir();
+
 	Status->EndInAir();
 	Feet->EndInAir();
 	Weapon->InitComboIndex();
@@ -204,35 +243,9 @@ void ACHuman::EndFall()
 
 void ACHuman::NotifyDead()
 {
+	CheckNullUObject(Weapon);
+
 	Weapon->DestroyWeapons();
 	Destroy();
-}
-
-void ACHuman::Asign()
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetCapsuleComponent());
-	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
-
-	//Create Custom Component
-	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
-	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
-	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
-	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
-	CHelpers::CreateActorComponent<UCFeetComponent>(this, &Feet, "Feet");
-	CHelpers::CreateActorComponent<UCMoveComponent>(this, &Move, "Move");
-
-
-	this->bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->MaxWalkSpeed = 600;
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
-	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0)); 
-
-	TSubclassOf<UCAnimInstance> ClassOfAnimInstance;
-	CHelpers::GetClass<UCAnimInstance>(&ClassOfAnimInstance, "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'");
-
-	GetMesh()->SetAnimClass(ClassOfAnimInstance);
 }
 

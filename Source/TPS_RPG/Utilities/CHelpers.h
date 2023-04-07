@@ -5,90 +5,66 @@
 #include "Niagara/Classes/NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 
-#define CheckTrue(p) {if((p)==true) return;} 
-#define CheckTrueResult(p,result) {if((p)==true) return result;}
+#define CheckTrue(Param) {if((Param)==true) return;} 
+#define CheckTrueResult(Param,Result) {if((Param)==true) return Result;}
 
-#define CheckFalse(p) {if((p)==false) return;}
-#define CheckFalseResult(p,result) {if((p)==false) return result;} 
+#define CheckFalse(Param) {if((Param)==false) return;}
+#define CheckFalseResult(Param,Result) {if((Param)==false) return Result;} 
 
-#define CheckNull(p) {if((p)==nullptr) return;}	
-#define CheckNullResult(p,result) {if((p)==nullptr) return result;}
+#define CheckNull(Param) {if((Param)==nullptr) return;}	
+#define CheckNullResult(Param,Result) {if((Param)==nullptr) return Result;}
+#define CheckNullUObject(Param) {if(IsValid(Param)==false) return;}	
+#define CheckNullUObjectResult(Param,Result) {if(IsValid(Param)==false) return Result;}	
 
 #define and &&
 #define or ||
 #define not !
 
-#define CreateTextRender() \
-{ \
-	CHelpers::CreateComponent<UTextRenderComponent>(this, &Text, "Text", Root); \
-	Text->SetRelativeLocation(FVector(0, 0, 100)); \
-	Text->SetRelativeRotation(FRotator(0, 180, 0)); \
-	Text->SetRelativeScale3D(FVector(2)); \
-	Text->TextRenderColor = FColor::Red; \
-	Text->HorizontalAlignment = EHorizTextAligment::EHTA_Center; \
-	Text->Text = FText::FromString(GetName().Replace(TEXT("Default__"), TEXT(""))); \
-}
+//#define CreateTextRender() \
+//{ \
+//	CHelpers::CreateComponent<UTextRenderComponent>(this, &Text, "Text", Root); \
+//	Text->SetRelativeLocation(FVector(0, 0, 100)); \
+//	Text->SetRelativeRotation(FRotator(0, 180, 0)); \
+//	Text->SetRelativeScale3D(FVector(2)); \
+//	Text->TextRenderColor = FColor::Red; \
+//	Text->HorizontalAlignment = EHorizTextAligment::EHTA_Center; \
+//	Text->Text = FText::FromString(GetName().Replace(TEXT("Default__"), TEXT(""))); \
+//}
 
 
 
 
-//언리얼에 필요한 기본적인 요소들 헤더
-
-// 내 프로젝트의 모듈이름이 무엇인지 궁금하다면
-//.uproject 파일의
-/*
-
-	"Modules": [
-		{
-			"Name": "CPP_Basic",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine"
-			]
-*///를 확인
-
-//이 클래스가 어느 모듈에 포함되어 있는지 : CPP_BASIC_API
 class TPS_RPG_API CHelpers
 {
 
 public:
-	//
-	template<typename T>
-	static void CreateComponent(AActor* InActor, T** OutComponent,
-		FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None)
-	{//어느 Actor에 소속될지/어디에서 생성될지(InActor), 할당받을 컴포넌트 포인터, 생성이름, 달라붙을 부모(유무 포함)		
-		//Scene 컴포넌트 부터 트랜스폼이 생긴다 여기서부터 부모자식 행렬관계(좌표)가 형성되므로 최상위인 USceneComponent를 사용
+	//template<typename T>
+	//static void CreateComponent(AActor* InActor, T** OutComponent,
+	//	FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None)
+	//{
+	//	*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 
-		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
+	//		if (InParent !=nullptr)		
+	//		{
+	//			(*OutComponent)->SetupAttachment(InParent, InSocketName);
 
-			if (InParent !=nullptr)		//nullptr 체크
-			{
-				//부모 SceneComponent가 존재한다면
-				(*OutComponent)->SetupAttachment(InParent, InSocketName);
-				//붙인다 행렬곱 실시
+	//			return;
+	//		}
+	//	InActor->SetRootComponent(*OutComponent);
 
-				return;
-			}
-		InActor->SetRootComponent(*OutComponent);
-		//InActor->RootComponent(*OutComponent); //Protected
-
-	}
+	//}
 
 
-	template<typename T>
-	static void CreateActorComponent(AActor* InActor, T** OutComponent, FName InName)
-	{
-		*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
-		//CreateComponent 함수 참고
-	}
+	//template<typename T>
+	//static void CreateActorComponent(AActor* InActor, T** OutComponent, FName InName)
+	//{
+	//	*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
+	//}
 
 	template<typename T>
 	static T* GetComponent(AActor* InActor)
 	{
 		return Cast<T>(InActor->GetComponentByClass(T::StaticClass()));
-		//GetComponents는 해당액터의 모든 컴포넌트들을 가져온다
-		//단일 컴포넌트, 원하는 클래스로 가져오도록 템플릿 작성
 	}
 
 	template<typename T>
@@ -105,8 +81,6 @@ public:
 		}
 		
 		return nullptr;
-		//GetComponents는 해당액터의 모든 컴포넌트들을 가져온다
-		//단일 컴포넌트, 원하는 클래스로 가져오도록 템플릿 작성
 	}
 
 
@@ -120,9 +94,6 @@ public:
 	template<typename T>
 	static void GetAssetDynamic(T** OutObject, FString InPath)
 	{
-		/*************************************
-		Cast<Typename>(); 해당 타입으로 캐스팅
-		**************************************/
 		*OutObject = Cast<T>
 			(
 				StaticLoadObject
@@ -134,19 +105,19 @@ public:
 			);
 	}
 
-	template<typename T>
-	static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
-	{
-		ConstructorHelpers::FClassFinder<T> asset(*InPath);
-		*OutClass = asset.Class; 
-	}
+	//template<typename T>
+	//static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
+	//{
+	//	ConstructorHelpers::FClassFinder<T> asset(*InPath);
+	//	*OutClass = asset.Class; 
+	//}
 
 	template<typename T>
 	static T* FindActor(UWorld * InWorld)
 	{
-		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)//월드의 현재 레벨의 모든 액터 순회
+		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
 		{
-			if (actor != nullptr && actor->IsA<T>()) //IsA 상속이다 : TRUE
+			if (actor != nullptr && actor->IsA<T>())
 			{
 				return Cast<T>(actor);
 			}
@@ -159,20 +130,19 @@ public:
 	{
 		OutArray.Empty();
 
-		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)//월드의 현재 레벨의 모든 액터 순회
+		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
 		{
-			if (actor != nullptr && actor->IsA<T>()) //IsA 상속이다 : TRUE
+			if (actor != nullptr && actor->IsA<T>()) 
 			{
 				OutArray.Add(Cast<T>(actor));
 			}
 		}
-//		return nullptr;
 	}
 
 
 	static void PlayParticleEffect(UWorld* InWorld, UParticleSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
 	{
-		CheckNull(InEffect);
+		CheckNullUObject(InEffect);
 		
 		FVector location = InTransform.GetLocation();
 		FRotator rotation = FRotator(InTransform.GetRotation());
@@ -197,7 +167,7 @@ public:
 	}
 	static void PlayNiagaraEffect(UWorld* InWorld, UNiagaraSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
 	{
-		CheckNull(InEffect);
+		CheckNullUObject(InEffect);
 		FVector location = InTransform.GetLocation();
 		FRotator rotation = FRotator(InTransform.GetRotation());
 		FVector scale = InTransform.GetScale3D();

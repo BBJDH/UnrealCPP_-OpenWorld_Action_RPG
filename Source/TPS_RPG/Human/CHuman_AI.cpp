@@ -9,14 +9,18 @@
 
 ACHuman_AI::ACHuman_AI():ACHuman()
 {
-	CHelpers::CreateActorComponent<UCAIStateComponent>(this, &AIState, "AIState");
-	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthBarWidget, "HealthBar",this->GetMesh());
+	CheckNullUObject(this->GetMesh());
+	AIState = this->CreateDefaultSubobject<UCAIStateComponent>("AIState");
 
-	TSubclassOf<UCUserWidget_HealthBar> healthBarClass;
+	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	CheckNullUObject(HealthBarWidget);
 
-	CHelpers::GetClass<UCUserWidget_HealthBar>(&healthBarClass, "WidgetBlueprint'/Game/Widgets/WB_HealthBar.WB_HealthBar_C'");
+	HealthBarWidget->SetupAttachment(this->GetMesh());
 
-	HealthBarWidget->SetWidgetClass(healthBarClass);
+	ConstructorHelpers::FClassFinder<UCUserWidget_HealthBar> AssetFound(*FString("WidgetBlueprint'/Game/Widgets/WB_HealthBar.WB_HealthBar_C'"));
+	CheckNullUObject(AssetFound.Class);
+
+	HealthBarWidget->SetWidgetClass(AssetFound.Class);
 	HealthBarWidget->SetRelativeLocation(FVector(0, 0, 220));
 	HealthBarWidget->SetDrawSize(FVector2D(120,20));
 	HealthBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
@@ -26,14 +30,15 @@ ACHuman_AI::ACHuman_AI():ACHuman()
 float ACHuman_AI::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float const Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	CheckNullUObjectResult(Status, Damage);
 
-	UCUserWidget_HealthBar* healthBar = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
+	UCUserWidget_HealthBar* HealthBarToUpdate = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
+	CheckNullUObjectResult(HealthBarToUpdate, Damage);
 
-	if(healthBar != nullptr)
-		healthBar->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
+	HealthBarToUpdate->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
 
-	return damage;
+	return Damage;
 }
 
 void ACHuman_AI::BeginPlay()
@@ -42,11 +47,10 @@ void ACHuman_AI::BeginPlay()
 
 	HealthBarWidget->InitWidget();
 	
-	UCUserWidget_HealthBar * healthBar = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
-	CheckNull(healthBar);
+	UCUserWidget_HealthBar * HealthBarToInit = Cast<UCUserWidget_HealthBar>(HealthBarWidget->GetUserWidgetObject());
+	CheckNullUObject(HealthBarToInit);
 
-	healthBar->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
-	healthBar->SetNameText(this->GetName());
-	healthBar->SetControllerNameText(this->GetController()->GetName());
-
+	HealthBarToInit->UpdateHealth(Status->GetHealth(), Status->GetMaxHealth());
+	HealthBarToInit->SetNameText(this->GetName());
+	HealthBarToInit->SetControllerNameText(this->GetController()->GetName());
 }

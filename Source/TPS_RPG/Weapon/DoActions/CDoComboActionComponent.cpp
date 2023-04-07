@@ -102,7 +102,7 @@ void UCDoComboActionComponent::OffAttachmentCollision()
 void UCDoComboActionComponent::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther)
 {
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
-	CheckNull(InOther);
+	CheckNullUObject(InOther);
 	CheckFalse(ActionIndex < HitDatas.Num());
 	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(OwnerCharacter);
 	CheckNull(teamagentInterface);

@@ -6,18 +6,35 @@
 #include "Component/CMoveComponent.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
-#include "Weapon/CAttachment.h"
 #include "Weapon/CWeaponStructures.h"
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 ACHuman_Player::ACHuman_Player():ACHuman()
 {
-	Asign();
+
+	//CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
+	Zoom = this->CreateDefaultSubobject<UCZoomComponent>("Zoom");
+	CheckNullUObject(Zoom);
+
+
+	//SpringArm Setting
+	SpringArm->SetRelativeLocation(FVector(0, 0, 60));
+	SpringArm->SocketOffset = FVector(0, 60, 0);
+	SpringArm->TargetArmLength = 600;
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->CameraLagSpeed = 5;
+	SpringArm->CameraRotationLagSpeed = 2;
+	SpringArm->bDoCollisionTest = true;
+	SpringArm->bUsePawnControlRotation = true;
+
+
+	//Jump Setting
+	this->JumpMaxCount = 2;
+	this->JumpMaxHoldTime = 0.2f;
 }
 
 void ACHuman_Player::BeginPlay()
@@ -38,30 +55,13 @@ void ACHuman_Player::Tick(float DeltaSeconds)
 	DashTimeline.TickTimeline(DeltaSeconds);
 }
 
-void ACHuman_Player::Asign()
-{
-	CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
-
-
-	//SpringArm Setting
-	SpringArm->SetRelativeLocation(FVector(0, 0, 60));
-	SpringArm->SocketOffset = FVector(0, 60, 0);
-	SpringArm->TargetArmLength = 600;
-	SpringArm->bEnableCameraLag = true;		
-	SpringArm->CameraLagSpeed = 5;
-	SpringArm->CameraRotationLagSpeed = 2;
-	SpringArm->bDoCollisionTest = true;	
-	SpringArm->bUsePawnControlRotation = true;	
-
-
-	//Jump Setting
-	this->JumpMaxCount = 2;
-	this->JumpMaxHoldTime = 0.2f;
-}
 
 void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 {
-	CheckNull(PlayerInputComponent);
+	CheckNullUObject(PlayerInputComponent);
+	CheckNullUObject(Weapon);
+	CheckNullUObject(Move);
+	CheckNullUObject(Zoom);
 	
 	//Action
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACHuman_Player::OnJumpPressed);

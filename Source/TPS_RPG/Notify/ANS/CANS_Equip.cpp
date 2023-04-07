@@ -14,18 +14,18 @@ void UCANS_Equip::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 	ACHuman* human = Cast<ACHuman>(MeshComp->GetOwner());
-	CheckNull(human);
+	CheckNullUObject(human);
 
 }
 
 void UCANS_Equip::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::NotifyEnd(MeshComp, Animation);
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 	ACHuman* human = Cast<ACHuman>(MeshComp->GetOwner());
-	CheckNull(human);
+	CheckNullUObject(human);
 }

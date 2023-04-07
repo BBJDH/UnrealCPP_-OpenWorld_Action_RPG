@@ -20,13 +20,11 @@ class TPS_RPG_API ACHuman
 public:
 	ACHuman();
 	virtual void BeginPlay() override;
-	void Tick(float DeltaTime) override;
-	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
+	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
 
-	//Broadcast Falling, Landed
-	void StartFall();
-	void EndFall();
+
 
 	//CallByNotify
 	void NotifyDead();
@@ -40,21 +38,19 @@ protected:
 	void OnJumpPressed();
 	void OnJumpReleased();
 
-	//BindAxis, Unused, Move to MoveComponent
-	//void OnMoveForward(float const InAxisValue);
-	//void OnMoveRight(float const InAxisValue);
 
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType);
 
-	//Constructor Function
-	void Asign();
+	//Broadcast InAir
+	void StartFall() const;
+	void EndFall() const;
 
 	void GetHit();
-	void Dead();
+	void Dead()const;
 
-	FVector GetVectorLookAtActor(AActor const* InActor);
+	FVector GetVectorLookAtActor(AActor const* InActor) const;
 	void SetActorRotation2D(FRotator LookAtRotator);
 
 

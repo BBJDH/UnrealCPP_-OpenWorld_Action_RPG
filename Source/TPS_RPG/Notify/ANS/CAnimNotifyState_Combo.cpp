@@ -12,15 +12,15 @@ FString UCAnimNotifyState_Combo::GetNotifyName_Implementation() const
 void UCAnimNotifyState_Combo::NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNull(weapon);
-	CheckNull(weapon->GetDoAction());
+	CheckNullUObject(weapon);
+	CheckNullUObject(weapon->GetDoAction());
 
 	UCDoComboActionComponent* combo = Cast<UCDoComboActionComponent>(weapon->GetDoAction());
-	CheckNull(combo);
+	CheckNullUObject(combo);
 
 	combo->EnableCombo();
 }
@@ -29,15 +29,15 @@ void UCAnimNotifyState_Combo::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnim
 {
 	Super::NotifyEnd(MeshComp, Animation);
 
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNull(weapon);
-	CheckNull(weapon->GetDoAction());
+	CheckNullUObject(weapon);
+	CheckNullUObject(weapon->GetDoAction());
 
 	UCDoComboActionComponent* combo = Cast<UCDoComboActionComponent>(weapon->GetDoAction());
-	CheckNull(combo);
+	CheckNullUObject(combo);
 
 	combo->DisableCombo();
 }

@@ -14,10 +14,18 @@
 
 ACAIController::ACAIController()
 {
-	CHelpers::CreateActorComponent<UAIPerceptionComponent>(this, &Perception, "Perception");
-	CHelpers::CreateActorComponent<UBlackboardComponent>(this, &Blackboard, "Blackboard");
+	//CHelpers::CreateActorComponent<UAIPerceptionComponent>(this, &Perception, "Perception");
+	//CHelpers::CreateActorComponent<UBlackboardComponent>(this, &Blackboard, "Blackboard");
 
-	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
+	Perception = this->CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
+	CheckNullUObject(Perception);
+
+	Blackboard = this->CreateDefaultSubobject<UBlackboardComponent>("Blackboard");
+	CheckNullUObject(Blackboard);
+
+	Sight = this->CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
+	CheckNullUObject(Sight);
+
 	Sight->SightRadius = 600;
 	Sight->LoseSightRadius = 800;
 	Sight->PeripheralVisionAngleDegrees = 150;	//인식범위 각
@@ -34,6 +42,8 @@ ACAIController::ACAIController()
 void ACAIController::BeginPlay()
 {
 	Super::BeginPlay();
+	CheckNullUObject(Perception);
+
 	//함수의 포인터가 직렬화 되어있어야 하므로 여기서 바인드
 	Perception->OnPerceptionUpdated.AddDynamic(this, &ACAIController::OnPerceptionUpdated);
 }
@@ -41,19 +51,19 @@ void ACAIController::BeginPlay()
 void ACAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	Owner = Cast<ACHuman_AI>(InPawn);
-	SetGenericTeamId(Owner->GetGenericTeamId());
+	OwnerCharacter = Cast<ACHuman_AI>(InPawn);
+	SetGenericTeamId(OwnerCharacter->GetGenericTeamId());
 	//BehaviorTree에 설정된 블랙보드를 AI컨트롤러의 블랙보드 컴포넌트에 등록
 
-	CheckNull(Owner->GetBehaviorTree());
+	CheckNullUObject(OwnerCharacter->GetBehaviorTree());
 
-	UseBlackboard(Owner->GetBehaviorTree()->BlackboardAsset, Blackboard);
+	UseBlackboard(OwnerCharacter->GetBehaviorTree()->BlackboardAsset, Blackboard);
 
-	AIState = CHelpers::GetComponent<UCAIStateComponent>(Owner);
-	//CheckNull(AIState);
+	AIState = CHelpers::GetComponent<UCAIStateComponent>(OwnerCharacter);
+	CheckNullUObject(AIState);
 	AIState->SetBlackboard(Blackboard);
 
-	RunBehaviorTree(Owner->GetBehaviorTree());
+	RunBehaviorTree(OwnerCharacter->GetBehaviorTree());
 }
 
 void ACAIController::OnUnPossess()
@@ -63,16 +73,19 @@ void ACAIController::OnUnPossess()
 
 void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
-	TArray<AActor*> actors;
+	CheckNullUObject(Perception);
+
+	TArray<AActor*> DetectedActors;
 	//어떤 감지로 뜬것을 가져올지 (nullptr은 모든 감지)
-	Perception->GetCurrentlyPerceivedActors(TSubclassOf<UAISense_Sight>(), actors);
+	Perception->GetCurrentlyPerceivedActors(TSubclassOf<UAISense_Sight>(), DetectedActors);
 
 	ACHuman* Target = nullptr;
-	for (AActor* actor : actors)
+	for (AActor* actor : DetectedActors)
 	{
 		Target = Cast<ACHuman>(actor);
 		if (Target != nullptr)
 			break;
 	}
+	CheckNullUObject(Blackboard);
 	Blackboard->SetValueAsObject("Target", Target);
 }

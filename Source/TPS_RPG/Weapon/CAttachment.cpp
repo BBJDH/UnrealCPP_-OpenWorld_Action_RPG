@@ -8,7 +8,13 @@
 
 ACAttachment::ACAttachment()
 {
-	CHelpers::CreateComponent<USceneComponent>(this, &Root, "Root");
+	//CHelpers::CreateComponent<USceneComponent>(this, &Root, "Root");
+
+	Root = CreateDefaultSubobject<USceneComponent>("Root");
+
+	CheckNullUObject(Root);
+
+	this->SetRootComponent(Root);
 }
 
 void ACAttachment::BeginPlay()

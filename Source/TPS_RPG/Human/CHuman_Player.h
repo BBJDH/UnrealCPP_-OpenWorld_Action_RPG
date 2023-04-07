@@ -22,6 +22,7 @@ public:
 	//void NotifyDashEvent();
 
 protected:
+
 	void Bind(UInputComponent* const PlayerInputComponent);
 
 	void HorizontalLook(float const InAxisValue);
@@ -33,8 +34,6 @@ protected:
 
 private:
 
-	//Constrctor Function
-	void Asign();
 
 	//Dash
 	//void DashSetup();

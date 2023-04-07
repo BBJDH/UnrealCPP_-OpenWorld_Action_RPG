@@ -63,7 +63,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 
 void FHitData::PlaySound(ACharacter* InOwner)
 {
-	CheckNull(Sound);
+	CheckNullUObject(Sound);
 
 	UWorld* world = InOwner->GetWorld();
 	FVector location = InOwner->GetActorLocation();
@@ -73,7 +73,7 @@ void FHitData::PlaySound(ACharacter* InOwner)
 
 void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
 {
-	CheckNull(Effect);
+	CheckNullUObject(Effect);
 
 	FTransform transform;
 	transform.SetLocation(InLocation);
@@ -86,7 +86,7 @@ void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
 
 void FHitData::HitLaunch(ACharacter* InOwner, FRotator const& InLookAtRotator , ACharacter * InAttacker)
 {
-	CheckNull(InOwner);
+	CheckNullUObject(InOwner);
 
 	//FVector const LocationOfSelf = InOwner->GetActorLocation();
 	//FVector const LocationOfAttacker = InAttacker->GetActorLocation();
@@ -98,7 +98,7 @@ void FHitData::HitLaunch(ACharacter* InOwner, FRotator const& InLookAtRotator , 
 
 	InOwner->LaunchCharacter(LaunchDirection * this->Launch, false, true);
 
-	CheckNull(InAttacker);
+	CheckNullUObject(InAttacker);
 	if (this->IsLaunchAttacker)
 	{
 		InAttacker->LaunchCharacter(LaunchDirection * this->Launch * 1.02f, false, true);

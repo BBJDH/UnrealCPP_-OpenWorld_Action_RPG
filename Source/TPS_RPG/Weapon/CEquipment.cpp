@@ -15,7 +15,7 @@ void UCEquipment::BeginPlay(ACharacter* InOwner, const FEquipmentData& InData)
 
 void UCEquipment::Equip(ACAttachment * InAttachment)
 {
-	CheckNull(InAttachment)
+	CheckNullUObject(InAttachment)
 	State->SetEquipMode();
 
 
@@ -32,7 +32,7 @@ void UCEquipment::Equip(ACAttachment * InAttachment)
 
 void UCEquipment::Begin_Equip(class ACAttachment* InAttachment)
 {
-	CheckNull(InAttachment)
+	CheckNullUObject(InAttachment)
 
 	bBeginEquip = true;
 	InAttachment->OnBeginEquip();
@@ -50,7 +50,7 @@ void UCEquipment::End_Equip()
 
 void UCEquipment::Unequip(ACAttachment* InAttachment)
 {
-	CheckNull(InAttachment)
+	CheckNullUObject(InAttachment)
 
 	bEquipped = false;
 

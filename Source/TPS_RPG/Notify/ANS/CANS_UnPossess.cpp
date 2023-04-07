@@ -16,18 +16,18 @@ void UCANS_UnPossess::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenc
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 
-	CheckNull(MeshComp);
+	CheckNullUObject(MeshComp);
 	Owner = Cast<ACharacter>(MeshComp->GetOwner());
-	CheckNull(Owner);
+	CheckNullUObject(Owner);
 	Controller = Owner->GetController();
-	CheckNull(Controller);
+	CheckNullUObject(Controller);
 	Owner->DisableInput(Cast<APlayerController>(Controller));
 }
 
 void UCANS_UnPossess::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::NotifyEnd(MeshComp, Animation);
-	CheckNull(Owner);
-	CheckNull(Controller);
+	CheckNullUObject(Owner);
+	CheckNullUObject(Controller);
 	Owner->EnableInput(Cast<APlayerController>(Controller));
 }

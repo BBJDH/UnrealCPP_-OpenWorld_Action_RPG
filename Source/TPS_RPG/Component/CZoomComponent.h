@@ -30,7 +30,7 @@ private:
 		float ZoomSpeed = 20;
 
 	UPROPERTY(EditAnywhere, Category = "Zooming")
-		float ZoomInterpSpeed = 5;
+		float ZoomSpeedOfInterpolation = 5;
 
 	UPROPERTY(EditAnywhere, Category = "Zooming")
 		FVector2D ZoomRange = FVector2D(100, 800);

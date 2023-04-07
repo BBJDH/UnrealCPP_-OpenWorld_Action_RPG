@@ -15,7 +15,7 @@ UCMontageComponent::UCMontageComponent()
 void UCMontageComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CheckNull(SettedMontageData);
+	CheckNullUObject(SettedMontageData);
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 
@@ -61,7 +61,7 @@ void UCMontageComponent::PlayLended() const
 
 void UCMontageComponent::PlayAnimMontage(EMontageType const InType) const
 {
-	CheckNull(OwnerCharacter);
+	CheckNullUObject(OwnerCharacter);
 
 	FMontageData* MontageDateToPlay = DatasOfPlayMontage[static_cast<int32>(InType)];
 	if (MontageDateToPlay != nullptr && MontageDateToPlay->Montage != nullptr)

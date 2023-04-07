@@ -34,8 +34,15 @@ private:
 		void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
 
 private:
-	class ACHuman_AI* Owner;
+	UPROPERTY(VisibleDefaultsOnly)
+
+	class ACHuman_AI* OwnerCharacter;
+
+	UPROPERTY(VisibleDefaultsOnly)
+
 	class UAISenseConfig_Sight* Sight;
+
+	UPROPERTY(VisibleDefaultsOnly)
 
 	class UCAIStateComponent* AIState;
 };

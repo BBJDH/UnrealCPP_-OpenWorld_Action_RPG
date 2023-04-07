@@ -14,9 +14,9 @@ void UCAnimNotify_Dead::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 {
 	Super::Notify(MeshComp, Animation);
 
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 	ACHuman* OwnerHuman = Cast<ACHuman>(MeshComp->GetOwner());
-	CheckNull(OwnerHuman);
+	CheckNullUObject(OwnerHuman);
 	OwnerHuman->NotifyDead();
 }

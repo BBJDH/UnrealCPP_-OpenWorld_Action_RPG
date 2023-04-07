@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "TPS_RPGGameModeBase.generated.h"
+#include "Action_RPGGameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPS_RPG_API ATPS_RPGGameModeBase : public AGameModeBase
+class TPS_RPG_API AAction_RPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	ATPS_RPGGameModeBase();
+	AAction_RPGGameModeBase();
 	
 };

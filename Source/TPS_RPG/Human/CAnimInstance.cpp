@@ -20,7 +20,7 @@ void UCAnimInstance::NativeBeginPlay()
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 
-	CheckNull(OwnerCharacter);
+	CheckNullUObject(OwnerCharacter);
 	//Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
 	//Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
@@ -29,7 +29,7 @@ void UCAnimInstance::NativeBeginPlay()
 
 	//UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(OwnerCharacter);
 	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
-	CheckNull(WeaponComponent);
+	CheckNullUObject(WeaponComponent);
 
 	WeaponComponent->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
 }
@@ -37,14 +37,14 @@ void UCAnimInstance::NativeBeginPlay()
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	CheckNull(OwnerCharacter);
+	CheckNullUObject(OwnerCharacter);
 	
 	Speed = OwnerCharacter->GetVelocity().Size2D();
 
 	//UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
 	UCFeetComponent* FeetIKComponent = Cast<UCFeetComponent>(OwnerCharacter->GetComponentByClass(UCFeetComponent::StaticClass()));
 
-	CheckNull(FeetIKComponent);
+	CheckNullUObject(FeetIKComponent);
 	if (FeetIKComponent != nullptr && OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
 	{
 		IsOnFeetIK = true;

@@ -14,15 +14,15 @@ void UCZoomComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	SpringArm = CHelpers::GetComponent<USpringArmComponent>(GetOwner());
-	CheckNull(SpringArm);
+	CheckNullUObject(SpringArm);
 	DestValueOfZoomLength = SpringArm->TargetArmLength;
 }
 
 void UCZoomComponent::InterpCurrentZoomLength(float const DeltaTime)
 {
-	CheckNull(SpringArm);
+	CheckNullUObject(SpringArm);
 	CheckTrue(UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength, DestValueOfZoomLength));
-	SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(SpringArm->TargetArmLength, DestValueOfZoomLength, DeltaTime, ZoomInterpSpeed);
+	SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(SpringArm->TargetArmLength, DestValueOfZoomLength, DeltaTime, ZoomSpeedOfInterpolation);
 }
 
 

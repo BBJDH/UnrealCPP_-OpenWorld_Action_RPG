@@ -12,12 +12,12 @@ FString UCAnimNotify_End_DoAction::GetNotifyName_Implementation() const
 void UCAnimNotify_End_DoAction::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::Notify(MeshComp, Animation);
-	CheckNull(MeshComp);
-	CheckNull(MeshComp->GetOwner());
+	CheckNullUObject(MeshComp);
+	CheckNullUObject(MeshComp->GetOwner());
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNull(weapon);
-	CheckNull(weapon->GetDoAction());
+	CheckNullUObject(weapon);
+	CheckNullUObject(weapon->GetDoAction());
 
 	weapon->GetDoAction()->End_DoAction();
 

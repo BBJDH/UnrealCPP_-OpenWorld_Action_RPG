@@ -54,17 +54,17 @@ protected:
 
 
 private:
-	void Trace(FName InName, float & OutDistance, FRotator& OutRotation);
+	void Trace(FName InName, float & OutDistance, FRotator& OutRotation) const ;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		TEnumAsByte<EDrawDebugTrace::Type> DrawDebug;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-		float InterpSpeed = 50;
+		float InterpolationSpeed = 50;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
-		float DistanceOfDonwFeet = 88;
+		float DistanceOfDownFeet = 88;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
 		float OffsetDistance = 0;
