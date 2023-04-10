@@ -18,12 +18,10 @@
 #include "Component/CStatusComponent.h"
 #include "Weapon/CWeaponStructures.h"
 
-DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 ACHuman::ACHuman() 
 {
 	CheckNullUObject(GetCapsuleComponent());
-
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
@@ -62,6 +60,8 @@ ACHuman::ACHuman()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
+	//CheckNullUObject(GetMesh()->SkeletalMesh);
+
 	ConstructorHelpers::FClassFinder<UCAnimInstance> const AssetFound(*FString( "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'"));
 	CheckNullUObject(AssetFound.Class);
 
@@ -71,7 +71,6 @@ ACHuman::ACHuman()
 void ACHuman::BeginPlay()
 {
 	Super::BeginPlay();
-
 	State->OnStateTypeChanged.AddDynamic(this, &ACHuman::OnStateTypeChanged);
 }
 

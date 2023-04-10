@@ -17,17 +17,12 @@
 void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+	UE_LOG(GameProject, Display, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 
 	CheckNullUObject(OwnerCharacter);
-	//Cast<ACHuman>(Owner)->StartFall.AddUFunction(this, "StartInAir");
-	//Cast<ACHuman>(Owner)->EndFall.AddUFunction(this, "EndInAir");
 
-	//Test
-	//Cast<ACHuman_Player>(Owner)->TestKeyEvent.AddUFunction(this,"ToggleIK");
-
-	//UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(OwnerCharacter);
 	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
 	CheckNullUObject(WeaponComponent);
 

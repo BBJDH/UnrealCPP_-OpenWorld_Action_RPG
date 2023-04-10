@@ -86,6 +86,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 		if (Target != nullptr)
 			break;
 	}
+
 	CheckNullUObject(Blackboard);
 	Blackboard->SetValueAsObject("Target", Target);
 }

@@ -11,7 +11,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Weapon/CWeaponStructures.h"
 
-DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 ACHuman_Player::ACHuman_Player():ACHuman()
 {

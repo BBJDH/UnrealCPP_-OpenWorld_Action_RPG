@@ -17,9 +17,13 @@ void UCAnimNotify_End_DoAction::Notify(USkeletalMeshComponent* MeshComp, UAnimSe
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
 	CheckNullUObject(weapon);
-	CheckNullUObject(weapon->GetDoAction());
 
-	weapon->GetDoAction()->End_DoAction();
+	if(weapon->IsUnarmedMode()==false)
+	{
+		CheckNullUObject(weapon->GetDoAction());
+
+		weapon->GetDoAction()->End_DoAction();
+	}
 
 	
 }

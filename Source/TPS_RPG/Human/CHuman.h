@@ -22,7 +22,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(this->TeamID);}
+	virtual FGenericTeamId GetGenericTeamId() const override { return static_cast<FGenericTeamId>(this->TeamID);}
 
 
 

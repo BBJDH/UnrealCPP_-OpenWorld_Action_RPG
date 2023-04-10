@@ -4,7 +4,7 @@
 #include "Particles/ParticleSystem.h"
 #include "Niagara/Classes/NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
-
+DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 #define CheckTrue(Param) {if((Param)==true) return;} 
 #define CheckTrueResult(Param,Result) {if((Param)==true) return Result;}
 
@@ -13,8 +13,9 @@
 
 #define CheckNull(Param) {if((Param)==nullptr) return;}	
 #define CheckNullResult(Param,Result) {if((Param)==nullptr) return Result;}
-#define CheckNullUObject(Param) {if(IsValid(Param)==false) return;}	
-#define CheckNullUObjectResult(Param,Result) {if(IsValid(Param)==false) return Result;}	
+
+#define CheckNullUObject(Param) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return;}}	
+#define CheckNullUObjectResult(Param,Result) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return Result;}}	
 
 #define and &&
 #define or ||

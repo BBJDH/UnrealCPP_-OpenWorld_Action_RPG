@@ -4,7 +4,6 @@
 #include "Component/CStateComponent.h"
 #include "Component/CStatusComponent.h"
 
-DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 
 UCDoActionComponent::UCDoActionComponent()
