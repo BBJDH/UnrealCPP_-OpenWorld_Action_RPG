@@ -7,9 +7,9 @@
 
 void FDoActionData::DoAction(ACharacter* InOwner)
 {
-	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(InOwner);
-	if (state != nullptr)
-		state->SetActionMode();
+	UCStateComponent* StateComponent = Cast<UCStateComponent>(InOwner->GetComponentByClass(UCStateComponent::StaticClass()));
+	if (StateComponent != nullptr)
+		StateComponent->SetActionMode();
 
 	if (Montage != nullptr)
 		InOwner->PlayAnimMontage(Montage, PlayRatio);
@@ -25,17 +25,17 @@ void FHitData::PlayMontage(ACharacter* InOwner)
 
 void FHitData::SendDamage(ACharacter* InAttacker, ACharacter* InOther)
 {
-	FHitDamageEvent e;
-	e.HitData = this;
+	FHitDamageEvent HitDamageEvent;
+	HitDamageEvent.HitData = this;
 
-	InOther->TakeDamage(Power, e, InAttacker->GetController(), nullptr);
+	InOther->TakeDamage(Power, HitDamageEvent, InAttacker->GetController(), nullptr);
 }
 
 void FHitData::PlayHitStop(UWorld* InWorld)
 {
 	CheckTrue(FMath::IsNearlyZero(StopTime));
 
-	TArray<ACharacter*> characters;
+	TArray<ACharacter*> AllCharactersInWorld;
 	for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
 	{
 		ACharacter* character = Cast<ACharacter>(actor);
@@ -44,7 +44,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 		{
 			character->CustomTimeDilation = 5e-2f;
 
-			characters.Add(character);
+			AllCharactersInWorld.Add(character);
 		}
 	}
 
@@ -52,7 +52,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 	(
 		[=]()
 		{
-			for (ACharacter* character : characters)
+			for (ACharacter* character : AllCharactersInWorld)
 				character->CustomTimeDilation = 1.0f;
 		}
 	);

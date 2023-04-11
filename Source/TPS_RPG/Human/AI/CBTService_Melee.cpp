@@ -4,7 +4,9 @@
 #include "Human/AI/CBTService_Melee.h"
 
 #include "Global.h"
-#include "Component/CAIStateComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Component/CAINormalBehaviorComponent.h"
+#include "Component/CWeaponComponent.h"
 #include "Human/CHuman_AI.h"
 #include "Human/AI/CAIController.h"
 
@@ -16,21 +18,46 @@ UCBTService_Melee::UCBTService_Melee()
 	RandomDeviation = 0.0f;
 }
 
+//���, ����, �������·� �б� ó��
 void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
-	ACHuman_AI* OwnerCharacter = Cast<ACHuman_AI>(controller->GetPawn());
-	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 
-	UCAIStateComponent* aiState = CHelpers::GetComponent<UCAIStateComponent>(OwnerCharacter);
+	ACAIController const *const AIController = Cast<ACAIController>(OwnerComp.GetOwner());
+	CheckNullUObject(AIController);
 
-	if (state->IsGetHitMode())
+	ACHuman_AI const *const OwnerCharacter = Cast<ACHuman_AI>(AIController->GetPawn());
+	CheckNullUObject(OwnerCharacter);
+
+	UCStateComponent const *const StateComponent = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
+	CheckNullUObject(StateComponent);
+
+	UCWeaponComponent const *const WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	CheckNullUObject(WeaponComponent);
+
+	
+	// CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
+
+	UCAINormalBehaviorComponent const *const AINormalBehavior = Cast<UCAINormalBehaviorComponent>(AIController->GetComponentByClass(UCAINormalBehaviorComponent::StaticClass()));
+	//UCAINormalBehaviorComponent* AINormalBehavior = CHelpers::GetComponent<UCAINormalBehaviorComponent>(OwnerCharacter);
+	CheckNullUObject(AINormalBehavior);
+
+	CheckTrue(AINormalBehavior->IsStopAIMode());
+
+	ACHuman * TargetInBlackBoard = Cast<ACHuman>(AIController->GetBlackboardComponent()->GetValueAsObject(KeyNameOfEnemy));
+
+	if(IsValid(TargetInBlackBoard) == true)
 	{
-		aiState->SetWaitMode();
+		AINormalBehavior->SetBattleMode();
 		return;
 	}
+
+	AINormalBehavior->SetPatrolMode();
+
+
+
+
 
 	//ACPlayer* player = aiState->GetTargetPlayer();
 	//if (player == nullptr)
@@ -52,5 +79,4 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	//	return;
 	//}
 
-	aiState->SetTraceMode();
 }

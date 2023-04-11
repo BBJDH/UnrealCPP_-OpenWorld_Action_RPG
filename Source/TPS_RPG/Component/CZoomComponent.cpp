@@ -13,7 +13,8 @@ UCZoomComponent::UCZoomComponent()
 void UCZoomComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	SpringArm = CHelpers::GetComponent<USpringArmComponent>(GetOwner());
+	SpringArm = Cast<USpringArmComponent>(GetOwner()->GetComponentByClass(USpringArmComponent::StaticClass()));
+	//SpringArm = CHelpers::GetComponent<USpringArmComponent>(GetOwner());
 	CheckNullUObject(SpringArm);
 	DestValueOfZoomLength = SpringArm->TargetArmLength;
 }

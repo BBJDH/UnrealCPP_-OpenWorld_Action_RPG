@@ -14,11 +14,11 @@ void UCAnimNotifyState_Equip::NotifyBegin(USkeletalMeshComponent * MeshComp, UAn
 	CheckNullUObject(MeshComp);
 	CheckNullUObject(MeshComp->GetOwner());
 
-	UCWeaponComponent* Weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNullUObject(Weapon);
-	CheckNullUObject(Weapon->GetEquipment());
+	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	CheckNullUObject(WeaponComponent);
+	CheckNullUObject(WeaponComponent->GetEquipment());
 
-	Weapon->NotifyBeginEquip();
+	WeaponComponent->NotifyBeginEquip();
 }
 
 void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
@@ -28,9 +28,9 @@ void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnim
 	CheckNullUObject(MeshComp);
 	CheckNullUObject(MeshComp->GetOwner());
 
-	UCWeaponComponent* Weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNullUObject(Weapon);
-	CheckNullUObject(Weapon->GetEquipment());
+	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	CheckNullUObject(WeaponComponent);
+	CheckNullUObject(WeaponComponent->GetEquipment());
 
-	Weapon->NotifyEndEquip();
+	WeaponComponent->NotifyEndEquip();
 }

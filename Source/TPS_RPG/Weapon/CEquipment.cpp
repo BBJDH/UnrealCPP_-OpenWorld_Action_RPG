@@ -10,7 +10,7 @@ void UCEquipment::BeginPlay(ACharacter* InOwner, const FEquipmentData& InData)
 	OwnerCharacter = InOwner;
 	Data = InData;
 
-	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
+	State = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
 }
 
 void UCEquipment::Equip(ACAttachment * InAttachment)

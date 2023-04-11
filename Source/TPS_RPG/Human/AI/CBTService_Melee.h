@@ -14,15 +14,18 @@ class TPS_RPG_API UCBTService_Melee : public UBTService
 {
 	GENERATED_BODY()
 
-
-private:
-	UPROPERTY(EditAnywhere, Category = "Action")
-		float ActionRange = 150;
-
+	
 public:
 	UCBTService_Melee();
 
 protected:
-	void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
+private:
+	UPROPERTY(EditAnywhere, Category = "Action")
+		float ActionRange = 150;
+	UPROPERTY(EditAnywhere,Category = "NameOfBlackBoardKey")
+		FName KeyNameOfEnemy = "Target";
+
+	
 };

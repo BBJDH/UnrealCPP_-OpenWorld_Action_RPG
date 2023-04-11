@@ -15,9 +15,10 @@ void UCAnimNotify_Begin_DoAction::Notify(USkeletalMeshComponent* MeshComp, UAnim
 	(MeshComp);
 	CheckNullUObject(MeshComp->GetOwner());
 
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
-	CheckNullUObject(weapon);
-	CheckNullUObject(weapon->GetDoAction());
+	//UCWeaponComponent* WeaponComponent = CHelpers::GetComponent<UCWeaponComponent>(MeshComp->GetOwner());
+	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
+	CheckNullUObject(WeaponComponent);
+	CheckNullUObject(WeaponComponent->GetDoAction());
 
-	weapon->GetDoAction()->Begin_DoAction();
+	WeaponComponent->GetDoAction()->Begin_DoAction();
 }

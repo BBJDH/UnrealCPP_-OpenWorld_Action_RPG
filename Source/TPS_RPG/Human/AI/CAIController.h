@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionComponent.h"
+
 #include "CAIController.generated.h"
 
 /**
@@ -31,8 +33,8 @@ protected:
 
 private:
 	UFUNCTION()
-		void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
-
+		void OnPerceptionUpdated(const FActorPerceptionUpdateInfo& UpdatedActors);
+	
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 
@@ -44,5 +46,8 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 
-	class UCAIStateComponent* AIState;
+	class UCAINormalBehaviorComponent* AINormalBehaviorComp;
+
+	UPROPERTY(EditAnywhere,Category = "NameOfBlackBoardKey")
+	FName TargetName = "Target";
 };

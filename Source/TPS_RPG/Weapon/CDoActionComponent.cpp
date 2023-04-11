@@ -16,8 +16,8 @@ void UCDoActionComponent::BeginPlay(/*ACAttachment* InAttachment, */UCEquipment*
 	OwnerCharacter = InOwner;
 	World = OwnerCharacter->GetWorld();
 
-	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
+	State = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
+	Status = Cast<UCStatusComponent>(OwnerCharacter->GetComponentByClass(UCStatusComponent::StaticClass()));
 	DoActionDatas = InDoActionDatas;
 	HitDatas = InHitDatas;
 }

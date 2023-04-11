@@ -3,7 +3,7 @@
 
 #include "Notify/AN/CAnimNotify_CameraShake.h"
 #include "Global.h"
-#include "Camera/CameraShake.h"
+#include "MatineeCameraShake.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 

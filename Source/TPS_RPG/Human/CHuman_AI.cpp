@@ -2,7 +2,7 @@
 
 #include "Human/CHuman_AI.h"
 #include "Global.h"
-#include "Component/CAIStateComponent.h"
+#include "Component/CAINormalBehaviorComponent.h"
 #include "Component/CStatusComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Widgets/CUserWidget_HealthBar.h"
@@ -10,7 +10,6 @@
 ACHuman_AI::ACHuman_AI():ACHuman()
 {
 	CheckNullUObject(this->GetMesh());
-	AIState = this->CreateDefaultSubobject<UCAIStateComponent>("AIState");
 
 	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	CheckNullUObject(HealthBarWidget);

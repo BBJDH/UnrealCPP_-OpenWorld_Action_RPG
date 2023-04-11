@@ -4,6 +4,8 @@
 #include "Particles/ParticleSystem.h"
 #include "Niagara/Classes/NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"//SpawnEmitter
+
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 #define CheckTrue(Param) {if((Param)==true) return;} 
 #define CheckTrueResult(Param,Result) {if((Param)==true) return Result;}
@@ -62,49 +64,49 @@ public:
 	//	*OutComponent = InActor->CreateDefaultSubobject<T>(InName);
 	//}
 
-	template<typename T>
-	static T* GetComponent(AActor* InActor)
-	{
-		return Cast<T>(InActor->GetComponentByClass(T::StaticClass()));
-	}
+	//template<typename T>
+	//static T* GetComponent(AActor* InActor)
+	//{
+	//	return Cast<T>(InActor->GetComponentByClass(T::StaticClass()));
+	//}
 
-	template<typename T>
-	static T* GetComponent(AActor* InActor, const FString & InName)
-	{
-		TArray<T *> components;
+	//template<typename T>
+	//static T* GetComponent(AActor* InActor, const FString & InName)
+	//{
+	//	TArray<T *> components;
 
-		InActor->GetComponens<T>(components);
+	//	InActor->GetComponens<T>(components);
 
-		for (T* COMPONENT : components)
-		{
-			if (component->GetName() == InName)
-				return COMPONENT;
-		}
-		
-		return nullptr;
-	}
+	//	for (T* COMPONENT : components)
+	//	{
+	//		if (component->GetName() == InName)
+	//			return COMPONENT;
+	//	}
+	//	
+	//	return nullptr;
+	//}
 
 
-	template<typename T>
-	static void GetAsset(T** OutObject, FString InPath)
-	{
-		ConstructorHelpers::FObjectFinder<T> asset(*InPath);
-		*OutObject = asset.Object;
-	}
+	//template<typename T>
+	//static void GetAsset(T** OutObject, FString InPath)
+	//{
+	//	ConstructorHelpers::FObjectFinder<T> asset(*InPath);
+	//	*OutObject = asset.Object;
+	//}
 
-	template<typename T>
-	static void GetAssetDynamic(T** OutObject, FString InPath)
-	{
-		*OutObject = Cast<T>
-			(
-				StaticLoadObject
-				(
-					T::StaticClass(),
-					nullptr,
-					*InPath
-				)
-			);
-	}
+	//template<typename T>
+	//static void GetAssetDynamic(T** OutObject, FString InPath)
+	//{
+	//	*OutObject = Cast<T>
+	//		(
+	//			StaticLoadObject
+	//			(
+	//				T::StaticClass(),
+	//				nullptr,
+	//				*InPath
+	//			)
+	//		);
+	//}
 
 	//template<typename T>
 	//static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
@@ -154,7 +156,7 @@ public:
 			if (InEffect != nullptr)
 			{
 				UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
-
+				
 				return;
 			}
 		}

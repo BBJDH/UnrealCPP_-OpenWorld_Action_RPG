@@ -18,8 +18,6 @@ public:
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-protected:
-
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
@@ -29,9 +27,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UWidgetComponent* HealthBarWidget;
 
-private:
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCAIStateComponent* AIState;
+//private:
+//	UPROPERTY(VisibleDefaultsOnly)
+//		class UCAINormalBehaviorComponent* AIState;
 
 
 
