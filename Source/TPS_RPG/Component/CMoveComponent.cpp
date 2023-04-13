@@ -20,7 +20,7 @@ void UCMoveComponent::BeginPlay()
 
 void UCMoveComponent::OnMoveForward(float InAxis)
 {
-	CheckFalse(IsCanMove);
+	CheckTrue(IsCanMove==false);
 
 	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetForwardVector();
@@ -30,7 +30,7 @@ void UCMoveComponent::OnMoveForward(float InAxis)
 
 void UCMoveComponent::OnMoveRight(float InAxis)
 {
-	CheckFalse(IsCanMove);
+	CheckTrue(IsCanMove==false);
 
 	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetRightVector();

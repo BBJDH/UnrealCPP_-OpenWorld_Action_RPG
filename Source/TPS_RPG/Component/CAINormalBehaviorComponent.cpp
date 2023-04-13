@@ -3,7 +3,7 @@
 #include "Component/CAINormalBehaviorComponent.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Human/AI/CAIController.h"
+#include "Human/AI/Controller/CAIController.h"
 #include "Global.h"
 
 UCAINormalBehaviorComponent::UCAINormalBehaviorComponent()

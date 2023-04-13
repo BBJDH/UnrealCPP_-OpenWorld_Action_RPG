@@ -8,7 +8,7 @@
 void UCDoComboActionComponent::DoAction()
 {
 	Super::DoAction();
-	CheckFalse(DoActionDatas.Num() > 0);
+	CheckTrue(DoActionDatas.Num() < 0)
 
 	if (IsComboEnable)
 	{
@@ -18,8 +18,8 @@ void UCDoComboActionComponent::DoAction()
 		return;
 	}
 
-	CheckFalse(State->IsIdleMode());
-	CheckFalse(ActionIndex < DoActionDatas.Num());
+	CheckTrue(State->IsIdleMode()==false);
+	CheckTrue(ActionIndex > DoActionDatas.Num());
 
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
@@ -28,9 +28,9 @@ void UCDoComboActionComponent::DoUpperAction()
 {
 	Super::DoUpperAction();
 
-	CheckFalse(DoActionDatas.Num() > 0);
-	CheckFalse(State->IsIdleMode());
-	CheckFalse(ActionIndex < DoActionDatas.Num());
+	CheckTrue(DoActionDatas.Num() < 0);
+	CheckTrue(State->IsIdleMode()==false);
+	CheckTrue(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
@@ -38,23 +38,23 @@ void UCDoComboActionComponent::Do_R_Action()
 {
 	Super::Do_R_Action();
 
-	CheckFalse(DoActionDatas.Num() > 0);
-	CheckFalse(State->IsIdleMode());
-	CheckFalse(ActionIndex < DoActionDatas.Num());
+	CheckTrue(DoActionDatas.Num() < 0);
+	CheckTrue(State->IsIdleMode()==false);
+	CheckTrue(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::Begin_DoAction()
 {
 	Super::Begin_DoAction();
-	CheckFalse(bExist);
+	CheckTrue(bExist==false);
 	
 	bExist = false;
-	//TODO: ÄÞº¸ ÀÎµ¦½º ÀçÃ³¸®,Action NameÀ¸·Î Ã£Àº ÀÎµ¦½º + Index
-	//Idle·Î µ¹¾Æ¿Â´Ù¸é Index ÃÊ±âÈ­,
+	//TODO: ï¿½Þºï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½Ã³ï¿½ï¿½,Action Nameï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ + Index
+	//Idleï¿½ï¿½ ï¿½ï¿½ï¿½Æ¿Â´Ù¸ï¿½ Index ï¿½Ê±ï¿½È­,
 	++ActionIndex;
 
-	CheckFalse(ActionIndex < DoActionDatas.Num());
+	CheckTrue(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
@@ -103,18 +103,19 @@ void UCDoComboActionComponent::OnAttachmentBeginOverlap(class ACharacter* InAtta
 {
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
 	CheckNullUObject(InOther);
-	CheckFalse(ActionIndex < HitDatas.Num());
+	CheckTrue(ActionIndex > HitDatas.Num())
+	
 	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(OwnerCharacter);
 	CheckNull(teamagentInterface);
 	uint8 ownerID = teamagentInterface->GetGenericTeamId();
 	CheckTrue(ownerID == Cast<IGenericTeamAgentInterface>(InOther)->GetGenericTeamId());
 	for (auto const & elem : HittedCharacters)
 	{
-		// elemÀº Ãæµ¹Ã¼ ¾È¿¡ Ãæµ¹ÇÑ Character Å¬·¡½º Áßº¹ Ã¼Å©
-		// ÀÌ¹Ì Ãæµ¹Çß´ø ¾×ÅÍµé°ú ÀÏÄ¡ÇÑ´Ù¸é ¿©±â¼­ Å»Ãâ
+		// elemï¿½ï¿½ ï¿½æµ¹Ã¼ ï¿½È¿ï¿½ ï¿½æµ¹ï¿½ï¿½ Character Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ßºï¿½ Ã¼Å©
+		// ï¿½Ì¹ï¿½ ï¿½æµ¹ï¿½ß´ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ñ´Ù¸ï¿½ ï¿½ï¿½ï¿½â¼­ Å»ï¿½ï¿½
 		CheckTrue(elem == InOther);
 	}
-	//»õ·Î Ãæµ¹µÈ °´Ã¼µé¸¸ ¿©±â¼­ È£Ãâ
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½é¸¸ ï¿½ï¿½ï¿½â¼­ È£ï¿½ï¿½
 	HittedCharacters.Add(InOther);
 	HitDatas[ActionIndex].SendDamage(InAttacker, InOther);
 }

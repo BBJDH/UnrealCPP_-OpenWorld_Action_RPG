@@ -28,17 +28,17 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	CheckFalse(IsOnTrace);
+	CheckTrue(IsOnTrace==false)
 
 	float MoveAmountOfLeftFeet{}, MoveAmountOfRightFeet{};		
 	FRotator RotationOfLeftFeet{}, RotationOfRightFeet{};	
 
-	//¹ß°ú Áö¸é »çÀÌ °Å¸® ÃøÁ¤
+	//ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Trace(LeftSocketName, MoveAmountOfLeftFeet, RotationOfLeftFeet);
 	Trace(RightSocketName, MoveAmountOfRightFeet, RotationOfRightFeet);
 	float const MoveAmountOfPelvis = FMath::Min(MoveAmountOfLeftFeet, MoveAmountOfRightFeet);
 
-	//Çö ½ÃÁ¡ÀÇ IKµ¥ÀÌÅÍ º¸°£, °»½Å
+	//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ IKï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½
 	CurrentIKData.PelvisDistance.Z = UKismetMathLibrary::FInterpTo(CurrentIKData.PelvisDistance.Z, MoveAmountOfPelvis, DeltaTime, InterpolationSpeed);
 	CurrentIKData.LeftDistance.X = UKismetMathLibrary::FInterpTo(CurrentIKData.LeftDistance.X, (MoveAmountOfLeftFeet - MoveAmountOfPelvis), DeltaTime, InterpolationSpeed);
 	CurrentIKData.RightDistance.X = UKismetMathLibrary::FInterpTo(CurrentIKData.RightDistance.X, -(MoveAmountOfRightFeet - MoveAmountOfPelvis), DeltaTime, InterpolationSpeed);
@@ -57,8 +57,8 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 }
 
-//ÁöÁ¤µÈ SocketÀÇ Ä³¸¯ÅÍ Çã¸®³ôÀÌºÎÅÍ Socket¾Æ·¡ DistanceOfDonwFeet ±íÀÌ ¸¸Å­ Å½»öÇÏ¿©
-//¹ßÀÌ ¿òÁ÷¿©¾ßÇÒ °Å¸®¿Í È¸Àü·®¸¦ ¹ÝÈ¯ (OutDistance, OutRotation)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Socketï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ã¸®ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ Socketï¿½Æ·ï¿½ DistanceOfDonwFeet ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å­ Å½ï¿½ï¿½ï¿½Ï¿ï¿½
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ (OutDistance, OutRotation)
 void UCFeetComponent::Trace(FName InSocketName, float& OutDistance, FRotator& OutRotation) const
 {
 	CheckNullUObject(OwnerCharacter);
@@ -94,7 +94,7 @@ void UCFeetComponent::Trace(FName InSocketName, float& OutDistance, FRotator& Ou
 	OutDistance = 0;
 	OutRotation = FRotator::ZeroRotator;
 
-	CheckFalse(HitResult.bBlockingHit);
+	CheckTrue(HitResult.bBlockingHit==false)
 
 	float const LengthOfEndToImpact = (HitResult.ImpactPoint - HitResult.TraceEnd).Size();
 	float const OutRotationOfRoll = UKismetMathLibrary::DegAtan2(HitResult.ImpactNormal.Y, HitResult.ImpactNormal.Z);

@@ -7,11 +7,12 @@
 #include "Kismet/GameplayStatics.h"//SpawnEmitter
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
+
 #define CheckTrue(Param) {if((Param)==true) return;} 
 #define CheckTrueResult(Param,Result) {if((Param)==true) return Result;}
 
-#define CheckFalse(Param) {if((Param)==false) return;}
-#define CheckFalseResult(Param,Result) {if((Param)==false) return Result;} 
+//#define CheckFalse(Param) {if((Param)==false) return;}
+//#define CheckFalseResult(Param,Result) {if((Param)==false) return Result;} 
 
 #define CheckNull(Param) {if((Param)==nullptr) return;}	
 #define CheckNullResult(Param,Result) {if((Param)==nullptr) return Result;}
