@@ -25,25 +25,25 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 
 	ACAIController const *const AIController = Cast<ACAIController>(OwnerComp.GetOwner());
-	CheckNullUObject(AIController);
+	CHECK_NULL_UOBJECT(AIController);
 
 	ACHuman_AI const *const OwnerCharacter = Cast<ACHuman_AI>(AIController->GetPawn());
-	CheckNullUObject(OwnerCharacter);
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 
 	UCStateComponent const *const StateComponent = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
-	CheckNullUObject(StateComponent);
+	CHECK_NULL_UOBJECT(StateComponent);
 
 	UCWeaponComponent const *const WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
-	CheckNullUObject(WeaponComponent);
+	CHECK_NULL_UOBJECT(WeaponComponent);
 
 	
 	// CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 
 	UCAINormalBehaviorComponent const *const AINormalBehavior = Cast<UCAINormalBehaviorComponent>(AIController->GetComponentByClass(UCAINormalBehaviorComponent::StaticClass()));
 	//UCAINormalBehaviorComponent* AINormalBehavior = CHelpers::GetComponent<UCAINormalBehaviorComponent>(OwnerCharacter);
-	CheckNullUObject(AINormalBehavior);
+	CHECK_NULL_UOBJECT(AINormalBehavior);
 
-	CheckTrue(AINormalBehavior->IsStopAIMode());
+	CHECK_TRUE(AINormalBehavior->IsStopAIMode());
 
 	ACHuman * TargetInBlackBoard = Cast<ACHuman>(AIController->GetBlackboardComponent()->GetValueAsObject(KeyNameOfEnemy));
 

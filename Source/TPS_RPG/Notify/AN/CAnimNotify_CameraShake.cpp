@@ -15,15 +15,15 @@ FString UCAnimNotify_CameraShake::GetNotifyName_Implementation() const
 void UCAnimNotify_CameraShake::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::Notify(MeshComp, Animation);
-	CheckNullUObject(MeshComp);
-	CheckNullUObject(MeshComp->GetOwner());
-	CheckNullUObject(CameraShakeClass);
+	CHECK_NULL_UOBJECT(MeshComp);
+	CHECK_NULL_UOBJECT(MeshComp->GetOwner());
+	CHECK_NULL_UOBJECT(CameraShakeClass);
 
 	ACharacter* character = MeshComp->GetOwner<ACharacter>();
-	CheckNullUObject(character);
+	CHECK_NULL_UOBJECT(character);
 
 	APlayerController* controller = character->GetController<APlayerController>();
-	CheckNullUObject(controller);
+	CHECK_NULL_UOBJECT(controller);
 
 	controller->PlayerCameraManager->StartCameraShake(CameraShakeClass);
 }

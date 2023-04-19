@@ -4,6 +4,8 @@
 #include "Component/CStateComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Niagara/Classes/NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+
 
 void FDoActionData::DoAction(ACharacter* InOwner)
 {
@@ -33,7 +35,7 @@ void FHitData::SendDamage(ACharacter* InAttacker, ACharacter* InOther)
 
 void FHitData::PlayHitStop(UWorld* InWorld)
 {
-	CheckTrue(FMath::IsNearlyZero(StopTime));
+	CHECK_TRUE(FMath::IsNearlyZero(StopTime));
 
 	TArray<ACharacter*> AllCharactersInWorld;
 	for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
@@ -63,7 +65,7 @@ void FHitData::PlayHitStop(UWorld* InWorld)
 
 void FHitData::PlaySound(ACharacter* InOwner)
 {
-	CheckNullUObject(Sound);
+	CHECK_NULL_UOBJECT(Sound);
 
 	UWorld* world = InOwner->GetWorld();
 	FVector location = InOwner->GetActorLocation();
@@ -73,20 +75,29 @@ void FHitData::PlaySound(ACharacter* InOwner)
 
 void FHitData::PlayEffect(UWorld* InWorld, const FVector& InLocation)
 {
-	CheckNullUObject(Effect);
+	CHECK_NULL_UOBJECT(Effect);
 
 	FTransform transform;
 	transform.SetLocation(InLocation);
 	transform.SetScale3D(EffectScale);
 	transform.AddToTranslation(EffectLocation);
+
+	UNiagaraSystem * NiagaraEffect = Cast<UNiagaraSystem>(Effect);
+	CHECK_NULL_UOBJECT(NiagaraEffect);
 	
-	CHelpers::PlayNiagaraEffect(InWorld, Cast<UNiagaraSystem>(Effect), transform);
-	CHelpers::PlayParticleEffect(InWorld, Cast<UParticleSystem>(Effect) , transform);
+
+	//UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(InWorld, NiagaraEffect, transform.GetLocation(), transform.Rotator(), transform.GetScale3D());
+		return;
+	
+	
+	//CHelpers::PlayNiagaraEffect(InWorld, Cast<UNiagaraSystem>(Effect), transform);
+	//CHelpers::PlayParticleEffect(InWorld, Cast<UParticleSystem>(Effect) , transform);
 }
 
 void FHitData::HitLaunch(ACharacter* InOwner, FRotator const& InLookAtRotator , ACharacter * InAttacker)
 {
-	CheckNullUObject(InOwner);
+	CHECK_NULL_UOBJECT(InOwner);
 
 	//FVector const LocationOfSelf = InOwner->GetActorLocation();
 	//FVector const LocationOfAttacker = InAttacker->GetActorLocation();
@@ -98,7 +109,7 @@ void FHitData::HitLaunch(ACharacter* InOwner, FRotator const& InLookAtRotator , 
 
 	InOwner->LaunchCharacter(LaunchDirection * this->Launch, false, true);
 
-	CheckNullUObject(InAttacker);
+	CHECK_NULL_UOBJECT(InAttacker);
 	if (this->IsLaunchAttacker)
 	{
 		InAttacker->LaunchCharacter(LaunchDirection * this->Launch * 1.02f, false, true);

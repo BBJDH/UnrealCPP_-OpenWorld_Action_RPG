@@ -5,10 +5,10 @@
 
 AAction_RPGGameModeBase::AAction_RPGGameModeBase()
 {
-	//≥≤ƒ≥ - Blueprint'/Game/BP/Human/Player/BP_CHuman_Player.BP_CHuman_Player'
+	//ÎÇ®Ï∫ê - Blueprint'/Game/BP/Human/Player/BP_CHuman_Player.BP_CHuman_Player'
 
 	ConstructorHelpers::FClassFinder<APawn> AssetFound(*FString("Blueprint'/Game/BP/Human/Player/Satomi/BP_CHuman_Satomi.BP_CHuman_Satomi_C'"));
-	CheckNullUObject(AssetFound.Class);
+	CHECK_NULL_UOBJECT(AssetFound.Class);
 	DefaultPawnClass = AssetFound.Class;
 	//CHelpers::GetClass<APawn>(&DefaultPawnClass, "Blueprint'/Game/BP/Human/Player/Satomi/BP_CHuman_Satomi.BP_CHuman_Satomi_C'");
 	//CHelpers::GetClass<APawn>(&DefaultPawnClass, "Blueprint'/Game/BP/Human/Player/BP_CHuman_Player.BP_CHuman_Player_C'");

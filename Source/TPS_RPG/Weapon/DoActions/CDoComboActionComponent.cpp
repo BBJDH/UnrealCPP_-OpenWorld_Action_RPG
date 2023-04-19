@@ -8,7 +8,7 @@
 void UCDoComboActionComponent::DoAction()
 {
 	Super::DoAction();
-	CheckTrue(DoActionDatas.Num() < 0)
+	CHECK_TRUE(DoActionDatas.Num() < 0)
 
 	if (IsComboEnable)
 	{
@@ -18,8 +18,8 @@ void UCDoComboActionComponent::DoAction()
 		return;
 	}
 
-	CheckTrue(State->IsIdleMode()==false);
-	CheckTrue(ActionIndex > DoActionDatas.Num());
+	CHECK_TRUE(State->IsIdleMode()==false);
+	CHECK_TRUE(ActionIndex > DoActionDatas.Num());
 
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
@@ -28,9 +28,9 @@ void UCDoComboActionComponent::DoUpperAction()
 {
 	Super::DoUpperAction();
 
-	CheckTrue(DoActionDatas.Num() < 0);
-	CheckTrue(State->IsIdleMode()==false);
-	CheckTrue(ActionIndex > DoActionDatas.Num());
+	CHECK_TRUE(DoActionDatas.Num() < 0);
+	CHECK_TRUE(State->IsIdleMode()==false);
+	CHECK_TRUE(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
@@ -38,23 +38,23 @@ void UCDoComboActionComponent::Do_R_Action()
 {
 	Super::Do_R_Action();
 
-	CheckTrue(DoActionDatas.Num() < 0);
-	CheckTrue(State->IsIdleMode()==false);
-	CheckTrue(ActionIndex > DoActionDatas.Num());
+	CHECK_TRUE(DoActionDatas.Num() < 0);
+	CHECK_TRUE(State->IsIdleMode()==false);
+	CHECK_TRUE(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
 void UCDoComboActionComponent::Begin_DoAction()
 {
 	Super::Begin_DoAction();
-	CheckTrue(bExist==false);
+	CHECK_TRUE(bExist==false);
 	
 	bExist = false;
 	//TODO: �޺� �ε��� ��ó��,Action Name���� ã�� �ε��� + Index
 	//Idle�� ���ƿ´ٸ� Index �ʱ�ȭ,
 	++ActionIndex;
 
-	CheckTrue(ActionIndex > DoActionDatas.Num());
+	CHECK_TRUE(ActionIndex > DoActionDatas.Num());
 	DoActionDatas[ActionIndex].DoAction(OwnerCharacter);
 }
 
@@ -102,18 +102,18 @@ void UCDoComboActionComponent::OffAttachmentCollision()
 void UCDoComboActionComponent::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class UShapeComponent* InCollision, class ACharacter* InOther)
 {
 	Super::OnAttachmentBeginOverlap(InAttacker, InCollision, InOther);
-	CheckNullUObject(InOther);
-	CheckTrue(ActionIndex > HitDatas.Num())
+	CHECK_NULL_UOBJECT(InOther);
+	CHECK_TRUE(ActionIndex > HitDatas.Num())
 	
 	IGenericTeamAgentInterface* teamagentInterface = Cast<IGenericTeamAgentInterface>(OwnerCharacter);
-	CheckNull(teamagentInterface);
+	CHECK_NULL(teamagentInterface);
 	uint8 ownerID = teamagentInterface->GetGenericTeamId();
-	CheckTrue(ownerID == Cast<IGenericTeamAgentInterface>(InOther)->GetGenericTeamId());
+	CHECK_TRUE(ownerID == Cast<IGenericTeamAgentInterface>(InOther)->GetGenericTeamId());
 	for (auto const & elem : HittedCharacters)
 	{
 		// elem�� �浹ü �ȿ� �浹�� Character Ŭ���� �ߺ� üũ
 		// �̹� �浹�ߴ� ���͵�� ��ġ�Ѵٸ� ���⼭ Ż��
-		CheckTrue(elem == InOther);
+		CHECK_TRUE(elem == InOther);
 	}
 	//���� �浹�� ��ü�鸸 ���⼭ ȣ��
 	HittedCharacters.Add(InOther);

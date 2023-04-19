@@ -17,16 +17,16 @@
 ACAIController::ACAIController()
 {
 	Perception = this->CreateDefaultSubobject<UCAIPerceptionComponent>("Perception");
-	CheckNullUObject(Perception);
+	CHECK_NULL_UOBJECT(Perception);
 
 	Blackboard = this->CreateDefaultSubobject<UBlackboardComponent>("Blackboard");
-	CheckNullUObject(Blackboard);
+	CHECK_NULL_UOBJECT(Blackboard);
 
 	Sight = this->CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
-	CheckNullUObject(Sight);
+	CHECK_NULL_UOBJECT(Sight);
 	
 	AINormalBehaviorComp = this->CreateDefaultSubobject<UCAINormalBehaviorComponent>("AIState");
-	CheckNullUObject(AINormalBehaviorComp);
+	CHECK_NULL_UOBJECT(AINormalBehaviorComp);
 	//AINormalBehaviorComp->SetBlackboard(Blackboard);
 
 	Sight->SightRadius = 600;
@@ -45,7 +45,7 @@ ACAIController::ACAIController()
 void ACAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	CheckNullUObject(Perception);
+	CHECK_NULL_UOBJECT(Perception);
 
 	//함수의 포인터가 직렬화 되어있어야 하므로 여기서 바인드
 	Perception->OnTargetPerceptionInfoUpdated.AddDynamic(this, &ACAIController::OnPerceptionUpdated);
@@ -65,7 +65,7 @@ void ACAIController::OnPossess(APawn* InPawn)
 	SetGenericTeamId(OwnerCharacter->GetGenericTeamId());
 	//BehaviorTree에 설정된 블랙보드를 AI컨트롤러의 블랙보드 컴포넌트에 등록
 
-	CheckNullUObject(OwnerCharacter->GetBehaviorTree());
+	CHECK_NULL_UOBJECT(OwnerCharacter->GetBehaviorTree());
 
 	UseBlackboard(OwnerCharacter->GetBehaviorTree()->BlackboardAsset, Blackboard);
 
@@ -80,9 +80,9 @@ void ACAIController::OnUnPossess()
 //블랙보드의 Target이 없는경우에만 여기에서 Target을 설정
 void ACAIController::OnPerceptionUpdated(const FActorPerceptionUpdateInfo& UpdateInfo) 
 {
-	CheckNullUObject(Perception);
-	CheckNullUObject(Blackboard);
-	CheckTrue(IsValid(Blackboard->GetValueAsObject(TargetName)) == true);
+	CHECK_NULL_UOBJECT(Perception);
+	CHECK_NULL_UOBJECT(Blackboard);
+	CHECK_TRUE(IsValid(Blackboard->GetValueAsObject(TargetName)) == true);
 	
 	UE_LOG(GameProject, Display, TEXT("OnPerceptionUpdated %s"), *OwnerCharacter->GetName());
 
@@ -106,10 +106,10 @@ bool ACAIController::IsHuman(AActor* InActor) const
 {
 	ACHuman const * const Target = Cast<ACHuman>(InActor);
 
-	CheckTrueResult(IsValid(Target) == false,false);
+	CHECK_TRUE_RESULT(IsValid(Target) == false,false);
 	UCStateComponent * State =Cast<UCStateComponent>(Target->GetComponentByClass(UCStateComponent::StaticClass()));
-	CheckNullUObjectResult(State,false);
-	CheckTrueResult(State->IsDeadMode()==true,false);
+	CHECK_NULL_UOBJECT_RESULT(State,false);
+	CHECK_TRUE_RESULT(State->IsDeadMode()==true,false);
 	return true;
 }
 

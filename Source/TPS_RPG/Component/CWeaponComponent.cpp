@@ -29,7 +29,7 @@ void UCWeaponComponent::BeginPlay()
 				Attachments[i]= OwnerCharacter->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, params);
 				DataAssets[i]->CallBeginPlay(OwnerCharacter);
 			}
-			if (Attachments[i] != nullptr and DataAssets[i]->GetDoAction() != nullptr)
+			if (Attachments[i] != nullptr AND DataAssets[i]->GetDoAction() != nullptr)
 			{
 				Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
 				Attachments[i]->OffAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OffAttachmentCollision");
@@ -48,24 +48,24 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 ACAttachment* UCWeaponComponent::GetAttachment()
 {
-	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(Attachments[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
+	CHECK_NULL_RESULT(Attachments[static_cast<int32>(CurrentWeaponType)], nullptr);
 
 	return Attachments[static_cast<int32>(CurrentWeaponType)];
 }
 
 UCEquipment* UCWeaponComponent::GetEquipment()
 {
-	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
+	CHECK_NULL_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
 
 	return DataAssets[static_cast<int32>(CurrentWeaponType)]->GetEquipment();
 }
 
 UCDoActionComponent* UCWeaponComponent::GetDoAction()
 {
-	CheckTrueResult(IsUnarmedMode(), nullptr);
-	CheckNullResult(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
+	CHECK_NULL_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
 
 	if (DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction() ==nullptr)
 	{
@@ -151,7 +151,7 @@ void UCWeaponComponent::ChangeType(EWeaponType const InType)
 
 void UCWeaponComponent::DoAction()
 {
-	CheckTrue(IsUnarmedMode());
+	CHECK_TRUE(IsUnarmedMode());
 
 	if (GetDoAction()!=nullptr)
 		GetDoAction()->DoAction();
@@ -159,14 +159,14 @@ void UCWeaponComponent::DoAction()
 
 void UCWeaponComponent::DoUpperAction()
 {
-	CheckTrue(IsUnarmedMode());
+	CHECK_TRUE(IsUnarmedMode());
 	if (GetDoAction() != nullptr)
 		GetDoAction()->DoUpperAction();
 }
 
 void UCWeaponComponent::Do_R_Action()
 {
-	CheckTrue(IsUnarmedMode());
+	CHECK_TRUE(IsUnarmedMode());
 	if (GetDoAction() != nullptr)
 		GetDoAction()->Do_R_Action();
 }

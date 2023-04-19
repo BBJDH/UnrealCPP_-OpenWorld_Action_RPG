@@ -20,7 +20,7 @@ void UCFeetComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
-	CheckNullUObject(OwnerCharacter);
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 }
 
 
@@ -28,17 +28,17 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	CheckTrue(IsOnTrace==false)
+	CHECK_TRUE(IsOnTrace==false)
 
 	float MoveAmountOfLeftFeet{}, MoveAmountOfRightFeet{};		
 	FRotator RotationOfLeftFeet{}, RotationOfRightFeet{};	
 
-	//�߰� ���� ���� �Ÿ� ����
+	//발과 지면 사이 거리 측정
 	Trace(LeftSocketName, MoveAmountOfLeftFeet, RotationOfLeftFeet);
 	Trace(RightSocketName, MoveAmountOfRightFeet, RotationOfRightFeet);
 	float const MoveAmountOfPelvis = FMath::Min(MoveAmountOfLeftFeet, MoveAmountOfRightFeet);
 
-	//�� ������ IK������ ����, ����
+	//현 시점의 IK데이터 보간, 갱신
 	CurrentIKData.PelvisDistance.Z = UKismetMathLibrary::FInterpTo(CurrentIKData.PelvisDistance.Z, MoveAmountOfPelvis, DeltaTime, InterpolationSpeed);
 	CurrentIKData.LeftDistance.X = UKismetMathLibrary::FInterpTo(CurrentIKData.LeftDistance.X, (MoveAmountOfLeftFeet - MoveAmountOfPelvis), DeltaTime, InterpolationSpeed);
 	CurrentIKData.RightDistance.X = UKismetMathLibrary::FInterpTo(CurrentIKData.RightDistance.X, -(MoveAmountOfRightFeet - MoveAmountOfPelvis), DeltaTime, InterpolationSpeed);
@@ -57,12 +57,12 @@ void UCFeetComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 }
 
-//������ Socket�� ĳ���� �㸮���̺��� Socket�Ʒ� DistanceOfDonwFeet ���� ��ŭ Ž���Ͽ�
-//���� ���������� �Ÿ��� ȸ������ ��ȯ (OutDistance, OutRotation)
+//지정된 Socket의 캐릭터 허리높이부터 Socket아래 DistanceOfDonwFeet 깊이 만큼 탐색하여
+//발이 움직여야할 거리와 회전량를 반환 (OutDistance, OutRotation)
 void UCFeetComponent::Trace(FName InSocketName, float& OutDistance, FRotator& OutRotation) const
 {
-	CheckNullUObject(OwnerCharacter);
-	CheckNullUObject(OwnerCharacter->GetMesh());
+	CHECK_NULL_UOBJECT(OwnerCharacter);
+	CHECK_NULL_UOBJECT(OwnerCharacter->GetMesh());
 
 	FVector const WorldPosOfSocket = OwnerCharacter->GetMesh()->GetSocketLocation(InSocketName);
 
@@ -94,7 +94,7 @@ void UCFeetComponent::Trace(FName InSocketName, float& OutDistance, FRotator& Ou
 	OutDistance = 0;
 	OutRotation = FRotator::ZeroRotator;
 
-	CheckTrue(HitResult.bBlockingHit==false)
+	CHECK_TRUE(HitResult.bBlockingHit==false)
 
 	float const LengthOfEndToImpact = (HitResult.ImpactPoint - HitResult.TraceEnd).Size();
 	float const OutRotationOfRoll = UKismetMathLibrary::DegAtan2(HitResult.ImpactNormal.Y, HitResult.ImpactNormal.Z);

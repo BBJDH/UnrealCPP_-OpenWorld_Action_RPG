@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/TimelineComponent.h"
 #include "Human/CHuman.h"
 #include "CHuman_Player.generated.h"
 
@@ -43,7 +42,7 @@ private:
 public:
 
 	//Dash Timeline
-	FTimeline DashTimeline;
+	//FTimeline DashTimeline;
 
 	UPROPERTY(EditAnywhere, Category = "Dash")
 		class UCurveFloat* CurveFloat;

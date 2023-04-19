@@ -16,12 +16,12 @@ void UCANS_AirborneLeap::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequ
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 	IsKeyPressed = false;
-	CheckNullUObject(MeshComp);
-	CheckNullUObject(MeshComp->GetOwner());
+	CHECK_NULL_UOBJECT(MeshComp);
+	CHECK_NULL_UOBJECT(MeshComp->GetOwner());
 
 	Player = Cast<ACHuman>(MeshComp->GetOwner());
-	CheckNullUObject(Player);
-	CheckNullUObject(Player->GetController());
+	CHECK_NULL_UOBJECT(Player);
+	CHECK_NULL_UOBJECT(Player->GetController());
 	PlayerController =Cast<APlayerController>(Player->GetController());
 
 }
@@ -30,7 +30,7 @@ void UCANS_AirborneLeap::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSeque
 	float FrameDeltaTime)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-	CheckNullUObject(PlayerController);
+	CHECK_NULL_UOBJECT(PlayerController);
 	if (PlayerController->IsInputKeyDown(EKeys::E))
 		IsKeyPressed = true;
 }
@@ -38,7 +38,7 @@ void UCANS_AirborneLeap::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSeque
 void UCANS_AirborneLeap::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::NotifyEnd(MeshComp, Animation);
-	CheckNullUObject(Player);
+	CHECK_NULL_UOBJECT(Player);
 	if (IsKeyPressed)
 	{
 		Player->LaunchCharacter(FVector(0, 0, 1200), false, false);

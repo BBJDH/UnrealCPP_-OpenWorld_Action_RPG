@@ -54,7 +54,7 @@ void UCAINormalBehaviorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	AAIController * OwnerController =  Cast<AAIController>(GetOwner());
-	CheckNullUObject(OwnerController);
+	CHECK_NULL_UOBJECT(OwnerController);
 	SetBlackboard(OwnerController->GetBlackboardComponent());
 }
 

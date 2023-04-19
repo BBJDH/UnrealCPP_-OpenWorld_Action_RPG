@@ -6,18 +6,17 @@
 #include "Component/CMoveComponent.h"
 #include "Component/CWeaponComponent.h"
 #include "Component/CZoomComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
-#include "Weapon/CWeaponStructures.h"
 
 
 ACHuman_Player::ACHuman_Player():ACHuman()
 {
-
+	CHECK_NULL_UOBJECT(SpringArm);
+	
 	//CHelpers::CreateActorComponent<UCZoomComponent>(this, &Zoom, "Zoom");
 	Zoom = this->CreateDefaultSubobject<UCZoomComponent>("Zoom");
-	CheckNullUObject(Zoom);
+	CHECK_NULL_UOBJECT(Zoom);
 
 
 	//SpringArm Setting
@@ -44,6 +43,8 @@ void ACHuman_Player::BeginPlay()
 
 void ACHuman_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	CHECK_NULL_UOBJECT(PlayerInputComponent);
+	
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	Bind(PlayerInputComponent);
 }
@@ -51,16 +52,16 @@ void ACHuman_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ACHuman_Player::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	DashTimeline.TickTimeline(DeltaSeconds);
+	//DashTimeline.TickTimeline(DeltaSeconds);
 }
 
-
+//플레이어 입력 이벤트
 void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 {
-	CheckNullUObject(PlayerInputComponent);
-	CheckNullUObject(Weapon);
-	CheckNullUObject(Move);
-	CheckNullUObject(Zoom);
+	CHECK_NULL_UOBJECT(PlayerInputComponent);
+	CHECK_NULL_UOBJECT(Weapon);
+	CHECK_NULL_UOBJECT(Move);
+	CHECK_NULL_UOBJECT(Zoom);
 	
 	//Action
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACHuman_Player::OnJumpPressed);
@@ -71,6 +72,7 @@ void ACHuman_Player::Bind(UInputComponent* const PlayerInputComponent)
 	PlayerInputComponent->BindAction("R_Skill", EInputEvent::IE_Pressed, Weapon, &UCWeaponComponent::Do_R_Action);
 	PlayerInputComponent->BindAction("Sprint/Avoid", EInputEvent::IE_Pressed, Move, &UCMoveComponent::OnSprint);
 	PlayerInputComponent->BindAction("Sprint/Avoid", EInputEvent::IE_Released, Move, &UCMoveComponent::OffSprint);
+	PlayerInputComponent->BindAction("Sprint/Avoid", EInputEvent::IE_DoubleClick, Move, &UCMoveComponent::OffSprint);
 
 
 	//Test

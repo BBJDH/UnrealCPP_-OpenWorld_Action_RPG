@@ -7,7 +7,7 @@
 
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Kismet/GameplayStatics.h"
 
 #include "Utilities/CHelpers.h"
 #include "Utilities/CLog.h"
@@ -22,7 +22,7 @@
  * - ActionName으로 공종콤보 재생될 것, InAir 유무 데이터 테이블에 추가할것
  *
  */
-//HACK: (22-07-14)  / ... 이것도 마찬가지로 
+//HACK: (00-07-14)  / ... 이것도 마찬가지로 
 
 //이런 키워드를 생성 가능하다 
 //도구 - 옵션 - 작업 목록

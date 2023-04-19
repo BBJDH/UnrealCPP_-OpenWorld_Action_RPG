@@ -6,7 +6,10 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "CFeetComponent.generated.h"
 
-
+/** FFeetData
+ * 				
+ * 	IK에서 사용할 데이터 정의
+ */
 USTRUCT(BlueprintType)
 struct FFeetData
 {
@@ -25,10 +28,11 @@ public:
 	FRotator RightRotation;
 };
 
-/*=================================================
- *					UCFeetComponent
- *=================================================
- */
+
+/** UCFeetComponent
+ *
+ * 	IK에서 사용할 FFeetData를 계산 및 업데이트
+ **/
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_RPG_API UCFeetComponent : public UActorComponent

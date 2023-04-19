@@ -1,28 +1,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Particles/ParticleSystem.h"
-#include "Niagara/Classes/NiagaraSystem.h"
-#include "NiagaraFunctionLibrary.h"
-#include "Kismet/GameplayStatics.h"//SpawnEmitter
+
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
-#define CheckTrue(Param) {if((Param)==true) return;} 
-#define CheckTrueResult(Param,Result) {if((Param)==true) return Result;}
+#define CHECK_TRUE(Param) {if((Param)==true) return;} 
+#define CHECK_TRUE_RESULT(Param,Result) {if((Param)==true) return Result;}
 
 //#define CheckFalse(Param) {if((Param)==false) return;}
 //#define CheckFalseResult(Param,Result) {if((Param)==false) return Result;} 
 
-#define CheckNull(Param) {if((Param)==nullptr) return;}	
-#define CheckNullResult(Param,Result) {if((Param)==nullptr) return Result;}
+#define CHECK_NULL(Param) {if((Param)==nullptr) return;}	
+#define CHECK_NULL_RESULT(Param,Result) {if((Param)==nullptr) return Result;}
 
-#define CheckNullUObject(Param) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return;}}	
-#define CheckNullUObjectResult(Param,Result) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return Result;}}	
+#define CHECK_NULL_UOBJECT(Param) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return;}}	
+#define CHECK_NULL_UOBJECT_RESULT(Param,Result) {if(IsValid(Param)==false) {UE_LOG(GameProject, Warning, TEXT("Null Or PendingKill, Function : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));  return Result;}}	
 
-#define and &&
-#define or ||
-#define not !
+#define AND &&
+#define OR ||
+#define NOT !
 
 //#define CreateTextRender() \
 //{ \
@@ -38,10 +35,10 @@ DEFINE_LOG_CATEGORY_STATIC(GameProject, Display, All)
 
 
 
-class TPS_RPG_API CHelpers
-{
-
-public:
+// class TPS_RPG_API CHelpers
+// {
+//
+// public:
 	//template<typename T>
 	//static void CreateComponent(AActor* InActor, T** OutComponent,
 	//	FName InName, USceneComponent* InParent = nullptr, FName InSocketName = NAME_None)
@@ -116,81 +113,82 @@ public:
 	//	*OutClass = asset.Class; 
 	//}
 
-	template<typename T>
-	static T* FindActor(UWorld * InWorld)
-	{
-		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
-		{
-			if (actor != nullptr && actor->IsA<T>())
-			{
-				return Cast<T>(actor);
-			}
-		}
-		return nullptr;
-	}
+	// template<typename T>
+	// static T* FindActor(UWorld * InWorld)
+	// {
+	// 	for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
+	// 	{
+	// 		if (actor != nullptr && actor->IsA<T>())
+	// 		{
+	// 			return Cast<T>(actor);
+	// 		}
+	// 	}
+	// 	return nullptr;
+	// }
 
-	template<typename T>
-	static void FindActors(UWorld * InWorld, TArray<T *>& OutArray)
-	{
-		OutArray.Empty();
+	// template<typename T>
+	// static void FindActors(UWorld * InWorld, TArray<T *>& OutArray)
+	// {
+	// 	OutArray.Empty();
+	//
+	// 	for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
+	// 	{
+	// 		if (actor != nullptr && actor->IsA<T>()) 
+	// 		{
+	// 			OutArray.Add(Cast<T>(actor));
+	// 		}
+	// 	}
+	// }
 
-		for (AActor* actor : InWorld->GetCurrentLevel()->Actors)
-		{
-			if (actor != nullptr && actor->IsA<T>()) 
-			{
-				OutArray.Add(Cast<T>(actor));
-			}
-		}
-	}
 
-
-	static void PlayParticleEffect(UWorld* InWorld, UParticleSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
-	{
-		CheckNullUObject(InEffect);
-		
-		FVector location = InTransform.GetLocation();
-		FRotator rotation = FRotator(InTransform.GetRotation());
-		FVector scale = InTransform.GetScale3D();
-
-		if (InMesh != nullptr)
-		{
-			if (InEffect != nullptr)
-			{
-				UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
-				
-				return;
-			}
-		}
-
-		if (InEffect != nullptr)
-		{
-			UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
-
-			return;
-		}
-	}
-	static void PlayNiagaraEffect(UWorld* InWorld, UNiagaraSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
-	{
-		CheckNullUObject(InEffect);
-		FVector location = InTransform.GetLocation();
-		FRotator rotation = FRotator(InTransform.GetRotation());
-		FVector scale = InTransform.GetScale3D();
-
-		if (InMesh != nullptr)
-		{
-			if (InEffect != nullptr)
-			{
-				//UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
-				UNiagaraFunctionLibrary::SpawnSystemAttached(InEffect, InMesh, InSocketName, location, rotation, EAttachLocation::SnapToTarget, true);
-				return;
-			}
-		}
-
-		if (InEffect != nullptr)
-		{
-			//UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(InWorld, InEffect, InTransform.GetLocation(), InTransform.Rotator(), InTransform.GetScale3D());
-			return;
-		}
-	}
-};
+	// static void PlayParticleEffect(UWorld* InWorld, UParticleSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
+	// {
+	// 	CHECK_NULL_UOBJECT(InEffect);
+	// 	
+	// 	FVector location = InTransform.GetLocation();
+	// 	FRotator rotation = FRotator(InTransform.GetRotation());
+	// 	FVector scale = InTransform.GetScale3D();
+	//
+	// 	if (InMesh != nullptr)
+	// 	{
+	// 		if (InEffect != nullptr)
+	// 		{
+	// 			UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
+	// 			
+	// 			return;
+	// 		}
+	// 	}
+	//
+	// 	if (InEffect != nullptr)
+	// 	{
+	// 		UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
+	//
+	// 		return;
+	// 	}
+	// }
+	
+	// static void PlayNiagaraEffect(UWorld* InWorld, UNiagaraSystem* InEffect, const FTransform& InTransform, USkeletalMeshComponent* InMesh = nullptr, FName InSocketName = NAME_None)
+	// {
+	// 	CHECK_NULL_UOBJECT(InEffect);
+	// 	FVector location = InTransform.GetLocation();
+	// 	FRotator rotation = FRotator(InTransform.GetRotation());
+	// 	FVector scale = InTransform.GetScale3D();
+	//
+	// 	if (InMesh != nullptr)
+	// 	{
+	// 		if (InEffect != nullptr)
+	// 		{
+	// 			//UGameplayStatics::SpawnEmitterAttached(InEffect, InMesh, InSocketName, location, rotation, scale);
+	// 			UNiagaraFunctionLibrary::SpawnSystemAttached(InEffect, InMesh, InSocketName, location, rotation, EAttachLocation::SnapToTarget, true);
+	// 			return;
+	// 		}
+	// 	}
+	//
+	// 	if (InEffect != nullptr)
+	// 	{
+	// 		//UGameplayStatics::SpawnEmitterAtLocation(InWorld, InEffect, InTransform);
+	// 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(InWorld, InEffect, InTransform.GetLocation(), InTransform.Rotator(), InTransform.GetScale3D());
+	// 		return;
+	// 	}
+	// }
+// };

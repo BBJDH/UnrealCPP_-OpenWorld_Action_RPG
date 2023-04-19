@@ -21,37 +21,37 @@
 
 ACHuman::ACHuman() 
 {
-	CheckNullUObject(GetCapsuleComponent());
+	CHECK_NULL_UOBJECT(GetCapsuleComponent());
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
-	CheckNullUObject(SpringArm);
+	CHECK_NULL_UOBJECT(SpringArm);
 
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
-	CheckNullUObject(Camera);
+	CHECK_NULL_UOBJECT(Camera);
 
 	Camera->SetupAttachment(SpringArm);
 
 	//Create Custom Component
 	Weapon = this->CreateDefaultSubobject<UCWeaponComponent>("Weapon");
-	CheckNullUObject(Weapon);
+	CHECK_NULL_UOBJECT(Weapon);
 
 	State = this->CreateDefaultSubobject<UCStateComponent>("State");
-	CheckNullUObject(State);
+	CHECK_NULL_UOBJECT(State);
 
 	Status = this->CreateDefaultSubobject<UCStatusComponent>("Status");
-	CheckNullUObject(Status);
+	CHECK_NULL_UOBJECT(Status);
 
 	Montage = this->CreateDefaultSubobject<UCMontageComponent>("Montage");
-	CheckNullUObject(Montage);
+	CHECK_NULL_UOBJECT(Montage);
 
 	Feet = this->CreateDefaultSubobject<UCFeetComponent>("Feet");
-	CheckNullUObject(Feet);
+	CHECK_NULL_UOBJECT(Feet);
 
 	Move = this->CreateDefaultSubobject<UCMoveComponent>("Move");
-	CheckNullUObject(Move);
+	CHECK_NULL_UOBJECT(Move);
 
 
 	this->bUseControllerRotationYaw = false;
@@ -63,7 +63,7 @@ ACHuman::ACHuman()
 	//CheckNullUObject(GetMesh()->SkeletalMesh);
 
 	ConstructorHelpers::FClassFinder<UCAnimInstance> const AssetFound(*FString( "AnimBlueprint'/Game/BP/Human/ABP_CHuman.ABP_CHuman_C'"));
-	CheckNullUObject(AssetFound.Class);
+	CHECK_NULL_UOBJECT(AssetFound.Class);
 
 	GetMesh()->SetAnimClass(AssetFound.Class);
 }
@@ -71,6 +71,7 @@ ACHuman::ACHuman()
 void ACHuman::BeginPlay()
 {
 	Super::BeginPlay();
+	CHECK_NULL_UOBJECT(State);
 	State->OnStateTypeChanged.AddDynamic(this, &ACHuman::OnStateTypeChanged);
 }
 
@@ -84,8 +85,9 @@ float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 {
 
 	float const AmountOfDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	CheckNullUObjectResult(State, AmountOfDamage);
-	CheckNullUObjectResult(EventInstigator->GetPawn(), AmountOfDamage);
+	CHECK_NULL_UOBJECT_RESULT(State, AmountOfDamage);
+	CHECK_NULL_UOBJECT_RESULT(EventInstigator->GetPawn(), AmountOfDamage);
+	
 	DamageData.Amount = AmountOfDamage;
 	DamageData.Attacker = Cast<ACharacter>(EventInstigator->GetPawn());
 	DamageData.Event = (FHitDamageEvent*)&DamageEvent;
@@ -98,9 +100,12 @@ float ACHuman::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 void ACHuman::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
+	CHECK_NULL_UOBJECT(Montage);
 	CustomJumpCount = 0;
 	if (this->GetVelocity().Z < -1000)
+	{
 		Montage->PlayLended();
+	}
 
 	EndFall();
 }
@@ -115,7 +120,7 @@ void ACHuman::Falling()
 void ACHuman::OnJumpPressed()
 {
 	Super::Jump();
-
+	CHECK_NULL_UOBJECT(Montage);
 	if(Super::CanJump())
 	{
 		switch (this->JumpCurrentCount)
@@ -134,6 +139,12 @@ void ACHuman::OnJumpReleased()
 	Super::StopJumping();
 }
 
+// void ACHuman::OnDodgeAction() const
+// {
+// 	CheckNullUObject(Montage);
+// 	Montage->PlayFirstJump(); 
+// }
+
 
 //캐릭터 상태 변화 감지
 void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewType)
@@ -148,9 +159,9 @@ void ACHuman::OnStateTypeChanged(EStateType const InPrevType, EStateType InNewTy
 //데미지 이벤트를 받아 처리
 void ACHuman::GetHit()
 {
-	CheckNull(DamageData.Event);
-	CheckNull(DamageData.Event->HitData);
-	CheckNullUObject(Status);
+	CHECK_NULL(DamageData.Event);
+	CHECK_NULL(DamageData.Event->HitData);
+	CHECK_NULL_UOBJECT(Status);
 	Status->Damage(DamageData.Amount);
 	DamageData.Amount = 0;
 
@@ -178,10 +189,12 @@ void ACHuman::GetHit()
 	DamageData.Event = nullptr;
 }
 
+//캐릭터 Dead상태 진입시 Call, 충돌 변경 및 몽타주 플레이
 void ACHuman::Dead() const
 {
-	CheckNullUObject(GetCapsuleComponent());
-	CheckNullUObject(GetController());
+	CHECK_NULL_UOBJECT(GetCapsuleComponent());
+	CHECK_NULL_UOBJECT(GetController());
+	CHECK_NULL_UOBJECT(Montage);
 	GetCapsuleComponent()->SetCollisionProfileName("RagdollWithNoCam");
 	Montage->PlayDead();
 
@@ -191,7 +204,8 @@ void ACHuman::Dead() const
 //Normalized Return
 FVector ACHuman::GetVectorLookAtActor(AActor const* InActor) const
 {
-	CheckNullUObjectResult(InActor,FVector());
+	CHECK_NULL_UOBJECT_RESULT(InActor,FVector());
+	
 	FVector const LocationOfSelf = GetActorLocation();
 	FVector const LocationOfDest= InActor->GetActorLocation();
 	FVector LookAtDest = LocationOfDest - LocationOfSelf;
@@ -199,6 +213,7 @@ FVector ACHuman::GetVectorLookAtActor(AActor const* InActor) const
 	return LookAtDest;
 }
 
+//Yaw 회전만 사용
 void ACHuman::SetActorRotation2D(FRotator LookAtRotator)
 {
 	LookAtRotator.Pitch = 0;
@@ -209,14 +224,14 @@ void ACHuman::SetActorRotation2D(FRotator LookAtRotator)
 //Broadcast Falling
 void ACHuman::StartFall() const
 {
-	CheckNullUObject(Status);
-	CheckNullUObject(Feet);
-	CheckNullUObject(Weapon);
+	CHECK_NULL_UOBJECT(Status);
+	CHECK_NULL_UOBJECT(Feet);
+	CHECK_NULL_UOBJECT(Weapon);
 
-	UAnimInstance * SelfAnimInstance =  this->GetMesh()->GetAnimInstance();
-	CheckNullUObject(SelfAnimInstance);
-	Cast<UCAnimInstance>(SelfAnimInstance)->StartInAir();
-
+	UCAnimInstance * SelfAnimInstance =  Cast<UCAnimInstance>(this->GetMesh()->GetAnimInstance());
+	CHECK_NULL_UOBJECT(SelfAnimInstance);
+	
+	SelfAnimInstance->StartInAir();
 	Status->StartInAir();
 	Feet->StartInAir();
 	Weapon->InitComboIndex();
@@ -226,23 +241,24 @@ void ACHuman::StartFall() const
 //Broadcast Landed
 void ACHuman::EndFall() const
 {
-	CheckNullUObject(Status);
-	CheckNullUObject(Feet);
-	CheckNullUObject(Weapon);
+	CHECK_NULL_UOBJECT(Status);
+	CHECK_NULL_UOBJECT(Feet);
+	CHECK_NULL_UOBJECT(Weapon);
 
-	UAnimInstance* SelfAnimInstance = this->GetMesh()->GetAnimInstance();
-	CheckNullUObject(SelfAnimInstance);
-	Cast<UCAnimInstance>(SelfAnimInstance)->EndInAir();
-
+	UCAnimInstance * SelfAnimInstance =  Cast<UCAnimInstance>(this->GetMesh()->GetAnimInstance());
+	CHECK_NULL_UOBJECT(SelfAnimInstance);
+	
+	SelfAnimInstance->EndInAir();
 	Status->EndInAir();
 	Feet->EndInAir();
 	Weapon->InitComboIndex();
 
 }
 
+//Notify Call, 죽음 처리
 void ACHuman::NotifyDead()
 {
-	CheckNullUObject(Weapon);
+	CHECK_NULL_UOBJECT(Weapon);
 
 	Weapon->DestroyWeapons();
 	Destroy();

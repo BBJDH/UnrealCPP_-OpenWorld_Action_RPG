@@ -12,7 +12,7 @@ ACAttachment::ACAttachment()
 
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
 
-	CheckNullUObject(Root);
+	CHECK_NULL_UOBJECT(Root);
 
 	this->SetRootComponent(Root);
 }
@@ -87,7 +87,7 @@ void ACAttachment::AttachTo(FName InSocketName)
 void ACAttachment::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) 
 {
-	CheckTrue(OwnerCharacter == OtherActor);
+	CHECK_TRUE(OwnerCharacter == OtherActor);
 
 	if (OnAttachmentBeginOverlap.IsBound())
 		OnAttachmentBeginOverlap.Broadcast(OwnerCharacter, Cast<UShapeComponent>(OverlappedComponent), Cast<ACharacter>(OtherActor));
@@ -96,7 +96,7 @@ void ACAttachment::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompon
 void ACAttachment::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	CheckTrue(OwnerCharacter == OtherActor);
+	CHECK_TRUE(OwnerCharacter == OtherActor);
 
 	if (OnAttachmentEndOverlap.IsBound())
 		OnAttachmentEndOverlap.Broadcast(OwnerCharacter, Cast<UShapeComponent>(OverlappedComponent), Cast<ACharacter>(OtherActor));

@@ -62,13 +62,13 @@ void UCDoActionComponent::InitIndex()
 void UCDoActionComponent::FindActionIdex(EActionType const NewType)
 {
 	
-	if (DoActionDatas.IsValidIndex(0)==false or DoActionDatas.Max()==0 )
+	if (DoActionDatas.IsValidIndex(0)==false OR DoActionDatas.Max()==0 )
 		return;
 
 	for(int i=0; i< DoActionDatas.Max(); i++)
 	{
 		//if(OwnerCharacter == DoActionDatas[i].InAir and DoActionDatas[i].ActionCommand == NewType)
-		if(Status->IsInAir() == DoActionDatas[i].InAir and DoActionDatas[i].ActionCommand == NewType)
+		if(Status->IsInAir() == DoActionDatas[i].InAir AND DoActionDatas[i].ActionCommand == NewType)
 		{
 			ActionIndex = i;
 			break;
@@ -83,10 +83,10 @@ void UCDoActionComponent::ChangedType(EActionType const NewType)
 {
 	EActionType const PrevType = this->ActionType;
 	this->ActionType = NewType;
-	//¾×¼ÇÀÌ µé¾î¿Ã¶§ ±× ¸ùÅ¸ÁÖ ÀÎµ¦½º¸¦ Ã£µµ·Ï ¼³Á¤
+	//ì•¡ì…˜ì´ ë“¤ì–´ì˜¬ë•Œ ê·¸ ëª½íƒ€ì£¼ ì¸ë±ìŠ¤ë¥¼ ì°¾ë„ë¡ ì„¤ì •
 	if(PrevType != NewType)
 		FindActionIdex(NewType);
-	//¿ÜºÎ ÀÌº¥Æ®·Î »ç¿ë½Ã ¹ÙÀÎµù Ã³¸®ÇØµÎ¾î¾ß ÇÔ  ChangedType ÀÌ¿ë
+	//ì™¸ë¶€ ì´ë²¤íŠ¸ë¡œ ì‚¬ìš©ì‹œ ë°”ì¸ë”© ì²˜ë¦¬í•´ë‘ì–´ì•¼ í•¨  ChangedType ì´ìš©
 	//if (OnActionTypeChaged.IsBound())
 	//	OnActionTypeChaged.Broadcast(PrevType, NewType);
 }

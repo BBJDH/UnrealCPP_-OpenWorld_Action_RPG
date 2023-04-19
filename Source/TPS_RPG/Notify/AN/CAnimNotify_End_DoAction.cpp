@@ -12,15 +12,15 @@ FString UCAnimNotify_End_DoAction::GetNotifyName_Implementation() const
 void UCAnimNotify_End_DoAction::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::Notify(MeshComp, Animation);
-	CheckNullUObject(MeshComp);
-	CheckNullUObject(MeshComp->GetOwner());
+	CHECK_NULL_UOBJECT(MeshComp);
+	CHECK_NULL_UOBJECT(MeshComp->GetOwner());
 
 	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(MeshComp->GetOwner()->GetComponentByClass(UCWeaponComponent::StaticClass()));
-	CheckNullUObject(WeaponComponent);
+	CHECK_NULL_UOBJECT(WeaponComponent);
 
 	if(WeaponComponent->IsUnarmedMode()==false)
 	{
-		CheckNullUObject(WeaponComponent->GetDoAction());
+		CHECK_NULL_UOBJECT(WeaponComponent->GetDoAction());
 
 		WeaponComponent->GetDoAction()->End_DoAction();
 	}

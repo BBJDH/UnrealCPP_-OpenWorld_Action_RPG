@@ -21,10 +21,10 @@ void UCAnimInstance::NativeBeginPlay()
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 
-	CheckNullUObject(OwnerCharacter);
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 
 	UCWeaponComponent* WeaponComponent = Cast<UCWeaponComponent>(OwnerCharacter->GetComponentByClass(UCWeaponComponent::StaticClass()));
-	CheckNullUObject(WeaponComponent);
+	CHECK_NULL_UOBJECT(WeaponComponent);
 
 	WeaponComponent->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
 }
@@ -32,14 +32,14 @@ void UCAnimInstance::NativeBeginPlay()
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	CheckNullUObject(OwnerCharacter);
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	
 	Speed = OwnerCharacter->GetVelocity().Size2D();
 
 	//UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(OwnerCharacter);
 	UCFeetComponent* FeetIKComponent = Cast<UCFeetComponent>(OwnerCharacter->GetComponentByClass(UCFeetComponent::StaticClass()));
 
-	CheckNullUObject(FeetIKComponent);
+	CHECK_NULL_UOBJECT(FeetIKComponent);
 	if (FeetIKComponent != nullptr && OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().IsNearlyZero())
 	{
 		IsOnFeetIK = true;

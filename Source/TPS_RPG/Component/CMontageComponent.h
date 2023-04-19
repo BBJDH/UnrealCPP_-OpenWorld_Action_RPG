@@ -10,7 +10,7 @@
 UENUM(BlueprintType)
 enum class EMontageType : uint8
 {
-	Idle=0, Roll, Equip, Hitted, Dead, Action, Jump_First, Jump_Second, Heavy_Landed, Max,
+	Idle=0, Roll, Dodge, Dead, Jump_First, Jump_Second, Heavy_Landed, Max,
 };
 
 USTRUCT(BlueprintType)
@@ -45,7 +45,6 @@ protected:
 
 
 public:
-	void PlayHitted()const;
 	void PlayDead()const;
 	void PlayFirstJump()const;
 	void PlaySecondJump()const;

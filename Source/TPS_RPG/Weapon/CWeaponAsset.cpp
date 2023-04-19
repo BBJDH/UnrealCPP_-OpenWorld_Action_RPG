@@ -14,7 +14,7 @@ UCWeaponAsset::UCWeaponAsset()
 
 TSubclassOf<ACAttachment> UCWeaponAsset::GetAttachmentClass()
 {
-	CheckNullResult(AttachmentClass,nullptr);
+	CHECK_NULL_RESULT(AttachmentClass,nullptr);
 	return AttachmentClass;
 }
 
