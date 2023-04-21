@@ -85,7 +85,9 @@ void UCDoActionComponent::ChangedType(EActionType const NewType)
 	this->ActionType = NewType;
 	//액션이 들어올때 그 몽타주 인덱스를 찾도록 설정
 	if(PrevType != NewType)
+	{
 		FindActionIdex(NewType);
+	}
 	//외부 이벤트로 사용시 바인딩 처리해두어야 함  ChangedType 이용
 	//if (OnActionTypeChaged.IsBound())
 	//	OnActionTypeChaged.Broadcast(PrevType, NewType);

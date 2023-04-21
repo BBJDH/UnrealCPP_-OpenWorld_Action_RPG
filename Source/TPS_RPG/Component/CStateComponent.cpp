@@ -49,11 +49,11 @@ void UCStateComponent::SetActionMode()
 
 void UCStateComponent::ChangeType(EStateType const InType)
 {
-	EStateType const prevType = Type;
+	EStateType const PrevType = Type;
 	Type = InType;
 
 	if (OnStateTypeChanged.IsBound())
-		OnStateTypeChanged.Broadcast(prevType, Type);
+		OnStateTypeChanged.Broadcast(PrevType, Type);
 }
 
 void UCStateComponent::OnSubActionMode()

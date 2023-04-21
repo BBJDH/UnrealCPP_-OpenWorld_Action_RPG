@@ -8,5 +8,6 @@
     <file url="file://$PROJECT_DIR$/Source/TPS_RPG/Human/CHuman.cpp" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Source/TPS_RPG/TPS_RPG.Build.cs" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Source/TPS_RPG/Utilities/CLog.cpp" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Source/TPS_RPG/Utilities/CLog.h" charset="x-windows-949" />
   </component>
 </project>

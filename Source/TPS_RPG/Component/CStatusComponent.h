@@ -31,10 +31,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 		float MaxHealth = 100;
 
-
-private:
 	UPROPERTY(VisibleDefaultsOnly)
 	class ACharacter* OwnerCharacter;
+	
 	float Health;
 	bool InAir;
 };

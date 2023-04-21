@@ -16,27 +16,31 @@ void UCWeaponComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 
+	
 	for (int i = 0; i < static_cast<int32>(EWeaponType::Max); i++)
 	{
-		if (DataAssets[i]!= nullptr)
+		if (DataAssets[i] == nullptr)
 		{
-			FActorSpawnParameters params;
-			params.Owner = OwnerCharacter;
-			TSubclassOf<ACAttachment> AttachmentClass = DataAssets[i]->GetAttachmentClass();
-			if(IsValid(AttachmentClass)==true)
-			{
-				Attachments[i]= OwnerCharacter->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, params);
-				DataAssets[i]->CallBeginPlay(OwnerCharacter);
-			}
-			if (Attachments[i] != nullptr AND DataAssets[i]->GetDoAction() != nullptr)
-			{
-				Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
-				Attachments[i]->OffAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OffAttachmentCollision");
+			continue;
+		}
+		
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = OwnerCharacter;
+		TSubclassOf<ACAttachment> AttachmentClass = DataAssets[i]->GetAttachmentClass();
+		if(IsValid(AttachmentClass)==true)
+		{
+			Attachments[i]= OwnerCharacter->GetWorld()->SpawnActor<ACAttachment>(AttachmentClass, SpawnParams);
+			DataAssets[i]->CallBeginPlay(OwnerCharacter);
+		}
+		if (IsValid(Attachments[i]) == true AND IsValid(DataAssets[i]->GetDoAction()) == true)
+		{
+			Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
+			Attachments[i]->OffAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OffAttachmentCollision");
 
-				Attachments[i]->OnAttachmentBeginOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentBeginOverlap");
-				Attachments[i]->OnAttachmentEndOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentEndOverlap");
-			}
+			Attachments[i]->OnAttachmentBeginOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentBeginOverlap");
+			Attachments[i]->OnAttachmentEndOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentEndOverlap");
 		}
 	}
 }
@@ -49,7 +53,7 @@ void UCWeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 ACAttachment* UCWeaponComponent::GetAttachment()
 {
 	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
-	CHECK_NULL_RESULT(Attachments[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_NULL_UOBJECT_RESULT(Attachments[static_cast<int32>(CurrentWeaponType)], nullptr);
 
 	return Attachments[static_cast<int32>(CurrentWeaponType)];
 }
@@ -57,7 +61,7 @@ ACAttachment* UCWeaponComponent::GetAttachment()
 UCEquipment* UCWeaponComponent::GetEquipment()
 {
 	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
-	CHECK_NULL_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_NULL_UOBJECT_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
 
 	return DataAssets[static_cast<int32>(CurrentWeaponType)]->GetEquipment();
 }
@@ -65,12 +69,8 @@ UCEquipment* UCWeaponComponent::GetEquipment()
 UCDoActionComponent* UCWeaponComponent::GetDoAction()
 {
 	CHECK_TRUE_RESULT(IsUnarmedMode(), nullptr);
-	CHECK_NULL_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
-
-	if (DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction() ==nullptr)
-	{
-		return nullptr;
-	}
+	CHECK_NULL_UOBJECT_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)], nullptr);
+	CHECK_NULL_UOBJECT_RESULT(DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction(),nullptr);
 
 	return DataAssets[static_cast<int32>(CurrentWeaponType)]->GetDoAction();
 }
@@ -88,11 +88,7 @@ void UCWeaponComponent::NotifyEndEquip()
 void UCWeaponComponent::InitComboIndex()
 {
 	class UCDoActionComponent* CurrentDoActionComponent = GetDoAction();
-
-	if (CurrentDoActionComponent == nullptr)
-	{
-		return;
-	}
+	CHECK_NULL_UOBJECT(CurrentDoActionComponent);
 
 	CurrentDoActionComponent->InitIndex();
 }
@@ -132,12 +128,11 @@ void UCWeaponComponent::SetMode(EWeaponType const InType)
 		GetEquipment()->Unequip(Attachments[static_cast<int32>(InType)]);
 	}
 
-	if (DataAssets[static_cast<int32>(InType)] != nullptr)
-	{
-		DataAssets[static_cast<int32>(InType)]->GetEquipment()->Equip(Attachments[static_cast<int32>(InType)]);
+	CHECK_NULL_UOBJECT(DataAssets[static_cast<int32>(InType)]);
+	
+	DataAssets[static_cast<int32>(InType)]->GetEquipment()->Equip(Attachments[static_cast<int32>(InType)]);
 
-		ChangeType(InType);
-	}
+	ChangeType(InType);
 }
 
 void UCWeaponComponent::ChangeType(EWeaponType const InType)
@@ -146,29 +141,33 @@ void UCWeaponComponent::ChangeType(EWeaponType const InType)
 	CurrentWeaponType = InType;
 
 	if (OnWeaponTypeChange.IsBound())
+	{
 		OnWeaponTypeChange.Broadcast(PrevType, InType);
+	}
 }
 
 void UCWeaponComponent::DoAction()
 {
 	CHECK_TRUE(IsUnarmedMode());
+	CHECK_NULL_UOBJECT(GetDoAction())
 
-	if (GetDoAction()!=nullptr)
-		GetDoAction()->DoAction();
+	GetDoAction()->DoAction();
 }
 
 void UCWeaponComponent::DoUpperAction()
 {
 	CHECK_TRUE(IsUnarmedMode());
-	if (GetDoAction() != nullptr)
-		GetDoAction()->DoUpperAction();
+	CHECK_NULL_UOBJECT(GetDoAction())
+
+	GetDoAction()->DoUpperAction();
 }
 
 void UCWeaponComponent::Do_R_Action()
 {
 	CHECK_TRUE(IsUnarmedMode());
-	if (GetDoAction() != nullptr)
-		GetDoAction()->Do_R_Action();
+	CHECK_NULL_UOBJECT(GetDoAction())
+
+	GetDoAction()->Do_R_Action();
 }
 
 void UCWeaponComponent::DestroyWeapons()

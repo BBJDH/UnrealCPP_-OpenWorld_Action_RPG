@@ -13,7 +13,7 @@ void UCDoComboActionComponent::DoAction()
 	if (IsComboEnable)
 	{
 		IsComboEnable = false;
-		bExist = true;
+		IsNextComboReady = true;
 
 		return;
 	}
@@ -47,11 +47,9 @@ void UCDoComboActionComponent::Do_R_Action()
 void UCDoComboActionComponent::Begin_DoAction()
 {
 	Super::Begin_DoAction();
-	CHECK_TRUE(bExist==false);
+	CHECK_TRUE(IsNextComboReady==false);
 	
-	bExist = false;
-	//TODO: �޺� �ε��� ��ó��,Action Name���� ã�� �ε��� + Index
-	//Idle�� ���ƿ´ٸ� Index �ʱ�ȭ,
+	IsNextComboReady = false;
 	++ActionIndex;
 
 	CHECK_TRUE(ActionIndex > DoActionDatas.Num());
@@ -69,30 +67,31 @@ void UCDoComboActionComponent::OffAttachmentCollision()
 
 	if (DoActionDatas[ActionIndex].FixedCamera)
 	{
-		float angle = -2.0f;
-		ACharacter* candidate = nullptr;
-		for (ACharacter* hitted : HittedCharacters)
+		float Angle = -2.0f;
+		ACharacter* Candidate = nullptr;
+		for (ACharacter* Hitted : HittedCharacters)
 		{
-			FVector direction = hitted->GetActorLocation() - OwnerCharacter->GetActorLocation();
+			FVector direction = Hitted->GetActorLocation() - OwnerCharacter->GetActorLocation();
 			direction = direction.GetSafeNormal2D();
 
 			FVector forward = FQuat(OwnerCharacter->GetControlRotation()).GetForwardVector();
 
-			float dot = FVector::DotProduct(direction, forward);
-			if (dot >= angle)
+			float Dot = FVector::DotProduct(direction, forward);
+			if (Dot >= Angle)
 			{
-				angle = dot;
-				candidate = hitted;
+				Angle = Dot;
+				Candidate = Hitted;
 			}
 		}
 
-		if (candidate != nullptr)
+		if (Candidate != nullptr)
 		{
-			FRotator rotator = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), candidate->GetActorLocation());
-			FRotator target = FRotator(0, rotator.Yaw, 0);
+			FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Candidate->GetActorLocation());
+			FRotator Target = FRotator(0, Rotator.Yaw, 0);
 
-			AController* controller = OwnerCharacter->GetController<AController>();
-			controller->SetControlRotation(target);
+			AController* Controller = OwnerCharacter->GetController<AController>();
+			CHECK_NULL_UOBJECT(Controller);
+			Controller->SetControlRotation(Target);
 		}
 	}
 

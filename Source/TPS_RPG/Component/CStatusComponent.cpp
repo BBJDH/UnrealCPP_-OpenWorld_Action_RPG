@@ -39,9 +39,11 @@ void UCStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* Temp = GetOwner();
-	FString Result = Temp->GetName();
+	// AActor* OwnerActor = GetOwner();
+	// CHECK_NULL_UOBJECT(OwnerActor);
+	//FString Result = OwnerActor->GetName();
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	Health = MaxHealth;
 
 	//CheckNull(OwnerCharacter);

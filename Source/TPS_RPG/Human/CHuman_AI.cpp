@@ -2,7 +2,6 @@
 
 #include "Human/CHuman_AI.h"
 #include "Global.h"
-#include "Component/CAINormalBehaviorComponent.h"
 #include "Component/CStatusComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Widgets/CUserWidget_HealthBar.h"

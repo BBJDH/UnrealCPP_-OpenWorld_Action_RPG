@@ -13,6 +13,7 @@ void UCMoveComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	CHECK_NULL_UOBJECT(OwnerCharacter)
 	
 	SetSpeed(ESpeedType::Run);
 	DisableControlRotation();
@@ -20,26 +21,29 @@ void UCMoveComponent::BeginPlay()
 
 void UCMoveComponent::OnMoveForward(float InAxis)
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	CHECK_TRUE(IsCanMove==false);
 
-	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
-	FVector direction = FQuat(rotator).GetForwardVector();
+	FRotator const RotatorToMove = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
+	FVector const DirectionToMove = FQuat(RotatorToMove).GetForwardVector();
 
-	OwnerCharacter->AddMovementInput(direction, InAxis);
+	OwnerCharacter->AddMovementInput(DirectionToMove, InAxis);
 }
 
 void UCMoveComponent::OnMoveRight(float InAxis)
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	CHECK_TRUE(IsCanMove==false);
 
-	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
-	FVector direction = FQuat(rotator).GetRightVector();
+	FRotator const RotatorToMove = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
+	FVector const DirectionToMove = FQuat(RotatorToMove).GetRightVector();
 
-	OwnerCharacter->AddMovementInput(direction, InAxis);
+	OwnerCharacter->AddMovementInput(DirectionToMove, InAxis);
 }
 
 void UCMoveComponent::OnHorizontalLook(float InAxis)const
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	CHECK_TRUE(IsFixedCamera);
 
 	OwnerCharacter->AddControllerYawInput(InAxis * SpeedOfMouseScroll.X * GetWorld()->GetDeltaSeconds());
@@ -47,6 +51,7 @@ void UCMoveComponent::OnHorizontalLook(float InAxis)const
 
 void UCMoveComponent::OnVerticalLook(float InAxis)const
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	CHECK_TRUE(IsFixedCamera);
 
 	OwnerCharacter->AddControllerPitchInput(InAxis * SpeedOfMouseScroll.Y * GetWorld()->GetDeltaSeconds());
@@ -54,6 +59,7 @@ void UCMoveComponent::OnVerticalLook(float InAxis)const
 
 void UCMoveComponent::SetSpeed(ESpeedType InType)
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
 	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed[static_cast<int32>(InType)];
 }
 
@@ -71,12 +77,16 @@ void UCMoveComponent::OffSprint()
 
 void UCMoveComponent::EnableControlRotation()const
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
+
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
 void UCMoveComponent::DisableControlRotation()const
 {
+	CHECK_NULL_UOBJECT(OwnerCharacter);
+	
 	OwnerCharacter->bUseControllerRotationYaw = false;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 }

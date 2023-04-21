@@ -16,6 +16,7 @@ void UCZoomComponent::BeginPlay()
 	SpringArm = Cast<USpringArmComponent>(GetOwner()->GetComponentByClass(USpringArmComponent::StaticClass()));
 	//SpringArm = CHelpers::GetComponent<USpringArmComponent>(GetOwner());
 	CHECK_NULL_UOBJECT(SpringArm);
+	
 	DestValueOfZoomLength = SpringArm->TargetArmLength;
 }
 
@@ -23,6 +24,7 @@ void UCZoomComponent::InterpCurrentZoomLength(float const DeltaTime)
 {
 	CHECK_NULL_UOBJECT(SpringArm);
 	CHECK_TRUE(UKismetMathLibrary::NearlyEqual_FloatFloat(SpringArm->TargetArmLength, DestValueOfZoomLength));
+
 	SpringArm->TargetArmLength = UKismetMathLibrary::FInterpTo(SpringArm->TargetArmLength, DestValueOfZoomLength, DeltaTime, ZoomSpeedOfInterpolation);
 }
 

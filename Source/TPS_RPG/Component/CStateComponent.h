@@ -18,6 +18,8 @@ class TPS_RPG_API UCStateComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UCStateComponent();
+	
 	FORCEINLINE bool IsIdleMode()		const { return Type == EStateType::Idle; }
 	FORCEINLINE bool IsRollMode()		const { return Type == EStateType::Roll; }
 	FORCEINLINE bool IsBackstepMode()	const { return Type == EStateType::BackStep; }
@@ -27,10 +29,6 @@ public:
 	FORCEINLINE bool IsActionMode() 	const { return Type == EStateType::Action; }
 	FORCEINLINE bool IsSubActionMode()	const { return bInSubActionMode; }
 
-public:	
-	UCStateComponent();
-
-public:
 	void SetIdleMode();
 	void SetRollMode();
 	void SetBackStepMode();
