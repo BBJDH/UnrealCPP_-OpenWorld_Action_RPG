@@ -13,11 +13,20 @@ UCDoActionComponent::UCDoActionComponent()
 
 void UCDoActionComponent::BeginPlay(/*ACAttachment* InAttachment, */UCEquipment* InEquipment, ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
 {
+	CHECK_NULL_UOBJECT(InOwner);
+	// CHECK_NULL_UOBJECT(OwnerCharacter->GetWorld());
+	CHECK_TRUE(InDoActionDatas.Num()==0)
+	CHECK_TRUE(InHitDatas.Num()==0)
+	
 	OwnerCharacter = InOwner;
 	World = OwnerCharacter->GetWorld();
 
 	State = Cast<UCStateComponent>(OwnerCharacter->GetComponentByClass(UCStateComponent::StaticClass()));
+	CHECK_NULL_UOBJECT(State);
+
 	Status = Cast<UCStatusComponent>(OwnerCharacter->GetComponentByClass(UCStatusComponent::StaticClass()));
+	CHECK_NULL_UOBJECT(Status);
+
 	DoActionDatas = InDoActionDatas;
 	HitDatas = InHitDatas;
 }
@@ -49,6 +58,8 @@ void UCDoActionComponent::Begin_DoAction()
 
 void UCDoActionComponent::End_DoAction()
 {
+	CHECK_NULL_UOBJECT(State);
+	
 	BeginAction = false;
 	State->SetIdleMode();
 	FindActionIdex(ActionType);
