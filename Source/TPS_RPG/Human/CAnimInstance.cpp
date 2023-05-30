@@ -17,7 +17,7 @@
 void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
-	UE_LOG(GameProject, Display, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
+	//UE_LOG(GameProject, Display, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 
@@ -32,7 +32,10 @@ void UCAnimInstance::NativeBeginPlay()
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	CHECK_NULL_UOBJECT(OwnerCharacter);
+	if(IsValid(OwnerCharacter) ==false)
+	{
+		return;
+	}
 	
 	Speed = OwnerCharacter->GetVelocity().Size2D();
 

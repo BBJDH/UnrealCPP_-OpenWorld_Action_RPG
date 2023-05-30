@@ -24,8 +24,6 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual FGenericTeamId GetGenericTeamId() const override { return static_cast<FGenericTeamId>(this->TeamID);}
 
-
-
 	//CallByNotify
 	void NotifyDead();
 

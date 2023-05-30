@@ -16,17 +16,11 @@ class TPS_RPG_API ACAttachment : public AActor
 public:	
 	ACAttachment();
 
-protected:
-	virtual void BeginPlay() override;
+	//UFUNCTION(BlueprintImplementableEvent)
+	void OnBeginEquip();
 
-public:
-	UFUNCTION(BlueprintImplementableEvent)
-		void OnBeginEquip();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void OnUnequip();
-
-
+	//UFUNCTION(BlueprintImplementableEvent)
+	void OnUnequip();
 
 	void OnCollision();
 	void OffCollision();
@@ -35,6 +29,8 @@ public:
 	void OffAirCollision();
 
 protected:
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable, Category = "Attachment")
 		void AttachTo(FName InSocketName);
 
@@ -42,9 +38,11 @@ private:
 	UFUNCTION()
 		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) ;
 
-	UFUNCTION()
-		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) ;
+	// UFUNCTION()
+	// 	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) ;
 
+
+	
 public:
 	FAttachmentOverlap OnAttachmentBeginOverlap;
 	FAttachmentOverlap OnAttachmentEndOverlap;
@@ -56,10 +54,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class USceneComponent* Root;
 
-protected:
 	UPROPERTY(BlueprintReadOnly)
 		class ACharacter* OwnerCharacter;
 
-protected:
 	TArray<class UShapeComponent*> Collisions;
+
+private:
+	UPROPERTY(EditAnywhere,Category = "SoketName")
+	FName UnEquipSocketName;
+
+	UPROPERTY(EditAnywhere,Category = "SoketName")
+	FName EquipSocketName;
 };

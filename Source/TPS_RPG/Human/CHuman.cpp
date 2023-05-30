@@ -53,7 +53,7 @@ ACHuman::ACHuman()
 	Move = this->CreateDefaultSubobject<UCMoveComponent>("Move");
 	CHECK_NULL_UOBJECT(Move);
 
-
+	
 	this->bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
@@ -235,7 +235,6 @@ void ACHuman::StartFall() const
 	Status->StartInAir();
 	Feet->StartInAir();
 	Weapon->InitComboIndex();
-
 }
 
 //Broadcast Landed
@@ -252,14 +251,12 @@ void ACHuman::EndFall() const
 	Status->EndInAir();
 	Feet->EndInAir();
 	Weapon->InitComboIndex();
-
 }
 
 //Notify Call, Á×À½ Ã³¸®
 void ACHuman::NotifyDead()
 {
 	CHECK_NULL_UOBJECT(Weapon);
-
 	Weapon->DestroyWeapons();
 	Destroy();
 }

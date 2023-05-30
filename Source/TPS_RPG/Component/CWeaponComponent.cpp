@@ -5,10 +5,14 @@
 #include "Weapon/CAttachment.h"
 #include "Weapon/CEquipment.h"
 #include "Weapon/CDoActionComponent.h"
+#include "Utilities/CHelpers.h"
 
 UCWeaponComponent::UCWeaponComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+
+
 }
 
 void UCWeaponComponent::BeginPlay()
@@ -18,7 +22,7 @@ void UCWeaponComponent::BeginPlay()
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	CHECK_NULL_UOBJECT(OwnerCharacter);
 
-	
+	//Data Asset으로부터 등록된 무기 생성
 	for (int i = 0; i < static_cast<int32>(EWeaponType::Max); i++)
 	{
 		if (DataAssets[i] == nullptr)
@@ -28,6 +32,7 @@ void UCWeaponComponent::BeginPlay()
 		
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = OwnerCharacter;
+		//UE_LOG(GameProject,Warning, TEXT("SpawnActor Call!"));
 		TSubclassOf<ACAttachment> AttachmentClass = DataAssets[i]->GetAttachmentClass();
 		if(IsValid(AttachmentClass)==true)
 		{
@@ -38,7 +43,7 @@ void UCWeaponComponent::BeginPlay()
 		{
 			Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
 			Attachments[i]->OffAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OffAttachmentCollision");
-
+	
 			Attachments[i]->OnAttachmentBeginOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentBeginOverlap");
 			Attachments[i]->OnAttachmentEndOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentEndOverlap");
 		}
@@ -87,6 +92,7 @@ void UCWeaponComponent::NotifyEndEquip()
 
 void UCWeaponComponent::InitComboIndex()
 {
+	CHECK_TRUE(IsUnarmedMode()==true);
 	class UCDoActionComponent* CurrentDoActionComponent = GetDoAction();
 	CHECK_NULL_UOBJECT(CurrentDoActionComponent);
 
