@@ -17,7 +17,6 @@ public:
 	FORCEINLINE class UCEquipment* GetEquipment() { return Equipment; }
 	FORCEINLINE class UCDoActionComponent* GetDoAction() { return DoAction; }
 
-public:
 	UCWeaponAsset();
 
 	TSubclassOf<class ACAttachment> GetAttachmentClass();
@@ -36,7 +35,6 @@ private:
 	UPROPERTY()
 		class UCDoActionComponent* DoAction;
 
-private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ACAttachment> AttachmentClass;
 

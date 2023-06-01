@@ -12,8 +12,7 @@ class TPS_RPG_API UCDoComboActionComponent : public UCDoActionComponent
 public:
 	FORCEINLINE void EnableCombo() { IsComboEnable = true; }
 	FORCEINLINE void DisableCombo() { IsComboEnable = false; }
-
-public:
+	
 	virtual void DoAction() override;
 	virtual void DoUpperAction() override;
 	virtual void Do_R_Action() override;
@@ -29,6 +28,6 @@ private:
 	bool IsComboEnable;
 	bool IsNextComboReady;
 
-private:
+
 	TArray<class ACharacter*> HittedCharacters;
 };

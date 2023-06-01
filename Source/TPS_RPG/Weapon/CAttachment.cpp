@@ -29,10 +29,7 @@ void ACAttachment::OnUnequip()
 
 void ACAttachment::BeginPlay()
 {
-	//와!!!!!!
-	UE_LOG(GameProject, Warning, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
 	Super::BeginPlay();
-	UE_LOG(GameProject, Warning, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 
@@ -44,10 +41,8 @@ void ACAttachment::BeginPlay()
 		//미사용
 		//component->OnComponentEndOverlap.AddDynamic(this, &ACAttachment::OnComponentEndOverlap);
 	}
-	//AttachTo(UnEquipSocketName);
+	AttachTo(UnEquipSocketName);
 	OffCollision();
-
-
 }
 
 //모든 충돌체 충돌 On
@@ -98,7 +93,7 @@ void ACAttachment::OffAirCollision()
 
 void ACAttachment::AttachTo(FName InSocketName)
 {
-	UE_LOG(GameProject, Warning, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
+	//UE_LOG(GameProject, Warning, TEXT("FunctionCall : %s, LINE : %s"), *FString(__FUNCTION__), *FString::FromInt(__LINE__));
 
 	CHECK_NULL_UOBJECT(OwnerCharacter);
 	CHECK_NULL_UOBJECT(OwnerCharacter->GetMesh());

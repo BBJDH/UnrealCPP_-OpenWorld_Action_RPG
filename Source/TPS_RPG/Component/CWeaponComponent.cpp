@@ -41,11 +41,13 @@ void UCWeaponComponent::BeginPlay()
 		}
 		if (IsValid(Attachments[i]) == true AND IsValid(DataAssets[i]->GetDoAction()) == true)
 		{
-			Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
+			//Attachments[i]->OnAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentCollision");
+			//충돌한 캐릭터들 초기화를 위해 사용
 			Attachments[i]->OffAttachmentCollision.AddUFunction(DataAssets[i]->GetDoAction(), "OffAttachmentCollision");
-	
+
+			//충돌한 새로운 개체 hit 처리
 			Attachments[i]->OnAttachmentBeginOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentBeginOverlap");
-			Attachments[i]->OnAttachmentEndOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentEndOverlap");
+			//Attachments[i]->OnAttachmentEndOverlap.AddUFunction(DataAssets[i]->GetDoAction(), "OnAttachmentEndOverlap");
 		}
 	}
 }
